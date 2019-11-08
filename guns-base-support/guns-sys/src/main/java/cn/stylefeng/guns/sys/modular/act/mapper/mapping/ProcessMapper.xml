@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.sys.modular.act.mapper.ProcessMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.sys.modular.act.entity.Procdef">
+        <id column="ID_" property="id"/>
+        <result column="REV_" property="rev"/>
+        <result column="CATEGORY_" property="category"/>
+        <result column="NAME_" property="name"/>
+        <result column="KEY_" property="key"/>
+        <result column="VERSION_" property="version"/>
+        <result column="DEPLOYMENT_ID_" property="deploymentId"/>
+        <result column="RESOURCE_NAME_" property="resourceName"/>
+        <result column="DGRM_RESOURCE_NAME_" property="dgrmResourceName"/>
+        <result column="DESCRIPTION_" property="description"/>
+        <result column="HAS_START_FORM_KEY_" property="hasStartFormKey"/>
+        <result column="HAS_GRAPHICAL_NOTATION_" property="hasGraphicalNotation"/>
+        <result column="SUSPENSION_STATE_" property="suspensionState"/>
+        <result column="TENANT_ID_" property="tenantId"/>
+        <result column="ENGINE_VERSION_" property="engineVersion"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID_ AS "id", REV_ AS "rev", CATEGORY_ AS "category", NAME_ AS "name", KEY_ AS "key", VERSION_ AS "version", DEPLOYMENT_ID_ AS "deploymentId", RESOURCE_NAME_ AS "resourceName", DGRM_RESOURCE_NAME_ AS "dgrmResourceName", DESCRIPTION_ AS "description", HAS_START_FORM_KEY_ AS "hasStartFormKey", HAS_GRAPHICAL_NOTATION_ AS "hasGraphicalNotation", SUSPENSION_STATE_ AS "suspensionState", TENANT_ID_ AS "tenantId", ENGINE_VERSION_ AS "engineVersion"
+    </sql>
+
+    <!-- 激活or挂起任务(指定某个任务) -->
+    <update id="onoffTask">
+        update
+        ACT_RU_TASK
+        set
+        SUSPENSION_STATE_ = #{status}
+        where ID_ = #{id}
+    </update>
+
+    <!-- 激活or挂起任务(指定某个流程的所有任务) -->
+    <update id="onoffAllTask">
+        update
+        ACT_RU_TASK
+        set
+        SUSPENSION_STATE_ = #{status}
+        where PROC_DEF_ID_ = #{id}
+    </update>
+
+    <select id="customList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.ProcdefResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcdefParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_re_procdef where 1 = 1
+        <if test="paramCondition.name != null and paramCondition.name != ''">
+            and NAME_ like CONCAT('%',#{paramCondition.name},'%')
+        </if>
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcdefParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_re_procdef where 1 = 1
+        <if test="paramCondition.name != null and paramCondition.name != ''">
+            and NAME_ like CONCAT('%',#{paramCondition.name},'%')
+        </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.ProcdefResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcdefParam">
+        select
+        p.ID_ AS "id", p.CATEGORY_ AS "category", p.NAME_ AS "name", p.KEY_ AS "key", p.VERSION_ AS "version", p.DEPLOYMENT_ID_ AS "deploymentId",
+        p.RESOURCE_NAME_ AS "resourceName", p.DGRM_RESOURCE_NAME_ AS "dgrmResourceName", DESCRIPTION_ AS "description", p.SUSPENSION_STATE_ AS "suspensionState",
+        d.DEPLOY_TIME_ as deployTime
+        from act_re_procdef p
+        left join
+        ACT_RE_DEPLOYMENT d
+        on p.DEPLOYMENT_ID_ = d.ID_
+        where 1=1
+        <if test="paramCondition.keywords!= null and paramCondition.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            p.NAME_ LIKE CONCAT(CONCAT('%', #{paramCondition.keywords}),'%')
+            )
+        </if>
+        <if test="paramCondition.lastStart != null and paramCondition.lastStart != ''"><!-- 开始时间检索 -->
+            and d.DEPLOY_TIME_ &gt;= #{paramCondition.lastStart}
+        </if>
+        <if test="paramCondition.lastEnd != null and paramCondition.lastEnd != ''"><!-- 结束时间检索 -->
+            and d.DEPLOY_TIME_ &lt;= #{paramCondition.lastEnd}
+        </if>
+        order by d.DEPLOY_TIME_ desc
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcdefParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_re_procdef where 1 = 1
+        <if test="paramCondition.name != null and paramCondition.name != ''">
+            and NAME_ like CONCAT('%',#{paramCondition.name},'%')
+        </if>
+    </select>
+
+    <!-- 流程变量列表 -->
+    <select id="varList" resultType="map">
+        select
+        *
+        from
+        ACT_RU_VARIABLE
+        where 1=1
+        <if test="_parameter != null and _parameter != ''"><!-- 流程实例ID -->
+            and PROC_INST_ID_ = #{procInstId}
+            and TASK_ID_ is NULL
+        </if>
+    </select>
+
+    <!-- 历史任务节点列表关联历史流程变量表 -->
+    <select id="historyTaskList" resultType="map">
+        select
+        ht.*,
+        hv.TEXT_
+        from
+        ACT_HI_ACTINST ht
+        left join
+        ACT_HI_VARINST hv
+        on ht.TASK_ID_ = hv.TASK_ID_
+        where 1=1
+        <if test="_parameter != null and _parameter != ''"><!-- 流程实例ID -->
+            and ht.PROC_INST_ID_ = #{procInstId}
+        </if>
+        order by ht.ID_
+    </select>
+
+    <!-- 历史流程变量列表 -->
+    <select id="historyVariableList" resultType="map">
+        select
+        *
+        from
+        ACT_HI_VARINST
+        where 1=1
+        <if test="_parameter != null and _parameter != ''"><!-- 流程实例ID -->
+            and PROC_INST_ID_ = #{procInstId}
+            and TASK_ID_ is NULL
+        </if>
+    </select>
+
+</mapper>

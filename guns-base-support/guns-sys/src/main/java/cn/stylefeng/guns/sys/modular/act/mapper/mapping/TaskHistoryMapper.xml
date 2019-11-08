@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.sys.modular.act.mapper.TaskHistoryMapper">
+
+    <select id="historyTaskList" resultType="map">
+        select
+        ht.*,
+        hv.TEXT_
+        from
+        ACT_HI_ACTINST ht
+        left join
+        ACT_HI_VARINST hv
+        on ht.TASK_ID_ = hv.TASK_ID_
+        where 1=1
+        <if test="PROC_INST_ID_ != null and PROC_INST_ID_ != ''"><!-- 流程实例ID -->
+            and ht.PROC_INST_ID_ = #{PROC_INST_ID_}
+        </if>
+        order by ht.ID_
+    </select>
+</mapper>

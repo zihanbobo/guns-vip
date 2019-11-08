@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.sys.modular.act.mapper.TaskWaitingMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.sys.modular.act.entity.Task">
+        <id column="ID_" property="id" />
+        <result column="REV_" property="rev" />
+        <result column="EXECUTION_ID_" property="executionId" />
+        <result column="PROC_INST_ID_" property="procInstId" />
+        <result column="PROC_DEF_ID_" property="procDefId" />
+        <result column="NAME_" property="name" />
+        <result column="PARENT_TASK_ID_" property="parentTaskId" />
+        <result column="DESCRIPTION_" property="description" />
+        <result column="TASK_DEF_KEY_" property="taskDefKey" />
+        <result column="OWNER_" property="owner" />
+        <result column="ASSIGNEE_" property="assignee" />
+        <result column="DELEGATION_" property="delegation" />
+        <result column="PRIORITY_" property="priority" />
+        <result column="CREATE_TIME_" property="createTime" />
+        <result column="DUE_DATE_" property="dueDate" />
+        <result column="CATEGORY_" property="category" />
+        <result column="SUSPENSION_STATE_" property="suspensionState" />
+        <result column="TENANT_ID_" property="tenantId" />
+        <result column="FORM_KEY_" property="formKey" />
+        <result column="CLAIM_TIME_" property="claimTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID_ AS "id", REV_ AS "rev", EXECUTION_ID_ AS "executionId", PROC_INST_ID_ AS "procInstId", PROC_DEF_ID_ AS "procDefId", NAME_ AS "name", PARENT_TASK_ID_ AS "parentTaskId", DESCRIPTION_ AS "description", TASK_DEF_KEY_ AS "taskDefKey", OWNER_ AS "owner", ASSIGNEE_ AS "assignee", DELEGATION_ AS "delegation", PRIORITY_ AS "priority", CREATE_TIME_ AS "createTime", DUE_DATE_ AS "dueDate", CATEGORY_ AS "category", SUSPENSION_STATE_ AS "suspensionState", TENANT_ID_ AS "tenantId", FORM_KEY_ AS "formKey", CLAIM_TIME_ AS "claimTime"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.TaskResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.TaskParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_ru_task where 1 = 1
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and CREATE_TIME_ like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.TaskParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_ru_task where 1 = 1
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and CREATE_TIME_ like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.TaskResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.TaskParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_ru_task where 1 = 1
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and CREATE_TIME_ like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.TaskParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_ru_task where 1 = 1
+            <if test="paramCondition.createTime != null and paramCondition.createTime != ''">
+                and CREATE_TIME_ like CONCAT('%',#{paramCondition.createTime},'%')
+            </if>
+    </select>
+
+    <!-- 待办任务 or正在运行任务列表-->
+    <select id="datalistPage" resultType="map">
+        select
+        f.*,
+        p.NAME_ PNAME_,
+        p.DGRM_RESOURCE_NAME_
+        from
+        ACT_RU_TASK f
+        left join
+        ACT_RE_PROCDEF p
+        on f.PROC_DEF_ID_ = p.ID_
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            p.NAME_ LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or
+            f.NAME_ LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or
+            f.ASSIGNEE_ LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.lastStart != null and pd.lastStart != ''"><!-- 开始时间检索 -->
+            and f.CREATE_TIME_ &gt;= #{pd.lastStart}
+        </if>
+        <if test="pd.lastEnd != null and pd.lastEnd != ''"><!-- 结束时间检索 -->
+            and f.CREATE_TIME_ &lt;= #{pd.lastEnd}
+        </if>
+        <if test="pd.USERNAME != null and pd.USERNAME != ''"><!-- 当前办理人检索 -->
+            and
+            (
+            f.ASSIGNEE_ = #{pd.USERNAME}
+            or
+            f.ASSIGNEE_ in ${pd.RNUMBERS}
+            )
+        </if>
+        order by f.CREATE_TIME_ desc
+    </select>
+
+    <select id="getUserRoleString" resultType="string">
+        select u.role_id as id from sys_user u WHERE u.account = #{account};
+    </select>
+
+</mapper>

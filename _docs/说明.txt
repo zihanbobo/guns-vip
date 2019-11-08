@@ -1,0 +1,7 @@
+先运行1.guns_mysql.sql
+
+再运行2.guns_act_mysql.sql
+
+最新版只适配了mysql，其他的后面适配会
+
+_guns_rest_mysql.sql为前后端分离版本的sql

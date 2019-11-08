@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.sys.modular.act.mapper.MyleaveMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.sys.modular.act.entity.Myleave">
+        <id column="MYLEAVE_ID" property="myleaveId"/>
+        <result column="USERNAME" property="username"/>
+        <result column="TYPE" property="type"/>
+        <result column="STARTTIME" property="starttime"/>
+        <result column="ENDTIME" property="endtime"/>
+        <result column="WHENLONG" property="whenlong"/>
+        <result column="REASON" property="reason"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        MYLEAVE_ID AS "myleaveId", USERNAME AS "username", TYPE AS "type", STARTTIME AS "starttime", ENDTIME AS "endtime", WHENLONG AS "whenlong", REASON AS "reason"
+    </sql>
+
+    <select id="customList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.MyleaveResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.MyLeaveParam">
+        select
+        <include refid="Base_Column_List"/>
+        from oa_myleave where 1 = 1
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.MyLeaveParam">
+        select
+        <include refid="Base_Column_List"/>
+        from oa_myleave where 1 = 1
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.MyleaveResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.MyLeaveParam">
+        select
+        <include refid="Base_Column_List"/>
+        from oa_myleave where 1 = 1
+    </select>
+
+    <!-- 列表 -->
+    <select id="datalistPage" resultType="map">
+        select
+        l.USERNAME as username,
+        l.TYPE as type,
+        l.STARTTIME as starttime,
+        l.ENDTIME as endtime,
+        l.WHENLONG as whenlong,
+        l.MYLEAVE_ID as myleaveId,
+        l.REASON as reason
+        from
+        oa_myleave l
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''">
+            and
+            (
+            l.REASON LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            or
+            l.USERNAME LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.username!= null and pd.username != ''">
+            and l.USERNAME = #{pd.username}
+        </if>
+        <if test="pd.type != null and pd.type != ''">
+            and l.TYPE=#{pd.type}
+        </if>
+        order by l.ENDTIME desc
+    </select>
+
+    <!--查询请假类型-->
+    <select id="getLeaves" resultType="map">
+        select dict.dict_id dictId,
+        dict.name dictName
+        from sys_dict dict
+        where dict.dict_type_id = '1160532886713155585'
+    </select>
+
+</mapper>

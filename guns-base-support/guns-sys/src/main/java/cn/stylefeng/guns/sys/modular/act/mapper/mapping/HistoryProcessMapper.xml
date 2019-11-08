@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.sys.modular.act.mapper.HistoryProcessMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.sys.modular.act.entity.Procinst">
+        <id column="ID_" property="id"/>
+        <result column="PROC_INST_ID_" property="procInstId"/>
+        <result column="BUSINESS_KEY_" property="businessKey"/>
+        <result column="PROC_DEF_ID_" property="procDefId"/>
+        <result column="START_TIME_" property="startTime"/>
+        <result column="END_TIME_" property="endTime"/>
+        <result column="DURATION_" property="duration"/>
+        <result column="START_USER_ID_" property="startUserId"/>
+        <result column="START_ACT_ID_" property="startActId"/>
+        <result column="END_ACT_ID_" property="endActId"/>
+        <result column="SUPER_PROCESS_INSTANCE_ID_" property="superProcessInstanceId"/>
+        <result column="DELETE_REASON_" property="deleteReason"/>
+        <result column="TENANT_ID_" property="tenantId"/>
+        <result column="NAME_" property="name"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID_ AS "id", PROC_INST_ID_ AS "procInstId", BUSINESS_KEY_ AS "businessKey", PROC_DEF_ID_ AS "procDefId", START_TIME_ AS "startTime", END_TIME_ AS "endTime", DURATION_ AS "duration", START_USER_ID_ AS "startUserId", START_ACT_ID_ AS "startActId", END_ACT_ID_ AS "endActId", SUPER_PROCESS_INSTANCE_ID_ AS "superProcessInstanceId", DELETE_REASON_ AS "deleteReason", TENANT_ID_ AS "tenantId", NAME_ AS "name"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.ProcinstResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcinstParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_hi_procinst where 1 = 1
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcinstParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_hi_procinst where 1 = 1
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.sys.modular.act.model.result.ProcinstResult" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcinstParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_hi_procinst where 1 = 1
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.sys.modular.act.model.params.ProcinstParam">
+        select
+        <include refid="Base_Column_List"/>
+        from act_hi_procinst where 1 = 1
+    </select>
+
+    <!-- 历史流程列表-->
+    <select id="datalistPage" resultType="map">
+        select
+        hp.*,
+        rp.NAME_ PNAME_,
+        rp.VERSION_,
+        rp.ID_ PID_,
+        rp.DEPLOYMENT_ID_,
+        rp.DGRM_RESOURCE_NAME_
+        from
+        ACT_HI_PROCINST hp
+        left join
+        ACT_RE_PROCDEF rp
+        on hp.PROC_DEF_ID_ = rp.ID_
+        where 1=1
+        <if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+            and
+            (
+            rp.NAME_ LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+            )
+        </if>
+        <if test="pd.lastStart != null and pd.lastStart != ''"><!-- 开始时间检索 -->
+            and hp.END_TIME_ &gt;= #{pd.lastStart}
+        </if>
+        <if test="pd.lastEnd != null and pd.lastEnd != ''"><!-- 结束时间检索 -->
+            and hp.END_TIME_ &lt;= #{pd.lastEnd}
+        </if>
+        and hp.END_TIME_ is not NULL
+        order by hp.END_TIME_ desc
+    </select>
+
+    <!-- 历史流程变量列表 -->
+    <select id="hivarList" resultType="map">
+        select
+        *
+        from
+        ACT_HI_VARINST
+        where 1=1
+        <if test="PROC_INST_ID_ != null and PROC_INST_ID_ != ''"><!-- 流程实例ID -->
+            and PROC_INST_ID_ = #{PROC_INST_ID_}
+            and TASK_ID_ is NULL
+        </if>
+    </select>
+
+</mapper>
