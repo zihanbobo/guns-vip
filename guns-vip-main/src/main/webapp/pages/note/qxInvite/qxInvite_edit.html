@@ -1,0 +1,129 @@
+@layout("/common/_form.html",{js:["/assets/note/qxInvite/qxInvite_edit.js"]}){
+
+<form class="layui-form" id="qxInviteForm" lay-filter="qxInviteForm">
+    <div class="layui-fluid" style="padding-bottom: 75px;">
+        <div class="layui-card">
+            <div class="layui-card-header">基本信息</div>
+            <div class="layui-card-body">
+                <div class="layui-form-item layui-row">
+                    <input name="id" type="hidden"/>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">乐观锁<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="version" name="version" placeholder="请输入乐观锁" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">创建人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="createdBy" name="createdBy" placeholder="请输入创建人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">创建时间<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="createdTime" name="createdTime" placeholder="请输入创建时间" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">更新人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="updatedBy" name="updatedBy" placeholder="请输入更新人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">更新时间<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="updatedTime" name="updatedTime" placeholder="请输入更新时间" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">删除标识<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="deleted" name="deleted" placeholder="请输入删除标识" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">邀请人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="inviter" name="inviter" placeholder="请输入邀请人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">被邀请人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="invitee" name="invitee" placeholder="请输入被邀请人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">邀请时间<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="inviteTime" name="inviteTime" placeholder="请输入邀请时间" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">约单类型 0-主动约；1-被动约<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="inviteType" name="inviteType" placeholder="请输入约单类型 0-主动约；1-被动约" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">约会类型<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="dateTypeId" name="dateTypeId" placeholder="请输入约会类型" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">扣款种类 礼物ID<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="giftId" name="giftId" placeholder="请输入扣款种类 礼物ID" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">地点<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="location" name="location" placeholder="请输入地点" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">城市编号<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="cityNo" name="cityNo" placeholder="请输入城市编号" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">经度<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="longitude" name="longitude" placeholder="请输入经度" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">纬度<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="latitude" name="latitude" placeholder="请输入纬度" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="status" name="status" placeholder="请输入状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">约单单号<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="sn" name="sn" placeholder="请输入约单单号" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group-bottom text-center">
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>&emsp;提交&emsp;</button>
+        <button type="reset" class="layui-btn layui-btn-primary" ew-event="closeDialog">&emsp;取消&emsp;</button>
+    </div>
+
+</form>
+
+@}

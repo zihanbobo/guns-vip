@@ -1,0 +1,75 @@
+@layout("/common/_form.html",{js:["/assets/note/qxPayLog/qxPayLog_edit.js"]}){
+
+<form class="layui-form" id="qxPayLogForm" lay-filter="qxPayLogForm">
+    <div class="layui-fluid" style="padding-bottom: 75px;">
+        <div class="layui-card">
+            <div class="layui-card-header">基本信息</div>
+            <div class="layui-card-body">
+                <div class="layui-form-item layui-row">
+                    <input name="id" type="hidden"/>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">乐观锁<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="version" name="version" placeholder="请输入乐观锁" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">创建人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="createdBy" name="createdBy" placeholder="请输入创建人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">创建时间<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="createdTime" name="createdTime" placeholder="请输入创建时间" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">更新人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="updatedBy" name="updatedBy" placeholder="请输入更新人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">更新时间<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="updatedTime" name="updatedTime" placeholder="请输入更新时间" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">删除标识<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="deleted" name="deleted" placeholder="请输入删除标识" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">用户ID<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="userId" name="userId" placeholder="请输入用户ID" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">金额<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="amount" name="amount" placeholder="请输入金额" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">付费类型 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出；9-违约金汇入；<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="type" name="type" placeholder="请输入付费类型 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出；9-违约金汇入；" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group-bottom text-center">
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>&emsp;提交&emsp;</button>
+        <button type="reset" class="layui-btn layui-btn-primary" ew-event="closeDialog">&emsp;取消&emsp;</button>
+    </div>
+
+</form>
+
+@}

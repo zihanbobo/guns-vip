@@ -1,0 +1,117 @@
+@layout("/common/_form.html",{js:["/assets/note/qxNote/qxNote_edit.js"]}){
+
+<form class="layui-form" id="qxNoteForm" lay-filter="qxNoteForm">
+    <div class="layui-fluid" style="padding-bottom: 75px;">
+        <div class="layui-card">
+            <div class="layui-card-header">基本信息</div>
+            <div class="layui-card-body">
+                <div class="layui-form-item layui-row">
+                    <input name="id" type="hidden"/>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">乐观锁<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="version" name="version" placeholder="请输入乐观锁" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">创建人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="createdBy" name="createdBy" placeholder="请输入创建人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">创建时间<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="createdTime" name="createdTime" placeholder="请输入创建时间" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">更新人<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="updatedBy" name="updatedBy" placeholder="请输入更新人" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">更新时间<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="updatedTime" name="updatedTime" placeholder="请输入更新时间" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">删除标识<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="deleted" name="deleted" placeholder="请输入删除标识" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">用户ID<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="userId" name="userId" placeholder="请输入用户ID" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">图片 图片地址1;图片地址2;图片地址3<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="images" name="images" placeholder="请输入图片 图片地址1;图片地址2;图片地址3" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">推文标题<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="title" name="title" placeholder="请输入推文标题" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">推文内容<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="content" name="content" placeholder="请输入推文内容" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">是否允许评价<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="canComment" name="canComment" placeholder="请输入是否允许评价" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">点赞数<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="favoriteCount" name="favoriteCount" placeholder="请输入点赞数" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">评论数<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="commentCount" name="commentCount" placeholder="请输入评论数" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">已赠送礼物数<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="giftCount" name="giftCount" placeholder="请输入已赠送礼物数" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">是否加密<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="isPrivate" name="isPrivate" placeholder="请输入是否加密" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">打开条件 解锁需付出的礼物<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="giftId" name="giftId" placeholder="请输入打开条件 解锁需付出的礼物" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group-bottom text-center">
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>&emsp;提交&emsp;</button>
+        <button type="reset" class="layui-btn layui-btn-primary" ew-event="closeDialog">&emsp;取消&emsp;</button>
+    </div>
+
+</form>
+
+@}

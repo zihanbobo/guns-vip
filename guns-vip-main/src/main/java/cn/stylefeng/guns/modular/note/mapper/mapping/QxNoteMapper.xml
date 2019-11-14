@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.note.mapper.QxNoteMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.note.entity.QxNote">
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+        <result column="user_id" property="userId" />
+        <result column="images" property="images" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="can_comment" property="canComment" />
+        <result column="favorite_count" property="favoriteCount" />
+        <result column="comment_count" property="commentCount" />
+        <result column="gift_count" property="giftCount" />
+        <result column="is_private" property="isPrivate" />
+        <result column="gift_id" property="giftId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", images AS "images", title AS "title", content AS "content", can_comment AS "canComment", favorite_count AS "favoriteCount", comment_count AS "commentCount", gift_count AS "giftCount", is_private AS "isPrivate", gift_id AS "giftId"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.note.model.result.QxNoteResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_note where 1 = 1
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_note where 1 = 1
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxNoteResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_note where 1 = 1
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_note where 1 = 1
+    </select>
+
+</mapper>

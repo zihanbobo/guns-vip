@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.note.mapper.QxInviteMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.note.entity.QxInvite">
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+        <result column="inviter" property="inviter" />
+        <result column="invitee" property="invitee" />
+        <result column="invite_time" property="inviteTime" />
+        <result column="invite_type" property="inviteType" />
+        <result column="date_type_id" property="dateTypeId" />
+        <result column="gift_id" property="giftId" />
+        <result column="location" property="location" />
+        <result column="city_no" property="cityNo" />
+        <result column="longitude" property="longitude" />
+        <result column="latitude" property="latitude" />
+        <result column="status" property="status" />
+        <result column="sn" property="sn" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", inviter AS "inviter", invitee AS "invitee", invite_time AS "inviteTime", invite_type AS "inviteType", date_type_id AS "dateTypeId", gift_id AS "giftId", location AS "location", city_no AS "cityNo", longitude AS "longitude", latitude AS "latitude", status AS "status", sn AS "sn"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.note.model.result.QxInviteResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_invite where 1 = 1
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_invite where 1 = 1
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxInviteResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_invite where 1 = 1
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_invite where 1 = 1
+    </select>
+
+</mapper>
