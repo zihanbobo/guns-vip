@@ -45,9 +45,6 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean check(HttpServletRequest request, HttpServletResponse response) {
-//        if (request.getServletPath().equals(JwtConstants.AUTH_PATH)) {
-//            return true;
-//        }
         final String requestHeader = request.getHeader(JwtConstants.AUTH_HEADER);
         String authToken;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
@@ -62,7 +59,6 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
                     return false;
                 }
             } catch (JwtException e) {
-
                 //有异常就是token解析失败
                 RenderUtil.renderJson(response, new ErrorResponseData(
                         RestExceptionEnum.TOKEN_ERROR.getCode(), RestExceptionEnum.TOKEN_ERROR.getMessage()));
