@@ -28,6 +28,7 @@ import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
 import cn.stylefeng.guns.core.constant.JwtConstants;
 import cn.stylefeng.guns.sys.modular.system.mapper.UserMapper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
 
 /**
  * api登录接口，获取token
@@ -36,7 +37,7 @@ import cn.stylefeng.roses.core.base.controller.BaseController;
  * @Date 2018/7/20 23:39
  */
 @RestController
-@RequestMapping("/gunsApi")
+@RequestMapping("/api")
 public class ApiLoginController extends BaseController {
 
     @Autowired
@@ -82,6 +83,11 @@ public class ApiLoginController extends BaseController {
     
     @RequestMapping("/test")
     public Object test() {
+    	return SUCCESS_TIP;
+    }
+    
+    @RequestMapping("/secret")
+    public ResponseData secret() {
     	return SUCCESS_TIP;
     }
 

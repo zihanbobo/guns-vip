@@ -15,10 +15,11 @@
  */
 package cn.stylefeng.guns.config.web;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
@@ -42,8 +43,8 @@ import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 
+import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.aop.RestApiInteceptor;
-import cn.stylefeng.guns.sys.core.constant.Const;
 import cn.stylefeng.guns.sys.core.exception.page.GunsErrorView;
 import cn.stylefeng.guns.sys.core.listener.ConfigListener;
 import cn.stylefeng.roses.core.xss.XssFilter;
@@ -57,6 +58,9 @@ import cn.stylefeng.roses.core.xss.XssFilter;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+	@Resource
+	private ConfigEntity configEntity;
+	
     /**
      * 配置string解析器放在json解析器前边
      *
@@ -92,9 +96,8 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-    	List<String> securityUrls = new ArrayList<>();
-    	securityUrls.add("auth");
-        registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/gunsApi/**");
+    	List<String> securityUrls = Arrays.asList(configEntity.getSecureUrls().split(","));
+        registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/api/**").excludePathPatterns(securityUrls);
     }
 
     /**

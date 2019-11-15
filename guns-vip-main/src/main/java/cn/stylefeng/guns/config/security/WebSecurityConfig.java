@@ -84,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 测试多数据源的接口，可以去掉
                 .antMatchers("/tran/**").permitAll()
                 // api接口
-                .antMatchers("/gunsApi/**").permitAll()
+                .antMatchers("/api/**").permitAll()
 
                 .anyRequest().authenticated();
 
