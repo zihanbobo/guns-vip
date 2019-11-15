@@ -15,16 +15,11 @@
  */
 package cn.stylefeng.guns.config.web;
 
-import cn.stylefeng.guns.sys.core.exception.page.GunsErrorView;
-import cn.stylefeng.guns.sys.core.listener.ConfigListener;
-import cn.stylefeng.roses.core.xss.XssFilter;
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.http.StatViewServlet;
-import com.alibaba.druid.support.http.WebStatFilter;
-import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
-import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
-import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.google.code.kaptcha.util.Config;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
@@ -35,12 +30,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.support.http.StatViewServlet;
+import com.alibaba.druid.support.http.WebStatFilter;
+import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
+import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.google.code.kaptcha.util.Config;
+
+import cn.stylefeng.guns.core.aop.RestApiInteceptor;
+import cn.stylefeng.guns.sys.core.constant.Const;
+import cn.stylefeng.guns.sys.core.exception.page.GunsErrorView;
+import cn.stylefeng.guns.sys.core.listener.ConfigListener;
+import cn.stylefeng.roses.core.xss.XssFilter;
 
 /**
  * web 配置类
@@ -79,6 +85,16 @@ public class WebConfig implements WebMvcConfigurer {
 
         //流程设计器
         registry.addResourceHandler("/activiti-editor/**").addResourceLocations("classpath:/activiti-editor/");
+    }
+    
+    /**
+     * 增加对rest api鉴权的spring mvc拦截器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+    	List<String> securityUrls = new ArrayList<>();
+    	securityUrls.add("auth");
+        registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/gunsApi/**");
     }
 
     /**
