@@ -9,14 +9,14 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 系统通知表
+ * 系统通知表 
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-16
  */
-@TableName("qx_notification")
-public class QxNotification implements Serializable {
+@TableName("qx_notice")
+public class QxNotice implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,10 +63,10 @@ public class QxNotification implements Serializable {
     private String deleted;
 
     /**
-     * 用户ID
+     * 用户账号
      */
-    @TableField("user_id")
-    private Long userId;
+    @TableField("account")
+    private String account;
 
     /**
      * 通知内容
@@ -75,10 +75,28 @@ public class QxNotification implements Serializable {
     private String content;
 
     /**
-     * 已读
+     * 消息分类 消息分类
      */
-    @TableField("readed")
-    private String readed;
+    @TableField("tag")
+    private Integer tag;
+
+    /**
+     * 通知类型 通知类型：0-短信，1-邮箱， 2-推送
+     */
+    @TableField("type")
+    private Integer type;
+
+    /**
+     * 发送状态 是否发送：0-未发送，1-已发送
+     */
+    @TableField("status_send")
+    private Integer statusSend;
+
+    /**
+     * 已读状态 读取状态：1-是.0-未读
+     */
+    @TableField("status_read")
+    private Integer statusRead;
 
 
     public Long getId() {
@@ -137,12 +155,12 @@ public class QxNotification implements Serializable {
         this.deleted = deleted;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getAccount() {
+        return account;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getContent() {
@@ -153,17 +171,41 @@ public class QxNotification implements Serializable {
         this.content = content;
     }
 
-    public String getReaded() {
-        return readed;
+    public Integer getTag() {
+        return tag;
     }
 
-    public void setReaded(String readed) {
-        this.readed = readed;
+    public void setTag(Integer tag) {
+        this.tag = tag;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getStatusSend() {
+        return statusSend;
+    }
+
+    public void setStatusSend(Integer statusSend) {
+        this.statusSend = statusSend;
+    }
+
+    public Integer getStatusRead() {
+        return statusRead;
+    }
+
+    public void setStatusRead(Integer statusRead) {
+        this.statusRead = statusRead;
     }
 
     @Override
     public String toString() {
-        return "QxNotification{" +
+        return "QxNotice{" +
         "id=" + id +
         ", version=" + version +
         ", createdBy=" + createdBy +
@@ -171,9 +213,12 @@ public class QxNotification implements Serializable {
         ", updatedBy=" + updatedBy +
         ", updatedTime=" + updatedTime +
         ", deleted=" + deleted +
-        ", userId=" + userId +
+        ", account=" + account +
         ", content=" + content +
-        ", readed=" + readed +
+        ", tag=" + tag +
+        ", type=" + type +
+        ", statusSend=" + statusSend +
+        ", statusRead=" + statusRead +
         "}";
     }
 }

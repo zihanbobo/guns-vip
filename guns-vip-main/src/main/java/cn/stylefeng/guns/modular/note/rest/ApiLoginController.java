@@ -19,16 +19,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
+import cn.stylefeng.guns.config.ConfigEntity;
+import cn.stylefeng.guns.core.CacheCodeUtil;
+import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.constant.JwtConstants;
-import cn.stylefeng.guns.sys.modular.system.mapper.UserMapper;
-import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.guns.core.util.NoticeHelper;
+import cn.stylefeng.guns.modular.note.service.QxUserService;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * api登录接口，获取token
@@ -36,60 +41,40 @@ import cn.stylefeng.roses.core.reqres.response.ResponseData;
  * @author stylefeng
  * @Date 2018/7/20 23:39
  */
+@Slf4j
 @RestController
-@RequestMapping("/api")
-public class ApiLoginController extends BaseController {
+@RequestMapping("/api/user")
+public class ApiLoginController extends ApiBaseController {
 
-    @Autowired
-    private UserMapper userMapper;
+	@Resource
+	private ConfigEntity configEntity;
 
-    /**
-     * api登录接口，通过账号密码获取token
-     */
-    @RequestMapping("/auth")
-    public Object auth(@RequestParam("username") String username,
-                       @RequestParam("password") String password) {
+	@Resource
+	private QxUserService qxUserService;
 
-//        //封装请求账号密码为shiro可验证的token
-//        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password.toCharArray());
-//
-//        //获取数据库中的账号密码，准备比对
-//        User user = userMapper.getByAccount(username);
-//
-//        String credentials = user.getPassword();
-//        String salt = user.getSalt();
-//        ByteSource credentialsSalt = new Md5Hash(salt);
-//        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-//                new ShiroUser(), credentials, credentialsSalt, "");
-//
-//        //校验用户账号密码
-//        HashedCredentialsMatcher md5CredentialsMatcher = new HashedCredentialsMatcher();
-//        md5CredentialsMatcher.setHashAlgorithmName(ShiroKit.hashAlgorithmName);
-//        md5CredentialsMatcher.setHashIterations(ShiroKit.hashIterations);
-//        boolean passwordTrueFlag = md5CredentialsMatcher.doCredentialsMatch(
-//                usernamePasswordToken, simpleAuthenticationInfo);
-//
-//        if (passwordTrueFlag) {
-            HashMap<String, Object> result = new HashMap<>();
-            Map<String, Object> claims = new HashMap<>();
-            final Date createdDate = new Date();
-            final Date expirationDate = new Date(createdDate.getTime() + JwtConstants.EXPIRATION * 1000);
-            result.put("token", JwtTokenUtil.generateToken("1", expirationDate, claims));
-            return result;
-//        } else {
-//            return new ErrorResponseData(500, "账号密码错误！");
-//        }
-    }
-    
-    @RequestMapping("/test")
-    public Object test() {
-    	return SUCCESS_TIP;
-    }
-    
-    @RequestMapping("/secret")
-    public ResponseData secret() {
-    	return SUCCESS_TIP;
-    }
+	@Resource
+	private NoticeHelper noticeHelper;
 
+	@RequestMapping("/login")
+	public Object login(@RequestParam("username") String mobile, @RequestParam("code") String code) {
+		HashMap<String, Object> result = new HashMap<>();
+		Map<String, Object> claims = new HashMap<>();
+		final Date createdDate = new Date();
+		final Date expirationDate = new Date(createdDate.getTime() + JwtConstants.EXPIRATION * 1000);
+		result.put("token", JwtTokenUtil.generateToken("1", expirationDate, claims));
+		return result;
+	}
+
+	@RequestMapping(value="/getCaptcha", method = RequestMethod.POST)
+	public Object getCaptcha(@RequestParam("mobile") String mobile, @RequestParam("type") int type) {
+		String code = CacheCodeUtil.createCode(configEntity.getCodeLength());
+		Map<String, String> pairs = new HashMap<>();
+		pairs.put("code", code);
+		pairs.put("minute", configEntity.getCodeExpirationMin() + "");
+		noticeHelper.send(mobile, type, pairs);
+		String codeKey = CacheCodeUtil.createCodeKey(mobile, type);
+		cacheValueSecond(codeKey, configEntity.getCodeExpirationMin() * 60, code);
+		log.info("/api/user/getCaptcha, account=" + mobile + ", code=" + code);
+		return ResultGenerator.genSuccessResult();
+	}
 }
-

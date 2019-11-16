@@ -22,9 +22,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
 import cn.stylefeng.guns.core.constant.JwtConstants;
-import cn.stylefeng.guns.core.exception.RestExceptionEnum;
-import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
-import cn.stylefeng.roses.core.util.RenderUtil;
+import cn.stylefeng.guns.core.exception.ServiceException;
 import io.jsonwebtoken.JwtException;
 
 
@@ -45,9 +43,6 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
     }
 
     private boolean check(HttpServletRequest request, HttpServletResponse response) {
-//        if (request.getServletPath().equals(JwtConstants.AUTH_PATH)) {
-//            return true;
-//        }
         final String requestHeader = request.getHeader(JwtConstants.AUTH_HEADER);
         String authToken;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
@@ -57,23 +52,15 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
             try {
                 boolean flag = JwtTokenUtil.isTokenExpired(authToken);
                 if (flag) {
-                    RenderUtil.renderJson(response, new ErrorResponseData(
-                            RestExceptionEnum.TOKEN_EXPIRED.getCode(), RestExceptionEnum.TOKEN_EXPIRED.getMessage()));
-                    return false;
+                	throw new ServiceException("token过期");
                 }
             } catch (JwtException e) {
-
                 //有异常就是token解析失败
-                RenderUtil.renderJson(response, new ErrorResponseData(
-                        RestExceptionEnum.TOKEN_ERROR.getCode(), RestExceptionEnum.TOKEN_ERROR.getMessage()));
-                return false;
+                throw new ServiceException("token验证失败");
             }
         } else {
-
             //header没有带Bearer字段
-            RenderUtil.renderJson(response, new ErrorResponseData(
-                    RestExceptionEnum.TOKEN_ERROR.getCode(), RestExceptionEnum.TOKEN_ERROR.getMessage()));
-            return false;
+            throw new ServiceException("token格式不正确");
         }
         return true;
     }

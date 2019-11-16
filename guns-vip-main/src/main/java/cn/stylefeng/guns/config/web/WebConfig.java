@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -42,6 +43,10 @@ import com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator;
 import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
+import com.google.code.ssm.CacheFactory;
+import com.google.code.ssm.config.DefaultAddressProvider;
+import com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl;
+import com.google.code.ssm.providers.xmemcached.XMemcachedConfiguration;
 
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.aop.RestApiInteceptor;
@@ -61,6 +66,20 @@ public class WebConfig implements WebMvcConfigurer {
 	@Resource
 	private ConfigEntity configEntity;
 	
+	@Value("${memcached.server}")
+	private String memcachedServer;
+	
+	@Bean(name = "defaultMemcachedClient")
+	public CacheFactory getCacheFactory() {
+		CacheFactory cf = new CacheFactory();
+		cf.setCacheClientFactory(new MemcacheClientFactoryImpl());
+		cf.setAddressProvider(new DefaultAddressProvider(memcachedServer));
+		XMemcachedConfiguration xc = new XMemcachedConfiguration();
+		xc.setConnectionPoolSize(20);
+		xc.setConsistentHashing(true);
+		cf.setConfiguration(xc);
+		return cf;
+	}
     /**
      * 配置string解析器放在json解析器前边
      *

@@ -1,15 +1,16 @@
 package cn.stylefeng.guns.modular.note.mapper;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
 import cn.stylefeng.guns.modular.note.model.result.QxUserResult;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -53,4 +54,8 @@ public interface QxUserMapper extends BaseMapper<QxUser> {
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxUserParam paramCondition);
 
+    /**
+     * 通过账号获取用户
+     */
+    QxUser getByAccount(@Param("account") String account);
 }

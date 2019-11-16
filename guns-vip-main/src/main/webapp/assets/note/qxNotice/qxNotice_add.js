@@ -1,7 +1,7 @@
 /**
  * 添加或者修改页面
  */
-var QxNotificationInfoDlg = {
+var QxNoticeInfoDlg = {
     data: {
         version: "",
         createdBy: "",
@@ -9,9 +9,12 @@ var QxNotificationInfoDlg = {
         updatedBy: "",
         updatedTime: "",
         deleted: "",
-        userId: "",
+        account: "",
         content: "",
-        readed: ""
+        tag: "",
+        type: "",
+        statusSend: "",
+        statusRead: ""
     }
 };
 
@@ -26,7 +29,7 @@ layui.use(['form', 'admin', 'ax'], function () {
 
     //表单提交事件
     form.on('submit(btnSubmit)', function (data) {
-        var ajax = new $ax(Feng.ctxPath + "/qxNotification/addItem", function (data) {
+        var ajax = new $ax(Feng.ctxPath + "/qxNotice/addItem", function (data) {
             Feng.success("添加成功！");
 
             //传给上个页面，刷新table用

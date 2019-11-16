@@ -1,9 +1,9 @@
 package cn.stylefeng.guns.modular.note.controller;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
-import cn.stylefeng.guns.modular.note.entity.QxNotification;
-import cn.stylefeng.guns.modular.note.model.params.QxNotificationParam;
-import cn.stylefeng.guns.modular.note.service.QxNotificationService;
+import cn.stylefeng.guns.modular.note.entity.QxNotice;
+import cn.stylefeng.guns.modular.note.model.params.QxNoticeParam;
+import cn.stylefeng.guns.modular.note.service.QxNoticeService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,60 +16,60 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 系统通知表控制器
  *
  * @author 
- * @Date 2019-11-14 13:32:53
+ * @Date 2019-11-16 23:58:38
  */
 @Controller
-@RequestMapping("/qxNotification")
-public class QxNotificationController extends BaseController {
+@RequestMapping("/qxNotice")
+public class QxNoticeController extends BaseController {
 
-    private String PREFIX = "/note/qxNotification";
+    private String PREFIX = "/note/qxNotice";
 
     @Autowired
-    private QxNotificationService qxNotificationService;
+    private QxNoticeService qxNoticeService;
 
     /**
      * 跳转到主页面
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @RequestMapping("")
     public String index() {
-        return PREFIX + "/qxNotification.html";
+        return PREFIX + "/qxNotice.html";
     }
 
     /**
      * 新增页面
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @RequestMapping("/add")
     public String add() {
-        return PREFIX + "/qxNotification_add.html";
+        return PREFIX + "/qxNotice_add.html";
     }
 
     /**
      * 编辑页面
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @RequestMapping("/edit")
     public String edit() {
-        return PREFIX + "/qxNotification_edit.html";
+        return PREFIX + "/qxNotice_edit.html";
     }
 
     /**
      * 新增接口
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @RequestMapping("/addItem")
     @ResponseBody
-    public ResponseData addItem(QxNotificationParam qxNotificationParam) {
-        this.qxNotificationService.add(qxNotificationParam);
+    public ResponseData addItem(QxNoticeParam qxNoticeParam) {
+        this.qxNoticeService.add(qxNoticeParam);
         return ResponseData.success();
     }
 
@@ -77,12 +77,12 @@ public class QxNotificationController extends BaseController {
      * 编辑接口
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @RequestMapping("/editItem")
     @ResponseBody
-    public ResponseData editItem(QxNotificationParam qxNotificationParam) {
-        this.qxNotificationService.update(qxNotificationParam);
+    public ResponseData editItem(QxNoticeParam qxNoticeParam) {
+        this.qxNoticeService.update(qxNoticeParam);
         return ResponseData.success();
     }
 
@@ -90,12 +90,12 @@ public class QxNotificationController extends BaseController {
      * 删除接口
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @RequestMapping("/delete")
     @ResponseBody
-    public ResponseData delete(QxNotificationParam qxNotificationParam) {
-        this.qxNotificationService.delete(qxNotificationParam);
+    public ResponseData delete(QxNoticeParam qxNoticeParam) {
+        this.qxNoticeService.delete(qxNoticeParam);
         return ResponseData.success();
     }
 
@@ -103,12 +103,12 @@ public class QxNotificationController extends BaseController {
      * 查看详情接口
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @RequestMapping("/detail")
     @ResponseBody
-    public ResponseData detail(QxNotificationParam qxNotificationParam) {
-        QxNotification detail = this.qxNotificationService.getById(qxNotificationParam.getId());
+    public ResponseData detail(QxNoticeParam qxNoticeParam) {
+        QxNotice detail = this.qxNoticeService.getById(qxNoticeParam.getId());
         return ResponseData.success(detail);
     }
 
@@ -116,12 +116,12 @@ public class QxNotificationController extends BaseController {
      * 查询列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-16
      */
     @ResponseBody
     @RequestMapping("/list")
-    public LayuiPageInfo list(QxNotificationParam qxNotificationParam) {
-        return this.qxNotificationService.findPageBySpec(qxNotificationParam);
+    public LayuiPageInfo list(QxNoticeParam qxNoticeParam) {
+        return this.qxNoticeService.findPageBySpec(qxNoticeParam);
     }
 
 }

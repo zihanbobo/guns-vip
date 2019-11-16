@@ -1,21 +1,20 @@
-package cn.stylefeng.guns.modular.note.model.params;
+package cn.stylefeng.guns.modular.note.model.result;
 
 import lombok.Data;
-import cn.stylefeng.roses.kernel.model.validator.BaseValidatingParam;
 import java.util.Date;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * <p>
- * 系统通知表
+ * 系统通知表 
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-16
  */
 @Data
-public class QxNotificationParam implements Serializable, BaseValidatingParam {
+public class QxNoticeResult implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -56,9 +55,9 @@ public class QxNotificationParam implements Serializable, BaseValidatingParam {
     private String deleted;
 
     /**
-     * 用户ID
+     * 用户账号
      */
-    private Long userId;
+    private String account;
 
     /**
      * 通知内容
@@ -66,13 +65,23 @@ public class QxNotificationParam implements Serializable, BaseValidatingParam {
     private String content;
 
     /**
-     * 已读
+     * 消息分类 消息分类
      */
-    private String readed;
+    private Integer tag;
 
-    @Override
-    public String checkParam() {
-        return null;
-    }
+    /**
+     * 通知类型 通知类型：0-短信，1-邮箱， 2-推送
+     */
+    private Integer type;
+
+    /**
+     * 发送状态 是否发送：0-未发送，1-已发送
+     */
+    private Integer statusSend;
+
+    /**
+     * 已读状态 读取状态：1-是.0-未读
+     */
+    private Integer statusRead;
 
 }
