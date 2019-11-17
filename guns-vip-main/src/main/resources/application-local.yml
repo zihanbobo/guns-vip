@@ -48,3 +48,6 @@ spring:
 # 邮件发送（改为自己的账号）
 mail:
   from: sn93@qq.com
+  
+memcached:
+  server: 127.0.0.1:11211

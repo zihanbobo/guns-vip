@@ -44,7 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
-public class ApiLoginController extends ApiBaseController {
+public class ApiUserController extends ApiBaseController {
 
 	@Resource
 	private ConfigEntity configEntity;
