@@ -15,12 +15,12 @@
  */
 package cn.stylefeng.guns.modular.note.rest;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,12 +30,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.code.ssm.Cache;
 
 import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
+import cn.stylefeng.guns.base.auth.jwt.payload.JwtPayLoad;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CacheCodeUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
-import cn.stylefeng.guns.core.constant.JwtConstants;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.util.NoticeHelper;
+import cn.stylefeng.guns.modular.note.dto.QxUserTo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.service.QxUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +66,7 @@ public class ApiUserController extends ApiBaseController {
 
 	@RequestMapping("/login")
 	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
-//		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 		QxUser user = qxUserService.getUserByAccount(mobile);
 		if (user == null) {
 			user = performRegister(mobile);
@@ -88,11 +89,9 @@ public class ApiUserController extends ApiBaseController {
 	
 	private JSONObject generateToken(QxUser user) {
 		JSONObject result = new JSONObject();
-		Map<String, Object> claims = new HashMap<>();
-		final Date createdDate = new Date();
-		final Date expirationDate = new Date(createdDate.getTime() + JwtConstants.EXPIRATION * 1000);
+		JwtPayLoad payLoad = new JwtPayLoad(user.getId(), user.getMobile(), null);
 		result.put("id", user.getId());
-		result.put("token", JwtTokenUtil.generateToken(user.getId().toString(), expirationDate, claims));
+		result.put("token", JwtTokenUtil.generateToken(payLoad));
 		return result;
 	}
 
@@ -106,6 +105,15 @@ public class ApiUserController extends ApiBaseController {
 		String codeKey = CacheCodeUtil.createCodeKey(mobile, type);
 		cacheValueSecond(codeKey, configEntity.getCodeExpirationMin() * 60, code);
 		log.info("/api/user/getCaptcha, account=" + mobile + ", code=" + code);
+		return ResultGenerator.genSuccessResult();
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public Object update(QxUserTo userTo) {
+		QxUser user = getUser();
+		BeanUtils.copyProperties(userTo, user);
+		qxUserService.updateById(user);
+		log.info("/api/user/update, userTo=" + userTo);
 		return ResultGenerator.genSuccessResult();
 	}
 }

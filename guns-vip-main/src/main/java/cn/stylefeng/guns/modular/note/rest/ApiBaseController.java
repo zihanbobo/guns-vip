@@ -3,8 +3,11 @@ package cn.stylefeng.guns.modular.note.rest;
 import java.util.concurrent.TimeoutException;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.google.code.ssm.Cache;
 import com.google.code.ssm.api.format.SerializationType;
@@ -12,14 +15,29 @@ import com.google.code.ssm.providers.CacheException;
 
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.exception.ServiceException;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.service.QxUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 
 public class ApiBaseController extends BaseController {
 	@Resource
 	protected ConfigEntity configEntity;
 
+	@Resource
+	protected QxUserService qxUserService;
+
 	@Resource(name = "defaultMemcachedClient")
 	protected Cache cache;
+
+	protected QxUser getUser() {
+		return qxUserService.getById(getRequestUserId());
+	}
+
+	protected Long getRequestUserId() {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
+		return Long.valueOf((String) request.getAttribute("userId"));
+	}
 
 	protected void cacheValueSecond(String key, int expiration, Object value) {
 		try {
@@ -28,7 +46,7 @@ public class ApiBaseController extends BaseController {
 			throw new RuntimeException("缓存" + key + "异常！", e);
 		}
 	}
-	
+
 	public static void validateCache(Cache cache, String key, String value, String name) {
 		String cacheValue = null;
 		if (StringUtils.isBlank(key)) {

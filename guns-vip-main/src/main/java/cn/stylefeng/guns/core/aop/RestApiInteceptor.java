@@ -21,9 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
+import cn.stylefeng.guns.base.auth.jwt.payload.JwtPayLoad;
 import cn.stylefeng.guns.core.constant.JwtConstants;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
@@ -32,6 +34,7 @@ import io.jsonwebtoken.JwtException;
  * @author stylefeng
  * @Date 2018/7/20 23:11
  */
+@Slf4j
 public class RestApiInteceptor extends HandlerInterceptorAdapter {
 
     @Override
@@ -54,6 +57,11 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
                 if (flag) {
                 	throw new ServiceException("token过期");
                 }
+                JwtPayLoad payload = JwtTokenUtil.getJwtPayLoad(authToken);
+                String userId = payload.getUserId().toString();
+                request.setAttribute("userId", userId);
+                log.info("userId" + userId);
+                return true;
             } catch (JwtException e) {
                 //有异常就是token解析失败
                 throw new ServiceException("token验证失败");
@@ -62,7 +70,6 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
             //header没有带Bearer字段
             throw new ServiceException("token格式不正确");
         }
-        return true;
     }
 
 }
