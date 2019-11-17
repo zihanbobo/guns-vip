@@ -26,12 +26,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.code.ssm.Cache;
+
 import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CacheCodeUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.constant.JwtConstants;
+import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.util.NoticeHelper;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.service.QxUserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,6 +54,9 @@ public class ApiUserController extends ApiBaseController {
 	@Resource
 	private ConfigEntity configEntity;
 
+	@Resource(name = "defaultMemcachedClient")
+	protected Cache cache;
+
 	@Resource
 	private QxUserService qxUserService;
 
@@ -56,16 +64,39 @@ public class ApiUserController extends ApiBaseController {
 	private NoticeHelper noticeHelper;
 
 	@RequestMapping("/login")
-	public Object login(@RequestParam("username") String mobile, @RequestParam("code") String code) {
-		HashMap<String, Object> result = new HashMap<>();
+	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
+		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+		QxUser user = qxUserService.getUserByAccount(mobile);
+		if (user == null) {
+			user = performRegister(mobile);
+		}
+		JSONObject result = generateToken(user);
+		return ResultGenerator.genSuccessResult(result);
+	}
+
+	private void validateCode(String mobile, String code,  int type, String name) {
+		String codeKey = CacheCodeUtil.createCodeKey(mobile, type);
+		validateCache(cache, codeKey, code, name);
+	}
+	
+	private QxUser performRegister(String mobile) {
+		QxUser user = new QxUser();
+		user.setMobile(mobile);
+		qxUserService.save(user);
+		return user;
+	}
+	
+	private JSONObject generateToken(QxUser user) {
+		JSONObject result = new JSONObject();
 		Map<String, Object> claims = new HashMap<>();
 		final Date createdDate = new Date();
 		final Date expirationDate = new Date(createdDate.getTime() + JwtConstants.EXPIRATION * 1000);
-		result.put("token", JwtTokenUtil.generateToken("1", expirationDate, claims));
+		result.put("id", user.getId());
+		result.put("token", JwtTokenUtil.generateToken(user.getId().toString(), expirationDate, claims));
 		return result;
 	}
 
-	@RequestMapping(value="/getCaptcha", method = RequestMethod.POST)
+	@RequestMapping(value = "/getCaptcha", method = RequestMethod.POST)
 	public Object getCaptcha(@RequestParam("mobile") String mobile, @RequestParam("type") int type) {
 		String code = CacheCodeUtil.createCode(configEntity.getCodeLength());
 		Map<String, String> pairs = new HashMap<>();

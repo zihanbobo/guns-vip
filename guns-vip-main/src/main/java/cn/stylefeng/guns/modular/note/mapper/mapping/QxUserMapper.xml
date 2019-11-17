@@ -55,6 +55,6 @@
 	<select id="getByAccount" resultType="cn.stylefeng.guns.modular.note.entity.QxUser">
 		select
 		<include refid="Base_Column_List"/>
-		from qx_user where mobile = #{account} and deleted != '1'
+		from qx_user where mobile = #{account} 
 	</select>
 </mapper>

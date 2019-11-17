@@ -14,6 +14,7 @@ import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.DateUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.NOTICE_SEND_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.NOTICE_TYPE;
+import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.notice.AliyunEmail;
 import cn.stylefeng.guns.core.notice.AliyunSms;
@@ -78,6 +79,9 @@ public class NoticeHelper {
 	}
 	
 	private boolean needCheckInterval(Integer tag) {
+		if (tag == SMS_CODE.LOGIN_OR_REGISTER) {
+			return true;
+		}
 		return false;
 	}
 	

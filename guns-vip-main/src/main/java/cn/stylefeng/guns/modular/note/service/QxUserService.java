@@ -66,4 +66,10 @@ public interface QxUserService extends IService<QxUser> {
      */
      LayuiPageInfo findPageBySpec(QxUserParam param);
 
+     /**
+      * 通过账号获取用户
+      * @param account
+      * @return
+      */
+     QxUser getUserByAccount(String account);
 }
