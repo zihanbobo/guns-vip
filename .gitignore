@@ -40,3 +40,5 @@ _dockerCerts/
 *.lck
 
 **/rebel.xml
+
+**/upload

@@ -85,6 +85,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/tran/**").permitAll()
                 // api接口
                 .antMatchers("/api/**").permitAll()
+                // 图片子u按
+                .antMatchers("/resource/**").permitAll()
 
                 .anyRequest().authenticated();
 

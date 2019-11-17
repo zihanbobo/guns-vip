@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import cn.stylefeng.guns.core.FileUtil;
 import lombok.Data;
 
 @Configuration
@@ -15,6 +16,10 @@ import lombok.Data;
 @Data
 public class ConfigEntity {
 	private String secureUrls;
+	// 上传文件
+	private String baseUploadPath;
+	private String imagesPath;
+
 	// 极光推送
 	private String jpushMaster;
 	private String jpushAppKey;
@@ -35,6 +40,10 @@ public class ConfigEntity {
 	private String emailAccountName;
 	private String emailFromAlias;
 	private String eTemplate;
+	
+	public String getAbsoluteUploadPath() {
+		return FileUtil.mergeDeployPath(baseUploadPath);
+	}
 
 	public String getTagName(Integer tag) {
 		return getNoticeConfig(tag, false).get("tagName");
