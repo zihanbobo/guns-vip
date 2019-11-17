@@ -116,4 +116,11 @@ public class ApiUserController extends ApiBaseController {
 		log.info("/api/user/update, userTo=" + userTo);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@RequestMapping(value = "/detail")
+	public Object detail() {
+		QxUser user = getUser();
+		log.info("/api/user/detail");
+		return ResultGenerator.genSuccessResult(user);
+	}
 }
