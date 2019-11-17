@@ -8,14 +8,14 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
     /**
      * 系统通知表管理
      */
-    var QxNotification = {
-        tableId: "qxNotificationTable"
+    var QxNotice = {
+        tableId: "qxNoticeTable"
     };
 
     /**
      * 初始化表格的列
      */
-    QxNotification.initColumn = function () {
+    QxNotice.initColumn = function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
@@ -25,9 +25,12 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'updatedBy', sort: true, title: '更新人'},
             {field: 'updatedTime', sort: true, title: '更新时间'},
             {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'userId', sort: true, title: '用户ID'},
+            {field: 'account', sort: true, title: '用户账号'},
             {field: 'content', sort: true, title: '通知内容'},
-            {field: 'readed', sort: true, title: '已读'},
+            {field: 'tag', sort: true, title: '消息分类 消息分类'},
+            {field: 'type', sort: true, title: '通知类型 通知类型：0-短信，1-邮箱， 2-推送'},
+            {field: 'statusSend', sort: true, title: '发送状态 是否发送：0-未发送，1-已发送'},
+            {field: 'statusRead', sort: true, title: '已读状态 读取状态：1-是.0-未读'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };
@@ -35,10 +38,10 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
     /**
      * 点击查询按钮
      */
-    QxNotification.search = function () {
+    QxNotice.search = function () {
         var queryData = {};
         queryData['condition'] = $("#condition").val();
-        table.reload(QxNotification.tableId, {
+        table.reload(QxNotice.tableId, {
             where: queryData, page: {curr: 1}
         });
     };
@@ -46,11 +49,11 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
     /**
      * 弹出添加对话框
      */
-    QxNotification.openAddDlg = function () {
+    QxNotice.openAddDlg = function () {
         func.open({
             title: '添加系统通知表',
-            content: Feng.ctxPath + '/qxNotification/add',
-            tableId: QxNotification.tableId
+            content: Feng.ctxPath + '/qxNotice/add',
+            tableId: QxNotice.tableId
         });
     };
 
@@ -59,19 +62,19 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
     *
     * @param data 点击按钮时候的行数据
     */
-    QxNotification.openEditDlg = function (data) {
+    QxNotice.openEditDlg = function (data) {
         func.open({
             title: '修改系统通知表',
-            content: Feng.ctxPath + '/qxNotification/edit?id=' + data.id,
-            tableId: QxNotification.tableId
+            content: Feng.ctxPath + '/qxNotice/edit?id=' + data.id,
+            tableId: QxNotice.tableId
         });
     };
 
     /**
      * 导出excel按钮
      */
-    QxNotification.exportExcel = function () {
-        var checkRows = table.checkStatus(QxNotification.tableId);
+    QxNotice.exportExcel = function () {
+        var checkRows = table.checkStatus(QxNotice.tableId);
         if (checkRows.data.length === 0) {
             Feng.error("请选择要导出的数据");
         } else {
@@ -84,11 +87,11 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      *
      * @param data 点击按钮时候的行数据
      */
-    QxNotification.onDeleteItem = function (data) {
+    QxNotice.onDeleteItem = function (data) {
         var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/qxNotification/delete", function (data) {
+            var ajax = new $ax(Feng.ctxPath + "/qxNotice/delete", function (data) {
                 Feng.success("删除成功!");
-                table.reload(QxNotification.tableId);
+                table.reload(QxNotice.tableId);
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
@@ -100,38 +103,38 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
 
     // 渲染表格
     var tableResult = table.render({
-        elem: '#' + QxNotification.tableId,
-        url: Feng.ctxPath + '/qxNotification/list',
+        elem: '#' + QxNotice.tableId,
+        url: Feng.ctxPath + '/qxNotice/list',
         page: true,
         height: "full-158",
         cellMinWidth: 100,
-        cols: QxNotification.initColumn()
+        cols: QxNotice.initColumn()
     });
 
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
-        QxNotification.search();
+        QxNotice.search();
     });
 
     // 添加按钮点击事件
     $('#btnAdd').click(function () {
-        QxNotification.openAddDlg();
+        QxNotice.openAddDlg();
     });
 
     // 导出excel
     $('#btnExp').click(function () {
-        QxNotification.exportExcel();
+        QxNotice.exportExcel();
     });
 
     // 工具条点击事件
-    table.on('tool(' + QxNotification.tableId + ')', function (obj) {
+    table.on('tool(' + QxNotice.tableId + ')', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
 
         if (layEvent === 'edit') {
-            QxNotification.openEditDlg(data);
+            QxNotice.openEditDlg(data);
         } else if (layEvent === 'delete') {
-            QxNotification.onDeleteItem(data);
+            QxNotice.onDeleteItem(data);
         }
     });
 });

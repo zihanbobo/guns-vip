@@ -1,7 +1,7 @@
 /**
  * 详情对话框
  */
-var QxNotificationInfoDlg = {
+var QxNoticeInfoDlg = {
     data: {
         version: "",
         createdBy: "",
@@ -9,9 +9,12 @@ var QxNotificationInfoDlg = {
         updatedBy: "",
         updatedTime: "",
         deleted: "",
-        userId: "",
+        account: "",
         content: "",
-        readed: ""
+        tag: "",
+        type: "",
+        statusSend: "",
+        statusRead: ""
     }
 };
 
@@ -25,13 +28,13 @@ layui.use(['form', 'admin', 'ax'], function () {
     // admin.iframeAuto();
 
     //获取详情信息，填充表单
-    var ajax = new $ax(Feng.ctxPath + "/qxNotification/detail?id=" + Feng.getUrlParam("id"));
+    var ajax = new $ax(Feng.ctxPath + "/qxNotice/detail?id=" + Feng.getUrlParam("id"));
     var result = ajax.start();
-    form.val('qxNotificationForm', result.data);
+    form.val('qxNoticeForm', result.data);
 
     //表单提交事件
     form.on('submit(btnSubmit)', function (data) {
-        var ajax = new $ax(Feng.ctxPath + "/qxNotification/editItem", function (data) {
+        var ajax = new $ax(Feng.ctxPath + "/qxNotice/editItem", function (data) {
             Feng.success("更新成功！");
 
             //传给上个页面，刷新table用

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.note.mapper.QxNoticeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.note.entity.QxNotice">
+        <id column="id" property="id" />
+        <result column="version" property="version" />
+        <result column="created_by" property="createdBy" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_by" property="updatedBy" />
+        <result column="updated_time" property="updatedTime" />
+        <result column="deleted" property="deleted" />
+        <result column="account" property="account" />
+        <result column="content" property="content" />
+        <result column="tag" property="tag" />
+        <result column="type" property="type" />
+        <result column="status_send" property="statusSend" />
+        <result column="status_read" property="statusRead" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", account AS "account", content AS "content", tag AS "tag", type AS "type", status_send AS "statusSend", status_read AS "statusRead"
+    </sql>
+
+
+    <select id="customList" resultType="cn.stylefeng.guns.modular.note.model.result.QxNoticeResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoticeParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_notice where 1 = 1
+    </select>
+
+    <select id="customMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoticeParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_notice where 1 = 1
+    </select>
+
+    <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxNoticeResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoticeParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_notice where 1 = 1
+    </select>
+
+    <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxNoticeParam">
+        select
+        <include refid="Base_Column_List"/>
+        from qx_notice where 1 = 1
+    </select>
+
+</mapper>
