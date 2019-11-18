@@ -32,6 +32,10 @@ public class ApiBaseController extends BaseController {
 	protected QxUser getUser() {
 		return qxUserService.getById(getRequestUserId());
 	}
+	
+	protected QxUser getUser(Long id) {
+		return qxUserService.getById(id);
+	}
 
 	protected Long getRequestUserId() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())

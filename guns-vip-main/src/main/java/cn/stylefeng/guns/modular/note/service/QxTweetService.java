@@ -65,5 +65,7 @@ public interface QxTweetService extends IService<QxTweet> {
      * @Date 2019-11-14
      */
      LayuiPageInfo findPageBySpec(QxTweetParam param);
+     
+     
 
 }
