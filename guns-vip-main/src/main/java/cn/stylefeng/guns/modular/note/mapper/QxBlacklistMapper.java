@@ -17,7 +17,7 @@ import java.util.Map;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxBlacklistMapper extends BaseMapper<QxBlacklist> {
 
@@ -25,7 +25,7 @@ public interface QxBlacklistMapper extends BaseMapper<QxBlacklist> {
      * 获取列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxBlacklistResult> customList(@Param("paramCondition") QxBlacklistParam paramCondition);
 
@@ -33,7 +33,7 @@ public interface QxBlacklistMapper extends BaseMapper<QxBlacklist> {
      * 获取map列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<Map<String, Object>> customMapList(@Param("paramCondition") QxBlacklistParam paramCondition);
 
@@ -41,7 +41,7 @@ public interface QxBlacklistMapper extends BaseMapper<QxBlacklist> {
      * 获取分页实体列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     Page<QxBlacklistResult> customPageList(@Param("page") Page page, @Param("paramCondition") QxBlacklistParam paramCondition);
 
@@ -49,7 +49,7 @@ public interface QxBlacklistMapper extends BaseMapper<QxBlacklist> {
      * 获取分页map列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxBlacklistParam paramCondition);
 

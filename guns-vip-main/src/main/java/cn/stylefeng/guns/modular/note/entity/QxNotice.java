@@ -9,11 +9,11 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 系统通知表 
+ * 系统通知表
  * </p>
  *
  * @author 
- * @since 2019-11-16
+ * @since 2019-11-18
  */
 @TableName("qx_notice")
 public class QxNotice implements Serializable {
@@ -60,7 +60,7 @@ public class QxNotice implements Serializable {
      * 删除标识
      */
     @TableField("deleted")
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 用户账号
@@ -147,11 +147,11 @@ public class QxNotice implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public String getDeleted() {
+    public Boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 

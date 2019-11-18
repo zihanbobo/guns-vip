@@ -22,7 +22,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @Service
 public class QxBlacklistServiceImpl extends ServiceImpl<QxBlacklistMapper, QxBlacklist> implements QxBlacklistService {

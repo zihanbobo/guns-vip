@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @TableName("qx_invite_comment")
 public class QxInviteComment implements Serializable {
@@ -60,7 +60,7 @@ public class QxInviteComment implements Serializable {
      * 删除标识
      */
     @TableField("deleted")
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 评价者ID
@@ -141,11 +141,11 @@ public class QxInviteComment implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public String getDeleted() {
+    public Boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 

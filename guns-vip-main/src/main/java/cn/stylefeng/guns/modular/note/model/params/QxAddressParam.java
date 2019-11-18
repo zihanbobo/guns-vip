@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @Data
 public class QxAddressParam implements Serializable, BaseValidatingParam {
@@ -53,7 +53,7 @@ public class QxAddressParam implements Serializable, BaseValidatingParam {
     /**
      * 删除标识
      */
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 用户ID
@@ -83,7 +83,7 @@ public class QxAddressParam implements Serializable, BaseValidatingParam {
     /**
      * 是否默认
      */
-    private String isDefault;
+    private Boolean isDefault;
 
     @Override
     public String checkParam() {

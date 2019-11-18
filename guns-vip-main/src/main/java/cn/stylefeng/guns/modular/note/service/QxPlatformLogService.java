@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxPlatformLogService extends IService<QxPlatformLog> {
 
@@ -22,7 +22,7 @@ public interface QxPlatformLogService extends IService<QxPlatformLog> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxPlatformLogParam param);
 
@@ -30,7 +30,7 @@ public interface QxPlatformLogService extends IService<QxPlatformLog> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxPlatformLogParam param);
 
@@ -38,7 +38,7 @@ public interface QxPlatformLogService extends IService<QxPlatformLog> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxPlatformLogParam param);
 
@@ -46,7 +46,7 @@ public interface QxPlatformLogService extends IService<QxPlatformLog> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxPlatformLogResult findBySpec(QxPlatformLogParam param);
 
@@ -54,7 +54,7 @@ public interface QxPlatformLogService extends IService<QxPlatformLog> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxPlatformLogResult> findListBySpec(QxPlatformLogParam param);
 
@@ -62,7 +62,7 @@ public interface QxPlatformLogService extends IService<QxPlatformLog> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxPlatformLogParam param);
 

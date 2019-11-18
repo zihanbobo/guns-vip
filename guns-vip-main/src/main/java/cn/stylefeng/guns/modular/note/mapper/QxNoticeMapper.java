@@ -13,11 +13,11 @@ import java.util.Map;
 
 /**
  * <p>
- * 系统通知表  Mapper 接口
+ * 系统通知表 Mapper 接口
  * </p>
  *
  * @author 
- * @since 2019-11-16
+ * @since 2019-11-18
  */
 public interface QxNoticeMapper extends BaseMapper<QxNotice> {
 
@@ -25,7 +25,7 @@ public interface QxNoticeMapper extends BaseMapper<QxNotice> {
      * 获取列表
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     List<QxNoticeResult> customList(@Param("paramCondition") QxNoticeParam paramCondition);
 
@@ -33,7 +33,7 @@ public interface QxNoticeMapper extends BaseMapper<QxNotice> {
      * 获取map列表
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     List<Map<String, Object>> customMapList(@Param("paramCondition") QxNoticeParam paramCondition);
 
@@ -41,7 +41,7 @@ public interface QxNoticeMapper extends BaseMapper<QxNotice> {
      * 获取分页实体列表
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     Page<QxNoticeResult> customPageList(@Param("page") Page page, @Param("paramCondition") QxNoticeParam paramCondition);
 
@@ -49,7 +49,7 @@ public interface QxNoticeMapper extends BaseMapper<QxNotice> {
      * 获取分页map列表
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxNoticeParam paramCondition);
 

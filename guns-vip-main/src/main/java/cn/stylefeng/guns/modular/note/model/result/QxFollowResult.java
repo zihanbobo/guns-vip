@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @Data
 public class QxFollowResult implements Serializable {
@@ -52,7 +52,7 @@ public class QxFollowResult implements Serializable {
     /**
      * 删除标识
      */
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 关注者ID

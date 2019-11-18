@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @TableName("qx_note")
 public class QxNote implements Serializable {
@@ -60,7 +60,7 @@ public class QxNote implements Serializable {
      * 删除标识
      */
     @TableField("deleted")
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 用户ID
@@ -90,7 +90,7 @@ public class QxNote implements Serializable {
      * 是否允许评价
      */
     @TableField("can_comment")
-    private String canComment;
+    private Boolean canComment;
 
     /**
      * 点赞数
@@ -114,13 +114,19 @@ public class QxNote implements Serializable {
      * 是否加密
      */
     @TableField("is_private")
-    private String isPrivate;
+    private Boolean isPrivate;
 
     /**
      * 打开条件 解锁需付出的礼物
      */
     @TableField("gift_id")
-    private String giftId;
+    private Long giftId;
+
+    /**
+     * 查看次数 查看次数
+     */
+    @TableField("watch_count")
+    private Integer watchCount;
 
 
     public Long getId() {
@@ -171,11 +177,11 @@ public class QxNote implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public String getDeleted() {
+    public Boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 
@@ -211,11 +217,11 @@ public class QxNote implements Serializable {
         this.content = content;
     }
 
-    public String getCanComment() {
+    public Boolean getCanComment() {
         return canComment;
     }
 
-    public void setCanComment(String canComment) {
+    public void setCanComment(Boolean canComment) {
         this.canComment = canComment;
     }
 
@@ -243,20 +249,28 @@ public class QxNote implements Serializable {
         this.giftCount = giftCount;
     }
 
-    public String getIsPrivate() {
-        return isPrivate;
-    }
+    public Boolean getIsPrivate() {
+		return isPrivate;
+	}
 
-    public void setIsPrivate(String isPrivate) {
-        this.isPrivate = isPrivate;
-    }
+	public void setIsPrivate(Boolean isPrivate) {
+		this.isPrivate = isPrivate;
+	}
 
-    public String getGiftId() {
+	public Long getGiftId() {
         return giftId;
     }
 
-    public void setGiftId(String giftId) {
+    public void setGiftId(Long giftId) {
         this.giftId = giftId;
+    }
+
+    public Integer getWatchCount() {
+        return watchCount;
+    }
+
+    public void setWatchCount(Integer watchCount) {
+        this.watchCount = watchCount;
     }
 
     @Override
@@ -279,6 +293,7 @@ public class QxNote implements Serializable {
         ", giftCount=" + giftCount +
         ", isPrivate=" + isPrivate +
         ", giftId=" + giftId +
+        ", watchCount=" + watchCount +
         "}";
     }
 }

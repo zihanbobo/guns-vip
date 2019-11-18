@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxTweetCommentService extends IService<QxTweetComment> {
 
@@ -22,7 +22,7 @@ public interface QxTweetCommentService extends IService<QxTweetComment> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxTweetCommentParam param);
 
@@ -30,7 +30,7 @@ public interface QxTweetCommentService extends IService<QxTweetComment> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxTweetCommentParam param);
 
@@ -38,7 +38,7 @@ public interface QxTweetCommentService extends IService<QxTweetComment> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxTweetCommentParam param);
 
@@ -46,7 +46,7 @@ public interface QxTweetCommentService extends IService<QxTweetComment> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxTweetCommentResult findBySpec(QxTweetCommentParam param);
 
@@ -54,7 +54,7 @@ public interface QxTweetCommentService extends IService<QxTweetComment> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxTweetCommentResult> findListBySpec(QxTweetCommentParam param);
 
@@ -62,7 +62,7 @@ public interface QxTweetCommentService extends IService<QxTweetComment> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxTweetCommentParam param);
 

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @Data
 public class QxNoteResult implements Serializable {
@@ -52,7 +52,7 @@ public class QxNoteResult implements Serializable {
     /**
      * 删除标识
      */
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 用户ID
@@ -77,7 +77,7 @@ public class QxNoteResult implements Serializable {
     /**
      * 是否允许评价
      */
-    private String canComment;
+    private Boolean canComment;
 
     /**
      * 点赞数
@@ -97,11 +97,16 @@ public class QxNoteResult implements Serializable {
     /**
      * 是否加密
      */
-    private String isPrivate;
+    private Boolean isPrivate;
 
     /**
      * 打开条件 解锁需付出的礼物
      */
-    private String giftId;
+    private Long giftId;
+
+    /**
+     * 查看次数 查看次数
+     */
+    private Integer watchCount;
 
 }

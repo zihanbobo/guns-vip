@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @TableName("qx_address")
 public class QxAddress implements Serializable {
@@ -60,7 +60,7 @@ public class QxAddress implements Serializable {
      * 删除标识
      */
     @TableField("deleted")
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 用户ID
@@ -96,7 +96,7 @@ public class QxAddress implements Serializable {
      * 是否默认
      */
     @TableField("is_default")
-    private String isDefault;
+    private Boolean isDefault;
 
 
     public Long getId() {
@@ -147,11 +147,11 @@ public class QxAddress implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public String getDeleted() {
+    public Boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(String deleted) {
+    public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
 
@@ -195,11 +195,11 @@ public class QxAddress implements Serializable {
         this.address = address;
     }
 
-    public String getIsDefault() {
+    public Boolean getDefault() {
         return isDefault;
     }
 
-    public void setIsDefault(String isDefault) {
+    public void setDefault(Boolean isDefault) {
         this.isDefault = isDefault;
     }
 

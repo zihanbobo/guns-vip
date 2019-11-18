@@ -8,11 +8,11 @@ import java.math.BigDecimal;
 
 /**
  * <p>
- * 系统通知表 
+ * 系统通知表
  * </p>
  *
  * @author 
- * @since 2019-11-16
+ * @since 2019-11-18
  */
 @Data
 public class QxNoticeParam implements Serializable, BaseValidatingParam {
@@ -53,7 +53,7 @@ public class QxNoticeParam implements Serializable, BaseValidatingParam {
     /**
      * 删除标识
      */
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 用户账号

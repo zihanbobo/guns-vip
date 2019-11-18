@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxCategoryService extends IService<QxCategory> {
 
@@ -22,7 +22,7 @@ public interface QxCategoryService extends IService<QxCategory> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxCategoryParam param);
 
@@ -30,7 +30,7 @@ public interface QxCategoryService extends IService<QxCategory> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxCategoryParam param);
 
@@ -38,7 +38,7 @@ public interface QxCategoryService extends IService<QxCategory> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxCategoryParam param);
 
@@ -46,7 +46,7 @@ public interface QxCategoryService extends IService<QxCategory> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxCategoryResult findBySpec(QxCategoryParam param);
 
@@ -54,7 +54,7 @@ public interface QxCategoryService extends IService<QxCategory> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxCategoryResult> findListBySpec(QxCategoryParam param);
 
@@ -62,7 +62,7 @@ public interface QxCategoryService extends IService<QxCategory> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxCategoryParam param);
 

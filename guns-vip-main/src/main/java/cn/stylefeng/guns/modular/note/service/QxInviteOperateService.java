@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxInviteOperateService extends IService<QxInviteOperate> {
 
@@ -22,7 +22,7 @@ public interface QxInviteOperateService extends IService<QxInviteOperate> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxInviteOperateParam param);
 
@@ -30,7 +30,7 @@ public interface QxInviteOperateService extends IService<QxInviteOperate> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxInviteOperateParam param);
 
@@ -38,7 +38,7 @@ public interface QxInviteOperateService extends IService<QxInviteOperate> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxInviteOperateParam param);
 
@@ -46,7 +46,7 @@ public interface QxInviteOperateService extends IService<QxInviteOperate> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxInviteOperateResult findBySpec(QxInviteOperateParam param);
 
@@ -54,7 +54,7 @@ public interface QxInviteOperateService extends IService<QxInviteOperate> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxInviteOperateResult> findListBySpec(QxInviteOperateParam param);
 
@@ -62,7 +62,7 @@ public interface QxInviteOperateService extends IService<QxInviteOperate> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxInviteOperateParam param);
 

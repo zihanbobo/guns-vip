@@ -18,7 +18,8 @@ var QxNoteInfoDlg = {
         commentCount: "",
         giftCount: "",
         isPrivate: "",
-        giftId: ""
+        giftId: "",
+        watchCount: ""
     }
 };
 

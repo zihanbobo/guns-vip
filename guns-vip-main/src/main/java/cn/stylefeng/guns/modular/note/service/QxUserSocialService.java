@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxUserSocialService extends IService<QxUserSocial> {
 
@@ -22,7 +22,7 @@ public interface QxUserSocialService extends IService<QxUserSocial> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxUserSocialParam param);
 
@@ -30,7 +30,7 @@ public interface QxUserSocialService extends IService<QxUserSocial> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxUserSocialParam param);
 
@@ -38,7 +38,7 @@ public interface QxUserSocialService extends IService<QxUserSocial> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxUserSocialParam param);
 
@@ -46,7 +46,7 @@ public interface QxUserSocialService extends IService<QxUserSocial> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxUserSocialResult findBySpec(QxUserSocialParam param);
 
@@ -54,7 +54,7 @@ public interface QxUserSocialService extends IService<QxUserSocial> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxUserSocialResult> findListBySpec(QxUserSocialParam param);
 
@@ -62,7 +62,7 @@ public interface QxUserSocialService extends IService<QxUserSocial> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxUserSocialParam param);
 

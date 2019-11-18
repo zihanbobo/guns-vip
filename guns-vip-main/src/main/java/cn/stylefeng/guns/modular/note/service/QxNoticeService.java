@@ -10,11 +10,11 @@ import java.util.List;
 
 /**
  * <p>
- * 系统通知表  服务类
+ * 系统通知表 服务类
  * </p>
  *
  * @author 
- * @since 2019-11-16
+ * @since 2019-11-18
  */
 public interface QxNoticeService extends IService<QxNotice> {
 
@@ -22,7 +22,7 @@ public interface QxNoticeService extends IService<QxNotice> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     void add(QxNoticeParam param);
 
@@ -30,7 +30,7 @@ public interface QxNoticeService extends IService<QxNotice> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     void delete(QxNoticeParam param);
 
@@ -38,7 +38,7 @@ public interface QxNoticeService extends IService<QxNotice> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     void update(QxNoticeParam param);
 
@@ -46,7 +46,7 @@ public interface QxNoticeService extends IService<QxNotice> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     QxNoticeResult findBySpec(QxNoticeParam param);
 
@@ -54,7 +54,7 @@ public interface QxNoticeService extends IService<QxNotice> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
     List<QxNoticeResult> findListBySpec(QxNoticeParam param);
 
@@ -62,7 +62,7 @@ public interface QxNoticeService extends IService<QxNotice> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-16
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxNoticeParam param);
 

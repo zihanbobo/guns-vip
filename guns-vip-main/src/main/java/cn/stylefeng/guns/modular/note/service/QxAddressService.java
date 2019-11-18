@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxAddressService extends IService<QxAddress> {
 
@@ -22,7 +22,7 @@ public interface QxAddressService extends IService<QxAddress> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxAddressParam param);
 
@@ -30,7 +30,7 @@ public interface QxAddressService extends IService<QxAddress> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxAddressParam param);
 
@@ -38,7 +38,7 @@ public interface QxAddressService extends IService<QxAddress> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxAddressParam param);
 
@@ -46,7 +46,7 @@ public interface QxAddressService extends IService<QxAddress> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxAddressResult findBySpec(QxAddressParam param);
 
@@ -54,7 +54,7 @@ public interface QxAddressService extends IService<QxAddress> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxAddressResult> findListBySpec(QxAddressParam param);
 
@@ -62,7 +62,7 @@ public interface QxAddressService extends IService<QxAddress> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxAddressParam param);
 

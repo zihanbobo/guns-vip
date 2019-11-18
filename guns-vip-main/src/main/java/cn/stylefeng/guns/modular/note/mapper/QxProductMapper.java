@@ -17,7 +17,7 @@ import java.util.Map;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxProductMapper extends BaseMapper<QxProduct> {
 
@@ -25,7 +25,7 @@ public interface QxProductMapper extends BaseMapper<QxProduct> {
      * 获取列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxProductResult> customList(@Param("paramCondition") QxProductParam paramCondition);
 
@@ -33,7 +33,7 @@ public interface QxProductMapper extends BaseMapper<QxProduct> {
      * 获取map列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<Map<String, Object>> customMapList(@Param("paramCondition") QxProductParam paramCondition);
 
@@ -41,7 +41,7 @@ public interface QxProductMapper extends BaseMapper<QxProduct> {
      * 获取分页实体列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     Page<QxProductResult> customPageList(@Param("page") Page page, @Param("paramCondition") QxProductParam paramCondition);
 
@@ -49,7 +49,7 @@ public interface QxProductMapper extends BaseMapper<QxProduct> {
      * 获取分页map列表
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxProductParam paramCondition);
 

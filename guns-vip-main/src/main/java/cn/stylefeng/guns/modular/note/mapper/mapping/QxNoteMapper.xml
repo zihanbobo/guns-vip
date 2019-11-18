@@ -21,11 +21,12 @@
         <result column="gift_count" property="giftCount" />
         <result column="is_private" property="isPrivate" />
         <result column="gift_id" property="giftId" />
+        <result column="watch_count" property="watchCount" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", images AS "images", title AS "title", content AS "content", can_comment AS "canComment", favorite_count AS "favoriteCount", comment_count AS "commentCount", gift_count AS "giftCount", is_private AS "isPrivate", gift_id AS "giftId"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", images AS "images", title AS "title", content AS "content", can_comment AS "canComment", favorite_count AS "favoriteCount", comment_count AS "commentCount", gift_count AS "giftCount", is_private AS "isPrivate", gift_id AS "giftId", watch_count AS "watchCount"
     </sql>
 
 

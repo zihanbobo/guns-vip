@@ -35,6 +35,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'giftCount', sort: true, title: '已赠送礼物数'},
             {field: 'isPrivate', sort: true, title: '是否加密'},
             {field: 'giftId', sort: true, title: '打开条件 解锁需付出的礼物'},
+            {field: 'watchCount', sort: true, title: '查看次数 查看次数'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

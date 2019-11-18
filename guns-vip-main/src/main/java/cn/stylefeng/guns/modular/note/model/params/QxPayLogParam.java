@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @Data
 public class QxPayLogParam implements Serializable, BaseValidatingParam {
@@ -53,7 +53,7 @@ public class QxPayLogParam implements Serializable, BaseValidatingParam {
     /**
      * 删除标识
      */
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 用户ID

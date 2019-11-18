@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxUserNoteService extends IService<QxUserNote> {
 
@@ -22,7 +22,7 @@ public interface QxUserNoteService extends IService<QxUserNote> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxUserNoteParam param);
 
@@ -30,7 +30,7 @@ public interface QxUserNoteService extends IService<QxUserNote> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxUserNoteParam param);
 
@@ -38,7 +38,7 @@ public interface QxUserNoteService extends IService<QxUserNote> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxUserNoteParam param);
 
@@ -46,7 +46,7 @@ public interface QxUserNoteService extends IService<QxUserNote> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxUserNoteResult findBySpec(QxUserNoteParam param);
 
@@ -54,7 +54,7 @@ public interface QxUserNoteService extends IService<QxUserNote> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxUserNoteResult> findListBySpec(QxUserNoteParam param);
 
@@ -62,7 +62,7 @@ public interface QxUserNoteService extends IService<QxUserNote> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxUserNoteParam param);
 

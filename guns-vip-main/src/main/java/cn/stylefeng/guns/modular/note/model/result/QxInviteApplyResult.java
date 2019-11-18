@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 @Data
 public class QxInviteApplyResult implements Serializable {
@@ -52,7 +52,7 @@ public class QxInviteApplyResult implements Serializable {
     /**
      * 删除标识
      */
-    private String deleted;
+    private Boolean deleted;
 
     /**
      * 约单ID
@@ -67,6 +67,6 @@ public class QxInviteApplyResult implements Serializable {
     /**
      * 是否选中
      */
-    private String choosed;
+    private Boolean choosed;
 
 }

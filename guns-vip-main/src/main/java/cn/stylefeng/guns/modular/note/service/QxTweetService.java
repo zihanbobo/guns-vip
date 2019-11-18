@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxTweetService extends IService<QxTweet> {
 
@@ -22,7 +22,7 @@ public interface QxTweetService extends IService<QxTweet> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxTweetParam param);
 
@@ -30,7 +30,7 @@ public interface QxTweetService extends IService<QxTweet> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxTweetParam param);
 
@@ -38,7 +38,7 @@ public interface QxTweetService extends IService<QxTweet> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxTweetParam param);
 
@@ -46,7 +46,7 @@ public interface QxTweetService extends IService<QxTweet> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxTweetResult findBySpec(QxTweetParam param);
 
@@ -54,7 +54,7 @@ public interface QxTweetService extends IService<QxTweet> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxTweetResult> findListBySpec(QxTweetParam param);
 
@@ -62,10 +62,8 @@ public interface QxTweetService extends IService<QxTweet> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxTweetParam param);
-     
-     
 
 }

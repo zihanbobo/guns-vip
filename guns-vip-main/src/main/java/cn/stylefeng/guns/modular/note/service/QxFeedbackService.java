@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxFeedbackService extends IService<QxFeedback> {
 
@@ -22,7 +22,7 @@ public interface QxFeedbackService extends IService<QxFeedback> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxFeedbackParam param);
 
@@ -30,7 +30,7 @@ public interface QxFeedbackService extends IService<QxFeedback> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxFeedbackParam param);
 
@@ -38,7 +38,7 @@ public interface QxFeedbackService extends IService<QxFeedback> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxFeedbackParam param);
 
@@ -46,7 +46,7 @@ public interface QxFeedbackService extends IService<QxFeedback> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxFeedbackResult findBySpec(QxFeedbackParam param);
 
@@ -54,7 +54,7 @@ public interface QxFeedbackService extends IService<QxFeedback> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxFeedbackResult> findListBySpec(QxFeedbackParam param);
 
@@ -62,7 +62,7 @@ public interface QxFeedbackService extends IService<QxFeedback> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxFeedbackParam param);
 

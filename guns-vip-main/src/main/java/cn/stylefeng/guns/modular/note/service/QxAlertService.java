@@ -14,7 +14,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-14
+ * @since 2019-11-18
  */
 public interface QxAlertService extends IService<QxAlert> {
 
@@ -22,7 +22,7 @@ public interface QxAlertService extends IService<QxAlert> {
      * 新增
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void add(QxAlertParam param);
 
@@ -30,7 +30,7 @@ public interface QxAlertService extends IService<QxAlert> {
      * 删除
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void delete(QxAlertParam param);
 
@@ -38,7 +38,7 @@ public interface QxAlertService extends IService<QxAlert> {
      * 更新
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     void update(QxAlertParam param);
 
@@ -46,7 +46,7 @@ public interface QxAlertService extends IService<QxAlert> {
      * 查询单条数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     QxAlertResult findBySpec(QxAlertParam param);
 
@@ -54,7 +54,7 @@ public interface QxAlertService extends IService<QxAlert> {
      * 查询列表，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
     List<QxAlertResult> findListBySpec(QxAlertParam param);
 
@@ -62,7 +62,7 @@ public interface QxAlertService extends IService<QxAlert> {
      * 查询分页数据，Specification模式
      *
      * @author 
-     * @Date 2019-11-14
+     * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxAlertParam param);
 

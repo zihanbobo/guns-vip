@@ -18,11 +18,11 @@ import java.util.List;
 
 /**
  * <p>
- * 系统通知表  服务实现类
+ * 系统通知表 服务实现类
  * </p>
  *
  * @author 
- * @since 2019-11-16
+ * @since 2019-11-18
  */
 @Service
 public class QxNoticeServiceImpl extends ServiceImpl<QxNoticeMapper, QxNotice> implements QxNoticeService {
