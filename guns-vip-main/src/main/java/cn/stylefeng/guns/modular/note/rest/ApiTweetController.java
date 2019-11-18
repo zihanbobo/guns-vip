@@ -93,4 +93,13 @@ public class ApiTweetController extends ApiBaseController {
 		log.info("/api/tweet/detail");
 		return ResultGenerator.genSuccessResult(vo);
 	}
+	
+	@RequestMapping("/like")
+	public Object like(Long id) {
+		QxTweet tweet = qxTweetService.getById(id);
+		tweet.setFavoriteCount(tweet.getFavoriteCount()+1);
+		qxTweetService.updateById(tweet);
+		log.info("/api/tweet/like, id=" + id);
+		return ResultGenerator.genSuccessResult();
+	}
 }
