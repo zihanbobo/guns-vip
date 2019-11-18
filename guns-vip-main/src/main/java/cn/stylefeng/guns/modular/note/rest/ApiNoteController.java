@@ -17,7 +17,9 @@ import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.modular.note.dto.QxNoteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxNoteVo;
+import cn.stylefeng.guns.modular.note.dvo.QxTweetVo;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
+import cn.stylefeng.guns.modular.note.entity.QxTweet;
 import cn.stylefeng.guns.modular.note.entity.QxUserNote;
 import cn.stylefeng.guns.modular.note.service.QxNoteService;
 import cn.stylefeng.guns.modular.note.service.QxUserNoteService;
@@ -96,5 +98,41 @@ public class ApiNoteController extends ApiBaseController {
 		qxNoteService.updateById(note);
 		log.info("/api/note/like, noteId=" + noteId);
 		return ResultGenerator.genSuccessResult(note.getFavoriteCount());
+	}
+	
+	@RequestMapping("/myNote")
+	public Object myNote() {
+		Page page = LayuiPageFactory.defaultPage();
+		QueryWrapper<QxNote> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", getRequestUserId()).orderByDesc("created_time");
+		qxNoteService.page(page, queryWrapper);
+		List<QxTweetVo> vos = createQxNoteVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/note/myNote");
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@RequestMapping("/userNotes")
+	public Object userNotes(Long userId) {
+		Page page = LayuiPageFactory.defaultPage();
+		QueryWrapper<QxNote> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", userId).orderByDesc("created_time");
+		qxNoteService.page(page, queryWrapper);
+		List<QxTweetVo> vos = createQxNoteVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/note/userNotes");
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@RequestMapping("/reward")
+	public Object reward(Long noteId) {
+		// TODO
+		return null;
+	}
+	
+	@RequestMapping("/unlock")
+	public Object unlock(Long noteId) {
+		// TODO
+		return null;
 	}
 }
