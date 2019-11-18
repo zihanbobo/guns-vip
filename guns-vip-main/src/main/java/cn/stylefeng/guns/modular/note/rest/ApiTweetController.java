@@ -102,4 +102,16 @@ public class ApiTweetController extends ApiBaseController {
 		log.info("/api/tweet/like, id=" + id);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@RequestMapping("/myTweet")
+	public Object myTweet() {
+		Page page = LayuiPageFactory.defaultPage();
+		QueryWrapper<QxTweet> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", getRequestUserId()).orderByDesc("created_time");
+		qxTweetService.page(page, queryWrapper);
+		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/tweet/myTweet");
+		return ResultGenerator.genSuccessResult(page);
+	}
 }
