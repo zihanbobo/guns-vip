@@ -50,6 +50,7 @@ public class ApiTweetController extends ApiBaseController {
         Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxTweet> wrapper = new QueryWrapper<>();
 		wrapper.like("title", keywords);
+		wrapper.orderByDesc("created_time");
 		qxTweetService.page(page, wrapper);
 		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
 		page.setRecords(vos);
@@ -72,5 +73,17 @@ public class ApiTweetController extends ApiBaseController {
 		QxUserVo vo = new QxUserVo();
 		BeanUtils.copyProperties(user, vo);
 		return vo;
+	}
+	
+	@RequestMapping("/userList")
+	public Object userList(Long userId) {
+		Page page = LayuiPageFactory.defaultPage();
+		QueryWrapper<QxTweet> wrapper = new QueryWrapper<>();
+		wrapper.eq("user_id", userId).orderByDesc("created_time");
+		qxTweetService.page(page, wrapper);
+		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/tweet/userList");
+		return ResultGenerator.genSuccessResult(page);
 	}
 }
