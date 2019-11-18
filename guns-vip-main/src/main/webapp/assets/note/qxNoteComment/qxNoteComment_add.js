@@ -9,7 +9,7 @@ var QxNoteCommentInfoDlg = {
         updatedBy: "",
         updatedTime: "",
         deleted: "",
-        tweetId: "",
+        noteId: "",
         content: ""
     }
 };

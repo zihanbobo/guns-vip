@@ -11,13 +11,13 @@
         <result column="updated_by" property="updatedBy" />
         <result column="updated_time" property="updatedTime" />
         <result column="deleted" property="deleted" />
-        <result column="tweet_id" property="tweetId" />
+        <result column="note_id" property="noteId" />
         <result column="content" property="content" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", tweet_id AS "tweetId", content AS "content"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", note_id AS "noteId", content AS "content"
     </sql>
 
 

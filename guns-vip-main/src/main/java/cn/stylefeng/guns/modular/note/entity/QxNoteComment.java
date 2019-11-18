@@ -65,8 +65,8 @@ public class QxNoteComment implements Serializable {
     /**
      * 推文ID
      */
-    @TableField("tweet_id")
-    private Long tweetId;
+    @TableField("note_id")
+    private Long noteId;
 
     /**
      * 评论内容
@@ -131,12 +131,12 @@ public class QxNoteComment implements Serializable {
         this.deleted = deleted;
     }
 
-    public Long getTweetId() {
-        return tweetId;
+    public Long getNoteId() {
+        return noteId;
     }
 
-    public void setTweetId(Long tweetId) {
-        this.tweetId = tweetId;
+    public void setNoteId(Long noteId) {
+        this.noteId = noteId;
     }
 
     public String getContent() {
@@ -157,7 +157,7 @@ public class QxNoteComment implements Serializable {
         ", updatedBy=" + updatedBy +
         ", updatedTime=" + updatedTime +
         ", deleted=" + deleted +
-        ", tweetId=" + tweetId +
+        ", noteId=" + noteId +
         ", content=" + content +
         "}";
     }

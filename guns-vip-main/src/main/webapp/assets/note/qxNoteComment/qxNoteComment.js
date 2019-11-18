@@ -25,7 +25,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'updatedBy', sort: true, title: '更新人'},
             {field: 'updatedTime', sort: true, title: '更新时间'},
             {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'tweetId', sort: true, title: '推文ID'},
+            {field: 'noteId', sort: true, title: '推文ID'},
             {field: 'content', sort: true, title: '评论内容'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];

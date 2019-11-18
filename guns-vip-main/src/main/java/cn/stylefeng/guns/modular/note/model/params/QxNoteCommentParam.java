@@ -58,7 +58,7 @@ public class QxNoteCommentParam implements Serializable, BaseValidatingParam {
     /**
      * 推文ID
      */
-    private Long tweetId;
+    private Long noteId;
 
     /**
      * 评论内容

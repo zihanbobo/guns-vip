@@ -57,7 +57,7 @@ public class QxNoteCommentResult implements Serializable {
     /**
      * 推文ID
      */
-    private Long tweetId;
+    private Long noteId;
 
     /**
      * 评论内容
