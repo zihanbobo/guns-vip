@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.note.service;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
@@ -65,5 +66,12 @@ public interface QxInviteService extends IService<QxInvite> {
      * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxInviteParam param);
+
+     /**
+      * 发起邀请
+      * @param requestUserId
+      * @param inviteTo
+      */
+	void addInvite(Long requestUserId, QxInviteTo inviteTo);
 
 }

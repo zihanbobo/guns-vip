@@ -879,7 +879,7 @@ public class CommonUtils {
 		return sb.toString();
 	}
 
-	public static String getSerialNumber(int id) {
+	public static String getSerialNumber() {
 		SimpleDateFormat format = new SimpleDateFormat("yyyymmddHHmmssSSS");
 		return format.format(new Date()) + getRandomNumber(13);
 	}

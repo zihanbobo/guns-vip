@@ -49,4 +49,19 @@ public interface ProjectConstants {
 	public interface SMS_CODE {
 		int LOGIN_OR_REGISTER = 0;
 	}
+	
+	/**
+	 * 约单状态
+	 *  0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉
+	 * @author steven
+	 *
+	 */
+	public interface INVITE_STATUS {
+		String WAIT_MATCH = "0";
+		String MATCHED = "1";
+		String DATING = "2";
+		String FINISH = "3";
+		String CANCEl = "4";
+		String COMPLAINT = "5";
+	}
 }

@@ -8,6 +8,7 @@ var QxInviteInfoDlg = {
         createdTime: "",
         updatedBy: "",
         updatedTime: "",
+        sn: "",
         deleted: "",
         inviter: "",
         invitee: "",
@@ -15,12 +16,14 @@ var QxInviteInfoDlg = {
         inviteType: "",
         dateTypeId: "",
         giftId: "",
-        location: "",
-        cityNo: "",
         longitude: "",
         latitude: "",
-        status: "",
-        sn: ""
+        province: "",
+        city: "",
+        district: "",
+        street: "",
+        streetNumber: "",
+        status: ""
     }
 };
 

@@ -10,6 +10,7 @@
         <result column="created_time" property="createdTime" />
         <result column="updated_by" property="updatedBy" />
         <result column="updated_time" property="updatedTime" />
+        <result column="sn" property="sn" />
         <result column="deleted" property="deleted" />
         <result column="inviter" property="inviter" />
         <result column="invitee" property="invitee" />
@@ -17,17 +18,19 @@
         <result column="invite_type" property="inviteType" />
         <result column="date_type_id" property="dateTypeId" />
         <result column="gift_id" property="giftId" />
-        <result column="location" property="location" />
-        <result column="city_no" property="cityNo" />
         <result column="longitude" property="longitude" />
         <result column="latitude" property="latitude" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="district" property="district" />
+        <result column="street" property="street" />
+        <result column="streetNumber" property="streetNumber" />
         <result column="status" property="status" />
-        <result column="sn" property="sn" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", inviter AS "inviter", invitee AS "invitee", invite_time AS "inviteTime", invite_type AS "inviteType", date_type_id AS "dateTypeId", gift_id AS "giftId", location AS "location", city_no AS "cityNo", longitude AS "longitude", latitude AS "latitude", status AS "status", sn AS "sn"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", sn AS "sn", deleted AS "deleted", inviter AS "inviter", invitee AS "invitee", invite_time AS "inviteTime", invite_type AS "inviteType", date_type_id AS "dateTypeId", gift_id AS "giftId", longitude AS "longitude", latitude AS "latitude", province AS "province", city AS "city", district AS "district", street AS "street", streetNumber AS "streetNumber", status AS "status"
     </sql>
 
 

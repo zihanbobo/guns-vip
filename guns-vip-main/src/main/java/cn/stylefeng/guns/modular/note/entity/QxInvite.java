@@ -58,6 +58,12 @@ public class QxInvite implements Serializable {
     private Date updatedTime;
 
     /**
+     * 约单单号
+     */
+    @TableField("sn")
+    private String sn;
+
+    /**
      * 删除标识
      */
     @TableField("deleted")
@@ -100,18 +106,6 @@ public class QxInvite implements Serializable {
     private Long giftId;
 
     /**
-     * 地点
-     */
-    @TableField("location")
-    private String location;
-
-    /**
-     * 城市编号
-     */
-    @TableField("city_no")
-    private String cityNo;
-
-    /**
      * 经度
      */
     @TableField("longitude")
@@ -124,16 +118,40 @@ public class QxInvite implements Serializable {
     private String latitude;
 
     /**
+     * 省
+     */
+    @TableField("province")
+    private String province;
+
+    /**
+     * 市
+     */
+    @TableField("city")
+    private String city;
+
+    /**
+     * 区县
+     */
+    @TableField("district")
+    private String district;
+
+    /**
+     * 街道名称
+     */
+    @TableField("street")
+    private String street;
+
+    /**
+     * 门牌号码
+     */
+    @TableField("streetNumber")
+    private String streetNumber;
+
+    /**
      * 状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉
      */
     @TableField("status")
     private String status;
-
-    /**
-     * 约单单号
-     */
-    @TableField("sn")
-    private String sn;
 
 
     public Long getId() {
@@ -182,6 +200,14 @@ public class QxInvite implements Serializable {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public String getSn() {
+        return sn;
+    }
+
+    public void setSn(String sn) {
+        this.sn = sn;
     }
 
     public Boolean getDeleted() {
@@ -240,22 +266,6 @@ public class QxInvite implements Serializable {
         this.giftId = giftId;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getCityNo() {
-        return cityNo;
-    }
-
-    public void setCityNo(String cityNo) {
-        this.cityNo = cityNo;
-    }
-
     public BigDecimal getLongitude() {
         return longitude;
     }
@@ -272,20 +282,52 @@ public class QxInvite implements Serializable {
         this.latitude = latitude;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getStreetNumber() {
+        return streetNumber;
+    }
+
+    public void setStreetNumber(String streetNumber) {
+        this.streetNumber = streetNumber;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getSn() {
-        return sn;
-    }
-
-    public void setSn(String sn) {
-        this.sn = sn;
     }
 
     @Override
@@ -297,6 +339,7 @@ public class QxInvite implements Serializable {
         ", createdTime=" + createdTime +
         ", updatedBy=" + updatedBy +
         ", updatedTime=" + updatedTime +
+        ", sn=" + sn +
         ", deleted=" + deleted +
         ", inviter=" + inviter +
         ", invitee=" + invitee +
@@ -304,12 +347,14 @@ public class QxInvite implements Serializable {
         ", inviteType=" + inviteType +
         ", dateTypeId=" + dateTypeId +
         ", giftId=" + giftId +
-        ", location=" + location +
-        ", cityNo=" + cityNo +
         ", longitude=" + longitude +
         ", latitude=" + latitude +
+        ", province=" + province +
+        ", city=" + city +
+        ", district=" + district +
+        ", street=" + street +
+        ", streetNumber=" + streetNumber +
         ", status=" + status +
-        ", sn=" + sn +
         "}";
     }
 }

@@ -51,6 +51,11 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
     private Date updatedTime;
 
     /**
+     * 约单单号
+     */
+    private String sn;
+
+    /**
      * 删除标识
      */
     private Boolean deleted;
@@ -86,16 +91,6 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
     private Long giftId;
 
     /**
-     * 地点
-     */
-    private String location;
-
-    /**
-     * 城市编号
-     */
-    private String cityNo;
-
-    /**
      * 经度
      */
     private BigDecimal longitude;
@@ -106,14 +101,34 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
     private String latitude;
 
     /**
+     * 省
+     */
+    private String province;
+
+    /**
+     * 市
+     */
+    private String city;
+
+    /**
+     * 区县
+     */
+    private String district;
+
+    /**
+     * 街道名称
+     */
+    private String street;
+
+    /**
+     * 门牌号码
+     */
+    private String streetNumber;
+
+    /**
      * 状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉
      */
     private String status;
-
-    /**
-     * 约单单号
-     */
-    private String sn;
 
     @Override
     public String checkParam() {

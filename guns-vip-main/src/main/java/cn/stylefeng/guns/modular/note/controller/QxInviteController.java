@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 约单表控制器
  *
  * @author 
- * @Date 2019-11-18 15:18:05
+ * @Date 2019-11-18 17:09:26
  */
 @Controller
 @RequestMapping("/qxInvite")

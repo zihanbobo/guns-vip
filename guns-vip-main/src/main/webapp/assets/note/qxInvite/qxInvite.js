@@ -24,6 +24,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'createdTime', sort: true, title: '创建时间'},
             {field: 'updatedBy', sort: true, title: '更新人'},
             {field: 'updatedTime', sort: true, title: '更新时间'},
+            {field: 'sn', sort: true, title: '约单单号'},
             {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'inviter', sort: true, title: '邀请人'},
             {field: 'invitee', sort: true, title: '被邀请人'},
@@ -31,12 +32,14 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'inviteType', sort: true, title: '约单类型 0-主动约；1-被动约'},
             {field: 'dateTypeId', sort: true, title: '约会类型'},
             {field: 'giftId', sort: true, title: '扣款种类 礼物ID'},
-            {field: 'location', sort: true, title: '地点'},
-            {field: 'cityNo', sort: true, title: '城市编号'},
             {field: 'longitude', sort: true, title: '经度'},
             {field: 'latitude', sort: true, title: '纬度'},
+            {field: 'province', sort: true, title: '省'},
+            {field: 'city', sort: true, title: '市'},
+            {field: 'district', sort: true, title: '区县'},
+            {field: 'street', sort: true, title: '街道名称'},
+            {field: 'streetNumber', sort: true, title: '门牌号码'},
             {field: 'status', sort: true, title: '状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉'},
-            {field: 'sn', sort: true, title: '约单单号'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.note.service.impl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
@@ -80,5 +81,11 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
         ToolUtil.copyProperties(param, entity);
         return entity;
     }
+
+	@Override
+	public void addInvite(Long requestUserId, QxInviteTo inviteTo) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
