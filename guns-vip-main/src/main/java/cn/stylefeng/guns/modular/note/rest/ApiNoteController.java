@@ -30,13 +30,13 @@ public class ApiNoteController extends ApiBaseController {
 
 	@Resource
 	private ConfigEntity configEntity;
-	
+
 	@Resource
 	private QxNoteService qxNoteService;
-	
+
 	@Resource
 	private QxUserNoteService qxUserNoteService;
-	
+
 	@RequestMapping("/list")
 	public Object list(Long userId) {
 		Page page = LayuiPageFactory.defaultPage();
@@ -49,7 +49,7 @@ public class ApiNoteController extends ApiBaseController {
 		log.info("/api/note/list, usrId=" + userId);
 		return ResultGenerator.genSuccessResult(vos);
 	}
-	
+
 	private List<QxNoteVo> createQxNoteVos(List<QxNote> list) {
 		Long currentUserId = getRequestUserId();
 		List<QxNoteVo> vos = new ArrayList<>();
@@ -67,7 +67,7 @@ public class ApiNoteController extends ApiBaseController {
 		}
 		return vos;
 	}
-	
+
 	private List<Long> getPaidNotes(Long userId) {
 		QueryWrapper<QxUserNote> queryWrapper = new QueryWrapper();
 		queryWrapper.eq("user_id", userId);
@@ -78,7 +78,7 @@ public class ApiNoteController extends ApiBaseController {
 		}
 		return paidNotes;
 	}
-	
+
 	@RequestMapping("/add")
 	public Object add(QxNoteTo noteTo) {
 		QxNote note = new QxNote();
@@ -87,5 +87,14 @@ public class ApiNoteController extends ApiBaseController {
 		qxNoteService.save(note);
 		log.info("/api/note/add, noteTo=" + noteTo);
 		return ResultGenerator.genSuccessResult();
+	}
+
+	@RequestMapping("/like")
+	public Object like(Long noteId) {
+		QxNote note = qxNoteService.getById(noteId);
+		note.setFavoriteCount(note.getFavoriteCount() + 1);
+		qxNoteService.updateById(note);
+		log.info("/api/note/like, noteId=" + noteId);
+		return ResultGenerator.genSuccessResult(note.getFavoriteCount());
 	}
 }
