@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.modular.note.dto.QxNoteCommentTo;
 import cn.stylefeng.guns.modular.note.dvo.QxNoteCommentVo;
 import cn.stylefeng.guns.modular.note.dvo.QxTweetCommentVo;
 import cn.stylefeng.guns.modular.note.entity.QxNoteComment;
@@ -54,5 +55,15 @@ public class ApiNoteCommentController extends ApiBaseController {
 			vos.add(vo);
 		}
 		return vos;
+	}
+	
+	@RequestMapping("/add")
+	public Object add(QxNoteCommentTo commentTo) {
+		QxNoteComment noteComment = new QxNoteComment();
+		BeanUtils.copyProperties(commentTo, noteComment);
+		noteComment.setCreatedBy(getRequestUserId());
+		qxNoteCommentService.save(noteComment);
+		log.info("/api/note/comment/add, commentTo=" + commentTo);
+		return ResultGenerator.genSuccessResult();
 	}
 }
