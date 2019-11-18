@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -15,6 +16,7 @@ import com.google.code.ssm.providers.CacheException;
 
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.exception.ServiceException;
+import cn.stylefeng.guns.modular.note.dvo.QxUserVo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.service.QxUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -41,6 +43,12 @@ public class ApiBaseController extends BaseController {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
 		return Long.valueOf((String) request.getAttribute("userId"));
+	}
+	
+	protected QxUserVo createQxUserVo(QxUser user) {
+		QxUserVo vo = new QxUserVo();
+		BeanUtils.copyProperties(user, vo);
+		return vo;
 	}
 
 	protected void cacheValueSecond(String key, int expiration, Object value) {

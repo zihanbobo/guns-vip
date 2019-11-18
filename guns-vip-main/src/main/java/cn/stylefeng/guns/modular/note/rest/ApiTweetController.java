@@ -48,10 +48,10 @@ public class ApiTweetController extends ApiBaseController {
 	public Object list(String keywords) {
 		//获取分页参数
         Page page = LayuiPageFactory.defaultPage();
-		QueryWrapper<QxTweet> wrapper = new QueryWrapper<>();
-		wrapper.like("title", keywords);
-		wrapper.orderByDesc("created_time");
-		qxTweetService.page(page, wrapper);
+		QueryWrapper<QxTweet> queryWrapper = new QueryWrapper<>();
+		queryWrapper.like("title", keywords);
+		queryWrapper.orderByDesc("created_time");
+		qxTweetService.page(page, queryWrapper);
 		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
 		page.setRecords(vos);
 		log.info("/api/tweet/list, keywords=" + keywords);
@@ -74,18 +74,12 @@ public class ApiTweetController extends ApiBaseController {
 		return vo;
 	}
 	
-	public QxUserVo createQxUserVo(QxUser user) {
-		QxUserVo vo = new QxUserVo();
-		BeanUtils.copyProperties(user, vo);
-		return vo;
-	}
-	
 	@RequestMapping("/userList")
 	public Object userList(Long userId) {
 		Page page = LayuiPageFactory.defaultPage();
-		QueryWrapper<QxTweet> wrapper = new QueryWrapper<>();
-		wrapper.eq("user_id", userId).orderByDesc("created_time");
-		qxTweetService.page(page, wrapper);
+		QueryWrapper<QxTweet> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", userId).orderByDesc("created_time");
+		qxTweetService.page(page, queryWrapper);
 		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
 		page.setRecords(vos);
 		log.info("/api/tweet/userList");
