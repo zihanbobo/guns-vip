@@ -61,12 +61,17 @@ public class ApiTweetController extends ApiBaseController {
 	public List<QxTweetVo> createQxTweetVos(List<QxTweet> list) {
 		List<QxTweetVo> vos = new ArrayList<>();
 		for (QxTweet tweet : list) {
-			QxTweetVo vo = new QxTweetVo();
-			BeanUtils.copyProperties(tweet, vo);
-			vo.setUserVo(createQxUserVo(getUser(tweet.getUserId())));
+			QxTweetVo vo = createQxTweetVo(tweet);
 			vos.add(vo);
 		}
 		return vos;
+	}
+	
+	public QxTweetVo createQxTweetVo(QxTweet tweet) {
+		QxTweetVo vo = new QxTweetVo();
+		BeanUtils.copyProperties(tweet, vo);
+		vo.setUserVo(createQxUserVo(getUser(tweet.getUserId())));
+		return vo;
 	}
 	
 	public QxUserVo createQxUserVo(QxUser user) {
@@ -85,5 +90,13 @@ public class ApiTweetController extends ApiBaseController {
 		page.setRecords(vos);
 		log.info("/api/tweet/userList");
 		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@RequestMapping("/detail")
+	public Object detail(Long id) {
+		QxTweet tweet = qxTweetService.getById(id);
+		QxTweetVo vo = createQxTweetVo(tweet);
+		log.info("/api/tweet/detail");
+		return ResultGenerator.genSuccessResult(vo);
 	}
 }
