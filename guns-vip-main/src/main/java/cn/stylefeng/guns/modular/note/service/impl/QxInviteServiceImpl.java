@@ -26,6 +26,7 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
+import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
@@ -35,6 +36,7 @@ import cn.stylefeng.guns.modular.note.mapper.QxInviteOperateMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
+import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import  cn.stylefeng.guns.modular.note.service.QxInviteService;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +61,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	
 	@Resource
 	private QxInviteOperateMapper qxInviteOperateMapper;
+	
+	@Resource
+	private QxComplaintService qxComplaintService;
 	
 	@Resource
 	private NoticeHelper noticeHelper;
@@ -247,5 +252,17 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			changeQxInviteStatus(inviteId, INVITE_STATUS.FINISH);
 			// TODO：对应金币转入到对方
 		}
+	}
+
+	@Override
+	public void complaint(Long inviteId, Long userId, String reason) {
+		QxComplaint complaint = new QxComplaint();
+		complaint.setInviteId(inviteId);
+		complaint.setUserId(userId);
+		complaint.setReason(reason);
+		qxComplaintService.save(complaint);
+		UpdateWrapper<QxInvite> updateWrapper = new UpdateWrapper<>();
+		updateWrapper.eq("id", inviteId).set("status", INVITE_STATUS.COMPLAINT);
+		this.baseMapper.update(null, updateWrapper);
 	}
 }

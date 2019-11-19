@@ -20,10 +20,12 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxInviteVo;
+import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxDateType;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
+import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import cn.stylefeng.guns.modular.note.service.QxDateTypeService;
 import cn.stylefeng.guns.modular.note.service.QxInviteApplyService;
 import cn.stylefeng.guns.modular.note.service.QxInviteOperateService;
@@ -49,6 +51,9 @@ public class ApiInviteController extends ApiBaseController {
 	
 	@Resource
 	private QxInviteOperateService qxInviteOperateService;
+	
+	@Resource
+	private QxComplaintService qxComplaintService;
 
 	/**
 	 * 约单四种： | 约单方式 | 约单类型 | inviter | invitee | apply | 事件 | | 多人 | 主动 | A | B,C,D
@@ -180,5 +185,22 @@ public class ApiInviteController extends ApiBaseController {
 		qxInviteService.finish(inviteId, getRequestUserId());
 		log.info("/api/invite/finish, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
+	}
+	
+	@RequestMapping("/complaint")
+	public Object complaint(Long inviteId, String reason) {
+		checkRepeatComplaint(inviteId, getRequestUserId());
+		qxInviteService.complaint(inviteId, getRequestUserId(), reason);
+		log.info("/api/invite/complatint, inviteId=" + inviteId + ", reason=" + reason);
+		return ResultGenerator.genSuccessResult();
+	}
+	
+	public void checkRepeatComplaint(Long inviteId, Long userId) {
+		QueryWrapper<QxComplaint> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", userId).eq("invite_id", inviteId);
+		int count = qxComplaintService.count(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("不能重复投诉");
+		}
 	}
 }
