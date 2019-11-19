@@ -45,5 +45,9 @@
         <include refid="Base_Column_List"/>
         from qx_invite_apply where 1 = 1
     </select>
+    
+    <update id="choose">
+    	update qx_invite_apply set choosed = 1 where user_id = #{userId} and invite_id = #{inviteId}
+    </update>
 
 </mapper>

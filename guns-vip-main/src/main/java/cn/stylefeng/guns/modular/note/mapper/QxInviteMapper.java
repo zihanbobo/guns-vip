@@ -62,4 +62,11 @@ public interface QxInviteMapper extends BaseMapper<QxInvite> {
      */
     List<QxInviteUserPojo> getInviteUsers(@Param("inviteId") Long inviteId);
 
+    /**
+     * 更新约单状态
+     * @param inviteId
+     * @param matched
+     */
+	void updateStatus(@Param("inviteId") Long inviteId, @Param("status") String status);
+
 }

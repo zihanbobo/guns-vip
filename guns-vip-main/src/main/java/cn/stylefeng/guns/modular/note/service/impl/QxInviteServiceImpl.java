@@ -11,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -46,6 +45,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> implements QxInviteService {
 
+	@Resource
+	private QxInviteMapper qxInviteMapper;
+	
 	@Resource
 	private QxInviteApplyMapper qxInviteApplyMapper;
 	
@@ -127,11 +129,8 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 
 	@Override
 	public void choose(Long inviteId, Long userId) {
-		QueryWrapper<QxInviteApply> updateWrapper = new QueryWrapper<>();
-		updateWrapper.eq("user_id", userId).eq("invite_id", inviteId);
-		QxInviteApply inviteApply = new QxInviteApply();
-		inviteApply.setChoosed(true);
-		qxInviteApplyMapper.update(inviteApply, updateWrapper);
+		qxInviteApplyMapper.choose(inviteId, userId);
+		qxInviteMapper.updateStatus(inviteId, INVITE_STATUS.MATCHED);
 		notifyInvitee(inviteId);
 	}
 	
