@@ -52,7 +52,7 @@ public interface ProjectConstants {
 	
 	/**
 	 * 约单状态
-	 *  0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉
+	 *  0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉;6-已拒绝
 	 * @author steven
 	 *
 	 */
@@ -63,5 +63,23 @@ public interface ProjectConstants {
 		String FINISH = "3";
 		String CANCEl = "4";
 		String COMPLAINT = "5";
+	}
+	
+	/**
+	 * 约单方式：0-单独约；1-报名约
+	 * @author steven
+	 *
+	 */
+	public interface INVITE_WAY {
+		String SINGLE = "0";
+		String MULTIPLE = "1";
+	}
+	
+	/**
+	 * 约单类型：0-主动约；1-被动约
+	 */
+	public interface INVITE_TYPE {
+		String ACTIVE = "0";
+		String PASSIVE = "1";
 	}
 }

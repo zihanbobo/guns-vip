@@ -1,30 +1,14 @@
 /**
  * 添加或者修改页面
  */
-var QxInviteInfoDlg = {
+var QxDateTypeInfoDlg = {
     data: {
         version: "",
         createdBy: "",
         createdTime: "",
         updatedBy: "",
         updatedTime: "",
-        sn: "",
-        deleted: "",
-        inviter: "",
-        invitee: "",
-        inviteTime: "",
-        inviteType: "",
-        dateTypeId: "",
-        giftId: "",
-        longitude: "",
-        latitude: "",
-        province: "",
-        city: "",
-        district: "",
-        street: "",
-        streetNumber: "",
-        status: "",
-        inviteWay: ""
+        name: ""
     }
 };
 
@@ -39,7 +23,7 @@ layui.use(['form', 'admin', 'ax'], function () {
 
     //表单提交事件
     form.on('submit(btnSubmit)', function (data) {
-        var ajax = new $ax(Feng.ctxPath + "/qxInvite/addItem", function (data) {
+        var ajax = new $ax(Feng.ctxPath + "/qxDateType/addItem", function (data) {
             Feng.success("添加成功！");
 
             //传给上个页面，刷新table用

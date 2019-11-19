@@ -1,7 +1,20 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
+import java.io.Serializable;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteMapper;
@@ -9,13 +22,6 @@ import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
 import  cn.stylefeng.guns.modular.note.service.QxInviteService;
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>
@@ -83,9 +89,12 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
     }
 
 	@Override
+    @Transactional(rollbackFor = Exception.class)
 	public void addInvite(Long requestUserId, QxInviteTo inviteTo) {
-		// TODO Auto-generated method stub
-		
+		QxInvite invite = new QxInvite();
+		BeanUtils.copyProperties(inviteTo, invite);
+		invite.setSn(CommonUtils.getSerialNumber());
+		invite.setStatus(INVITE_STATUS.WAIT_MATCH);
+		this.baseMapper.insert(invite);
 	}
-
 }

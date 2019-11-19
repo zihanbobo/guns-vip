@@ -153,7 +153,12 @@ public class QxInvite implements Serializable {
     @TableField("status")
     private String status;
 
-
+    /**
+     * 约单方式
+     */
+    @TableField("invite_way")
+    private String inviteWay;
+    
     public Long getId() {
         return id;
     }
@@ -330,7 +335,15 @@ public class QxInvite implements Serializable {
         this.status = status;
     }
 
-    @Override
+    public String getInviteWay() {
+		return inviteWay;
+	}
+
+	public void setInviteWay(String inviteWay) {
+		this.inviteWay = inviteWay;
+	}
+
+	@Override
     public String toString() {
         return "QxInvite{" +
         "id=" + id +
@@ -355,6 +368,7 @@ public class QxInvite implements Serializable {
         ", street=" + street +
         ", streetNumber=" + streetNumber +
         ", status=" + status +
+        ", inviteWay=" + inviteWay +
         "}";
     }
 }

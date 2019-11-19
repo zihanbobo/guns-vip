@@ -1,30 +1,14 @@
 /**
  * 详情对话框
  */
-var QxInviteInfoDlg = {
+var QxDateTypeInfoDlg = {
     data: {
         version: "",
         createdBy: "",
         createdTime: "",
         updatedBy: "",
         updatedTime: "",
-        sn: "",
-        deleted: "",
-        inviter: "",
-        invitee: "",
-        inviteTime: "",
-        inviteType: "",
-        dateTypeId: "",
-        giftId: "",
-        longitude: "",
-        latitude: "",
-        province: "",
-        city: "",
-        district: "",
-        street: "",
-        streetNumber: "",
-        status: "",
-        inviteWay: ""
+        name: ""
     }
 };
 
@@ -38,13 +22,13 @@ layui.use(['form', 'admin', 'ax'], function () {
     // admin.iframeAuto();
 
     //获取详情信息，填充表单
-    var ajax = new $ax(Feng.ctxPath + "/qxInvite/detail?id=" + Feng.getUrlParam("id"));
+    var ajax = new $ax(Feng.ctxPath + "/qxDateType/detail?id=" + Feng.getUrlParam("id"));
     var result = ajax.start();
-    form.val('qxInviteForm', result.data);
+    form.val('qxDateTypeForm', result.data);
 
     //表单提交事件
     form.on('submit(btnSubmit)', function (data) {
-        var ajax = new $ax(Feng.ctxPath + "/qxInvite/editItem", function (data) {
+        var ajax = new $ax(Feng.ctxPath + "/qxDateType/editItem", function (data) {
             Feng.success("更新成功！");
 
             //传给上个页面，刷新table用

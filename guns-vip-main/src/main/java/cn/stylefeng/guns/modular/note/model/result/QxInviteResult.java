@@ -2,6 +2,9 @@ package cn.stylefeng.guns.modular.note.model.result;
 
 import lombok.Data;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -128,5 +131,11 @@ public class QxInviteResult implements Serializable {
      * 状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉
      */
     private String status;
+    
+    /**
+     * 约单方式
+     */
+    @TableField("invite_way")
+    private String inviteWay;
 
 }

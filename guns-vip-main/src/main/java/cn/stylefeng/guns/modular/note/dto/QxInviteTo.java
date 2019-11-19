@@ -9,6 +9,8 @@ import lombok.Data;
 public class QxInviteTo {
 	private Date inviteTime;
 	private String inviteType;
+	private String inviteWay;
+	private Long invitee;
 	private Long dateTypeId;
 	private Long giftId;
     private BigDecimal longitude;
