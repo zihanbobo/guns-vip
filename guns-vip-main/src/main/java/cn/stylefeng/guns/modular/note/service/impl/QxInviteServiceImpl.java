@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -129,9 +130,26 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 
 	@Override
 	public void choose(Long inviteId, Long userId) {
-		qxInviteApplyMapper.choose(inviteId, userId);
-		qxInviteMapper.updateStatus(inviteId, INVITE_STATUS.MATCHED);
+		chooseApply(inviteId, userId);
+		updateInviteStatus(inviteId, userId, INVITE_STATUS.MATCHED);
 		notifyInvitee(inviteId);
+	}
+	
+	public void chooseApply(Long inviteId, Long userId) {
+		UpdateWrapper<QxInviteApply> updateWrapper = new UpdateWrapper<>();
+		updateWrapper.eq("invite_id", inviteId).eq("user_id", userId);
+		QxInviteApply model = new QxInviteApply();
+		model.setChoosed(true);
+		qxInviteApplyMapper.update(model, updateWrapper);
+	}
+	
+	public void updateInviteStatus(Long invitedId, Long invitee, String status) {
+		UpdateWrapper<QxInvite> updateWrapper = new UpdateWrapper<>();
+		updateWrapper.eq("id", invitedId);
+		QxInvite model = new QxInvite();
+		model.setInvitee(invitee);
+		model.setStatus(status);
+		this.baseMapper.update(model, updateWrapper);
 	}
 	
 	private void notifyInvitee(Long inviteId) {

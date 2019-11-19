@@ -69,8 +69,4 @@
 		WHERE
 			a.invite_id = #{inviteId}
     </select>
-
-	<update id="updateStatus">
-		update qx_invite set status = #{status} where id = #{inviteId}
-	</update>
 </mapper>

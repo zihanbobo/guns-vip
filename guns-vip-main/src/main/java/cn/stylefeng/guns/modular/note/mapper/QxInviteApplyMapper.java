@@ -52,12 +52,4 @@ public interface QxInviteApplyMapper extends BaseMapper<QxInviteApply> {
      * @Date 2019-11-18
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxInviteApplyParam paramCondition);
-
-    /**
-     * 选中报名人
-     * @param inviteId
-     * @param userId
-     */
-	void choose(@Param("inviteId") Long inviteId, @Param("userId") Long userId);
-
 }

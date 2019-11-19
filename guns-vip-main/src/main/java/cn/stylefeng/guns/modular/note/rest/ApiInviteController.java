@@ -103,4 +103,9 @@ public class ApiInviteController extends ApiBaseController {
 		log.info("/api/invite/choose, inviteId=" + inviteId + ", userId=" + userId);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@RequestMapping("/agree")
+	public Object agree() {
+		return null;
+	}
 }
