@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
@@ -129,5 +130,11 @@ public interface QxInviteService extends IService<QxInvite> {
 	 * @param reason
 	 */
 	void complaint(Long inviteId, Long userId, String reason);
+
+	/**
+	 * 评价约单
+	 * @param commentTo
+	 */
+	void comment(Long userId, QxInviteCommentTo commentTo);
 
 }

@@ -18,16 +18,19 @@ import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
+import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxInviteVo;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxDateType;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
+import cn.stylefeng.guns.modular.note.entity.QxInviteComment;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import cn.stylefeng.guns.modular.note.service.QxDateTypeService;
 import cn.stylefeng.guns.modular.note.service.QxInviteApplyService;
+import cn.stylefeng.guns.modular.note.service.QxInviteCommentService;
 import cn.stylefeng.guns.modular.note.service.QxInviteOperateService;
 import cn.stylefeng.guns.modular.note.service.QxInviteService;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +54,9 @@ public class ApiInviteController extends ApiBaseController {
 	
 	@Resource
 	private QxInviteOperateService qxInviteOperateService;
+	
+	@Resource
+	private QxInviteCommentService qxInviteCommentService;
 	
 	@Resource
 	private QxComplaintService qxComplaintService;
@@ -201,6 +207,23 @@ public class ApiInviteController extends ApiBaseController {
 		int count = qxComplaintService.count(queryWrapper);
 		if (count > 0) {
 			throw new ServiceException("不能重复投诉");
+		}
+	}
+	
+	@RequestMapping("/comment")
+	public Object comment(QxInviteCommentTo commentTo) {
+		checkRepeatComment(commentTo.getInviteId(), getRequestUserId());
+		qxInviteService.comment(getRequestUserId(), commentTo);
+		log.info("/api/invite/comment, commentTo=" + commentTo);
+		return ResultGenerator.genSuccessResult();
+	}
+	
+	public void checkRepeatComment(Long inviteId, Long userId) {
+		QueryWrapper<QxInviteComment> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("invite_id", inviteId).eq("commenter_id", userId);
+		int count = qxInviteCommentService.count(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("不能重复评价");
 		}
 	}
 }

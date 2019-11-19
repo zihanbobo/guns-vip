@@ -24,11 +24,14 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
+import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
+import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
+import cn.stylefeng.guns.modular.note.entity.QxInviteComment;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteApplyMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteMapper;
@@ -37,6 +40,7 @@ import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
+import cn.stylefeng.guns.modular.note.service.QxInviteCommentService;
 import  cn.stylefeng.guns.modular.note.service.QxInviteService;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +68,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	
 	@Resource
 	private QxComplaintService qxComplaintService;
+	
+	@Resource
+	private QxInviteCommentService qxInviteCommentSerivce;
 	
 	@Resource
 	private NoticeHelper noticeHelper;
@@ -264,5 +271,25 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		UpdateWrapper<QxInvite> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.eq("id", inviteId).set("status", INVITE_STATUS.COMPLAINT);
 		this.baseMapper.update(null, updateWrapper);
+	}
+
+	@Override
+	public void comment(Long userId, QxInviteCommentTo commentTo) {
+		QxInvite invite = this.getById(commentTo.getInviteId());
+		if (!INVITE_STATUS.FINISH.equals(invite.getStatus())) {
+			throw new ServiceException("约单未结束，不能评价哦");
+		}
+		if (!(userId.equals(invite.getInviter()) || userId.equals(invite.getInvitee()))) {
+			throw new ServiceException("只能评价自己的约单");
+		}
+		QxInviteComment inviteComment = new QxInviteComment();
+		BeanUtils.copyProperties(commentTo, inviteComment);
+		inviteComment.setCommenterId(userId);
+		if (userId.equals(invite.getInviter())) {
+			inviteComment.setCommenteeId(invite.getInvitee());
+		} else {
+			inviteComment.setCommenteeId(invite.getInviter());
+		}
+		qxInviteCommentSerivce.save(inviteComment);
 	}
 }
