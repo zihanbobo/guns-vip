@@ -91,4 +91,16 @@ public class ApiInviteController extends ApiBaseController {
 			throw new ServiceException("不能重复报名");
 		}
 	}
+	
+	@RequestMapping("/choose")
+	public Object choose(Long inviteId, Long userId) {
+		// 检查约单状态
+		QxInvite invite = qxInviteService.getById(inviteId);
+		if (!INVITE_STATUS.WAIT_MATCH.equals(invite.getStatus())) {
+			throw new ServiceException("改单已结束，不能选择报名者");
+		}
+		qxInviteService.choose(inviteId, userId);
+		log.info("/api/invite/choose, inviteId=" + inviteId + ", userId=" + userId);
+		return ResultGenerator.genSuccessResult();
+	}
 }

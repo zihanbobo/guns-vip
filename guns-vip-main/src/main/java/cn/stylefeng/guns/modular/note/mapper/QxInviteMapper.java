@@ -1,15 +1,17 @@
 package cn.stylefeng.guns.modular.note.mapper;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 
 /**
  * <p>
@@ -52,5 +54,12 @@ public interface QxInviteMapper extends BaseMapper<QxInvite> {
      * @Date 2019-11-18
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxInviteParam paramCondition);
+    
+    /**
+     * 获取约单所有用户信息
+     * @param inviteId
+     * @return
+     */
+    List<QxInviteUserPojo> getInviteUsers(@Param("inviteId") Long inviteId);
 
 }

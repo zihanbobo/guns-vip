@@ -1,7 +1,9 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -17,6 +20,8 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
+import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
@@ -24,8 +29,10 @@ import cn.stylefeng.guns.modular.note.mapper.QxInviteApplyMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 import  cn.stylefeng.guns.modular.note.service.QxInviteService;
 import cn.stylefeng.roses.core.util.ToolUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -35,11 +42,15 @@ import cn.stylefeng.roses.core.util.ToolUtil;
  * @author 
  * @since 2019-11-18
  */
+@Slf4j
 @Service
 public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> implements QxInviteService {
 
 	@Resource
 	private QxInviteApplyMapper qxInviteApplyMapper;
+	
+	@Resource
+	private NoticeHelper noticeHelper;
     
 	@Override
     public void add(QxInviteParam param){
@@ -112,5 +123,35 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		inviteApply.setInviteId(inviteId);
 		inviteApply.setChoosed(false);
 		qxInviteApplyMapper.insert(inviteApply);
+	}
+
+	@Override
+	public void choose(Long inviteId, Long userId) {
+		QueryWrapper<QxInviteApply> updateWrapper = new QueryWrapper<>();
+		updateWrapper.eq("user_id", userId).eq("invite_id", inviteId);
+		QxInviteApply inviteApply = new QxInviteApply();
+		inviteApply.setChoosed(true);
+		qxInviteApplyMapper.update(inviteApply, updateWrapper);
+		notifyInvitee(inviteId);
+	}
+	
+	private void notifyInvitee(Long inviteId) {
+		List<QxInviteUserPojo> list = this.baseMapper.getInviteUsers(inviteId);
+		for (QxInviteUserPojo inviteUser : list) {
+			int tag = 0;
+			String account = inviteUser.getMobile();
+			Map<String, String> pairs = new HashMap<>();
+			
+			if (inviteUser.getChoosed()) {
+				// 发送选中消息
+				tag = SMS_CODE.INVITE_SUCCESS;
+				log.info("User " + inviteUser.getMobile() + "被选中");
+			} else {
+				// 发送落选消息
+				tag = SMS_CODE.INVITE_FAIL;
+				log.info("User " + inviteUser.getMobile() + "未被选中");
+			}
+//			noticeHelper.push(account, tag, pairs);
+		}
 	}
 }

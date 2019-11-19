@@ -58,5 +58,16 @@
         <include refid="Base_Column_List"/>
         from qx_invite where 1 = 1
     </select>
+    
+    <select id="getInviteUsers" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo">
+		SELECT
+			a.invite_id AS inviteId, a.user_id AS userId, a.choosed, b.mobile 
+		FROM
+			qx_invite_apply a
+		LEFT JOIN
+			qx_user b ON a.user_id = b.id 
+		WHERE
+			a.invite_id = #{inviteId}
+    </select>
 
 </mapper>

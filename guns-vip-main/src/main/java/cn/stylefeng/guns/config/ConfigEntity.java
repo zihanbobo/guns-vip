@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import cn.stylefeng.guns.core.FileUtil;
+import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import lombok.Data;
 
 @Configuration
@@ -36,10 +37,14 @@ public class ConfigEntity {
 	private String smsDomain;
 	private String smsSignName;
 	private String smsTemplate;
+	private String smsInviteSuccessTemplate;
+	private String smsInviteFailTemplate;
 	// 邮箱
 	private String emailAccountName;
 	private String emailFromAlias;
 	private String eTemplate;
+	private String eInviteSuccessTemplate;
+	private String eInviteFailTemplate;
 	
 	public String getAbsoluteUploadPath() {
 		return FileUtil.mergeDeployPath(baseUploadPath);
@@ -59,8 +64,17 @@ public class ConfigEntity {
 
 	public Map<String, String> getNoticeConfig(Integer tag, boolean isSms) {
 		Map<String, String> map = new HashMap<>();
-		map.put("template", isSms ? smsTemplate : eTemplate);
-		map.put("tagName", "验证码");
+		if (SMS_CODE.INVITE_SUCCESS == tag) {
+			map.put("template", isSms ? smsInviteSuccessTemplate : eInviteSuccessTemplate);
+			map.put("tagName", "约单成功通知");
+		} else if (SMS_CODE.INVITE_FAIL == tag) {
+			map.put("template", isSms ? eInviteFailTemplate : smsInviteFailTemplate);
+			map.put("tagName", "约单失败通知");
+		} else {
+			map.put("template", isSms ? smsTemplate : eTemplate);
+			map.put("tagName", "验证码");
+		}
+		
 		return map;
 	}
 }

@@ -41,13 +41,16 @@ public interface ProjectConstants {
 	}
 
 	/**
-	 * 手机验证码 0-登录/注册验证码
+	 * 手机验证码:
+	 * 0-登录/注册验证码;1-约单成功；2-约单失败
 	 * 
 	 * @author steven
 	 *
 	 */
 	public interface SMS_CODE {
 		int LOGIN_OR_REGISTER = 0;
+		int INVITE_SUCCESS = 1;
+		int INVITE_FAIL = 2;
 	}
 	
 	/**
