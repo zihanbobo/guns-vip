@@ -242,4 +242,28 @@ public class ApiInviteController extends ApiBaseController {
 		log.info("/api/invite/alert, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@RequestMapping("/myInvite")
+	public Object myInvite() {
+		Page page = LayuiPageFactory.defaultPage();
+		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("inviter", getRequestUserId());
+		qxInviteService.page(page, queryWrapper);
+		List<QxInviteVo> vos = createQxInviteVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/invite/current");
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@RequestMapping("/inviteMe")
+	public Object inviteMe() {
+		Page page = LayuiPageFactory.defaultPage();
+		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("invitee", getRequestUserId());
+		qxInviteService.page(page, queryWrapper);
+		List<QxInviteVo> vos = createQxInviteVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/invite/current");
+		return ResultGenerator.genSuccessResult(page);
+	}
 }
