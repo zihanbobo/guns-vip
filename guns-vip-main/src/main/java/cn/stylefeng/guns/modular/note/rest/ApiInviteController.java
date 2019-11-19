@@ -11,10 +11,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxDateType;
+import cn.stylefeng.guns.modular.note.entity.QxInvite;
+import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
 import cn.stylefeng.guns.modular.note.service.QxDateTypeService;
+import cn.stylefeng.guns.modular.note.service.QxInviteApplyService;
 import cn.stylefeng.guns.modular.note.service.QxInviteService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +35,9 @@ public class ApiInviteController extends ApiBaseController {
 
 	@Resource
 	private QxDateTypeService qxDateTypeService;
+	
+	@Resource
+	private QxInviteApplyService qxInviteApplyService;
 	
 	/**
 	 * 约单四种：
@@ -60,5 +67,28 @@ public class ApiInviteController extends ApiBaseController {
 		List<QxDateType> list = qxDateTypeService.list(queryWrapper);
 		log.info("/api/invite/dateTypes");
 		return ResultGenerator.genSuccessResult(list);
+	}
+	
+	@RequestMapping("/apply")
+	public Object apply(Long inviteId) {
+		Long currentUserId = getRequestUserId();
+		// 检查重复报名
+		checkRepeatApply(currentUserId, inviteId);
+		QxInvite invite = qxInviteService.getById(inviteId);
+		if (!INVITE_STATUS.WAIT_MATCH.equals(invite.getStatus())) {
+			throw new ServiceException("该约单已结束，不能报名");
+		}
+		qxInviteService.apply(currentUserId, inviteId);
+		log.info("/api/invite/apply, inviteId=" + inviteId);
+		return ResultGenerator.genSuccessResult();
+	}
+	
+	private void checkRepeatApply(Long userId, Long inviteId) {
+		QueryWrapper<QxInviteApply> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", userId).eq("invite_id", inviteId);
+		int count = qxInviteApplyService.count(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("不能重复报名");
+		}
 	}
 }

@@ -3,6 +3,8 @@ package cn.stylefeng.guns.modular.note.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,8 @@ import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
+import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
+import cn.stylefeng.guns.modular.note.mapper.QxInviteApplyMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
@@ -34,7 +38,10 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 @Service
 public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> implements QxInviteService {
 
-    @Override
+	@Resource
+	private QxInviteApplyMapper qxInviteApplyMapper;
+    
+	@Override
     public void add(QxInviteParam param){
         QxInvite entity = getEntity(param);
         this.save(entity);
@@ -96,5 +103,14 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		invite.setSn(CommonUtils.getSerialNumber());
 		invite.setStatus(INVITE_STATUS.WAIT_MATCH);
 		this.baseMapper.insert(invite);
+	}
+
+	@Override
+	public void apply(Long currentUserId, Long inviteId) {
+		QxInviteApply inviteApply = new QxInviteApply();
+		inviteApply.setUserId(currentUserId);
+		inviteApply.setInviteId(inviteId);
+		inviteApply.setChoosed(false);
+		qxInviteApplyMapper.insert(inviteApply);
 	}
 }
