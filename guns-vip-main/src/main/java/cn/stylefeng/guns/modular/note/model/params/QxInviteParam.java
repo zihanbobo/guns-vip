@@ -138,6 +138,12 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
      */
     @TableField("invite_way")
     private String inviteWay;
+    
+    /**
+     * 约单描述
+     */
+    @TableField("content")
+    private String content;
 
     @Override
     public String checkParam() {

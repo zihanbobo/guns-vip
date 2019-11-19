@@ -196,4 +196,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		updateInviteStatus(inviteId, null, INVITE_STATUS.CANCEl);
 		notifyInvitee(inviteId);
 	}
+
+	@Override
+	public List<QxInvite> getCurrentInvites(Page page, Long userId) {
+		return this.baseMapper.getCurrentInvites(page, userId);
+	}
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -61,4 +63,8 @@ public interface QxInviteMapper extends BaseMapper<QxInvite> {
      * @return
      */
     List<QxInviteUserPojo> getInviteUsers(@Param("inviteId") Long inviteId);
+
+    @Select("select a.* from qx_invite a inner join qx_invite_apply b on a.id = b.invite_id and b.user_id = #{userId} order by created_time desc")
+    @ResultMap("BaseResultMap")
+	List<QxInvite> getCurrentInvites(@Param("page")  Page page, @Param("userId") Long userId);
 }

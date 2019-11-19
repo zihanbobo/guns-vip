@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
@@ -113,7 +115,7 @@ public class ApiInviteController extends ApiBaseController {
 		log.info("/api/invite/agree, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
 	}
-	
+
 	@RequestMapping("/reject")
 	public Object reject(Long inviteId) {
 		// 检查约单状态
@@ -124,5 +126,13 @@ public class ApiInviteController extends ApiBaseController {
 		qxInviteService.reject(inviteId);
 		log.info("/api/invite/reject, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
+	}
+
+	@RequestMapping("/current")
+	public Object current() {
+		Page page = LayuiPageFactory.defaultPage();
+		List<QxInvite> list = qxInviteService.getCurrentInvites(page, getRequestUserId());
+		log.info("/api/invite/current");
+		return ResultGenerator.genSuccessResult(list);
 	}
 }

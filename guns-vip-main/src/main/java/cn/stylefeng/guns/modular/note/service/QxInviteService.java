@@ -1,13 +1,15 @@
 package cn.stylefeng.guns.modular.note.service;
 
+import java.util.List;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
-import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>
@@ -99,5 +101,12 @@ public interface QxInviteService extends IService<QxInvite> {
 	 * @param inviteId
 	 */
 	void reject(Long inviteId);
+
+	/**
+	 * 获得当前约单
+	 * @param requestUserId
+	 * @return
+	 */
+	List<QxInvite> getCurrentInvites(Page page, Long requestUserId);
 
 }
