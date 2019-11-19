@@ -30,11 +30,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.code.ssm.Cache;
 
 import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
-import cn.stylefeng.guns.base.auth.jwt.payload.JwtPayLoad;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CacheCodeUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
-import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
+import cn.stylefeng.guns.core.TokenUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.TOKEN;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxUserTo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
@@ -88,10 +88,12 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	private JSONObject generateToken(QxUser user) {
+		String accessId = TOKEN.USER + user.getId();
+		String token = TokenUtils.createToken(accessId);
+		cacheValueSecond(accessId, 60 * 60 * 24 * 30, token);
 		JSONObject result = new JSONObject();
-		JwtPayLoad payLoad = new JwtPayLoad(user.getId(), user.getMobile(), null);
 		result.put("id", user.getId());
-		result.put("token", JwtTokenUtil.generateToken(payLoad));
+		result.put("token",token);
 		return result;
 	}
 

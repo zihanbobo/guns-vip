@@ -9,6 +9,14 @@ package cn.stylefeng.guns.core.constant;
 public interface ProjectConstants {
 
 	/**
+	 * 用户 token
+	 */
+	public interface TOKEN {
+		String ADMIN = "ADMIN_";
+		String USER = "USER_";
+	}
+
+	/**
 	 * 通知类型：0-短信，1-邮箱，2-消息；
 	 */
 	public interface NOTICE_TYPE {
@@ -18,8 +26,8 @@ public interface ProjectConstants {
 	}
 
 	/**
-	 * 消息读取状态
-	 * 0-未读；1-已读
+	 * 消息读取状态 0-未读；1-已读
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -32,6 +40,7 @@ public interface ProjectConstants {
 	 * 消息发送状态
 	 * 
 	 * 0-未发送；1-已发送
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -41,8 +50,7 @@ public interface ProjectConstants {
 	}
 
 	/**
-	 * 手机验证码:
-	 * 0-登录/注册验证码;1-约单成功；2-约单失败
+	 * 手机验证码: 0-登录/注册验证码;1-约单成功；2-约单失败
 	 * 
 	 * @author steven
 	 *
@@ -52,10 +60,10 @@ public interface ProjectConstants {
 		int INVITE_SUCCESS = 1;
 		int INVITE_FAIL = 2;
 	}
-	
+
 	/**
-	 * 约单状态
-	 *  0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉;6-已拒绝
+	 * 约单状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉;6-已拒绝
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -67,9 +75,10 @@ public interface ProjectConstants {
 		String CANCEl = "4";
 		String COMPLAINT = "5";
 	}
-	
+
 	/**
 	 * 约单方式：0-单独约；1-报名约
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -77,7 +86,7 @@ public interface ProjectConstants {
 		String SINGLE = "0";
 		String MULTIPLE = "1";
 	}
-	
+
 	/**
 	 * 约单类型：0-主动约；1-被动约
 	 */

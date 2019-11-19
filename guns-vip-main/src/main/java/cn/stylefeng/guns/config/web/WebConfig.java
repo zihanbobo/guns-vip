@@ -121,7 +121,7 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		List<String> securityUrls = Arrays.asList(configEntity.getSecureUrls().split(","));
-		registry.addInterceptor(new RestApiInteceptor()).addPathPatterns("/api/**").excludePathPatterns(securityUrls);
+		registry.addInterceptor(new RestApiInteceptor(getCacheFactory().getCache())).addPathPatterns("/api/**").excludePathPatterns(securityUrls);
 	}
 
 	/**

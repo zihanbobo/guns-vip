@@ -20,11 +20,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import cn.stylefeng.guns.base.auth.jwt.JwtTokenUtil;
-import cn.stylefeng.guns.base.auth.jwt.payload.JwtPayLoad;
+import com.alibaba.fastjson.JSON;
+import com.google.code.ssm.Cache;
+
+import cn.stylefeng.guns.core.TokenUtils;
 import cn.stylefeng.guns.core.constant.JwtConstants;
-import cn.stylefeng.guns.core.exception.ServiceException;
-import io.jsonwebtoken.JwtException;
+import cn.stylefeng.guns.core.constant.ProjectConstants.TOKEN;
+import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -37,39 +39,28 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RestApiInteceptor extends HandlerInterceptorAdapter {
 
+	private Cache cache;
+	
+	public RestApiInteceptor(Cache cache) {
+		this.cache = cache;
+	}
+	
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (handler instanceof org.springframework.web.servlet.resource.ResourceHttpRequestHandler) {
-            return true;
-        }
-        return check(request, response);
+    	response.setContentType("application/json;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		response.setStatus(HttpServletResponse.SC_OK);
+    	try {
+			String accessId = TokenUtils.validate(request.getHeader(JwtConstants.AUTH_HEADER), cache);
+			String userId = accessId.replaceAll(TOKEN.USER, "");
+			request.setAttribute("userId", userId);
+			log.info("UserID = " + userId);
+			return true;
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		ErrorResponseData result = new ErrorResponseData("认证失败！");
+		response.getWriter().write(JSON.toJSONString(result));
+		return false;
     }
-
-    private boolean check(HttpServletRequest request, HttpServletResponse response) {
-        final String requestHeader = request.getHeader(JwtConstants.AUTH_HEADER);
-        String authToken;
-        if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
-            authToken = requestHeader.substring(7);
-
-            //验证token是否过期,包含了验证jwt是否正确
-            try {
-                boolean flag = JwtTokenUtil.isTokenExpired(authToken);
-                if (flag) {
-                	throw new ServiceException("token过期");
-                }
-                JwtPayLoad payload = JwtTokenUtil.getJwtPayLoad(authToken);
-                String userId = payload.getUserId().toString();
-                request.setAttribute("userId", userId);
-                log.info("userId" + userId);
-                return true;
-            } catch (JwtException e) {
-                //有异常就是token解析失败
-                throw new ServiceException("token验证失败");
-            }
-        } else {
-            //header没有带Bearer字段
-            throw new ServiceException("token格式不正确");
-        }
-    }
-
 }
