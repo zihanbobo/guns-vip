@@ -1,9 +1,11 @@
 package cn.stylefeng.guns.modular.note.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +18,7 @@ import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
+import cn.stylefeng.guns.modular.note.dvo.QxInviteVo;
 import cn.stylefeng.guns.modular.note.entity.QxDateType;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
@@ -132,7 +135,19 @@ public class ApiInviteController extends ApiBaseController {
 	public Object current() {
 		Page page = LayuiPageFactory.defaultPage();
 		List<QxInvite> list = qxInviteService.getCurrentInvites(page, getRequestUserId());
+		List<QxInviteVo> vos = createQxInviteVos(list);
+		page.setRecords(vos);
 		log.info("/api/invite/current");
-		return ResultGenerator.genSuccessResult(list);
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	private List<QxInviteVo> createQxInviteVos(List<QxInvite> list) {
+		List<QxInviteVo> vos = new ArrayList<>();
+		for (QxInvite invite : list) {
+			QxInviteVo vo = new QxInviteVo();
+			BeanUtils.copyProperties(invite, vo);
+			vos.add(vo);
+		}
+		return vos;
 	}
 }
