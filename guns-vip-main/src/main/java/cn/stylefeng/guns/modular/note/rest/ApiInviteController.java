@@ -113,4 +113,16 @@ public class ApiInviteController extends ApiBaseController {
 		log.info("/api/invite/agree, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@RequestMapping("/reject")
+	public Object reject(Long inviteId) {
+		// 检查约单状态
+		QxInvite invite = qxInviteService.getById(inviteId);
+		if (!INVITE_STATUS.WAIT_MATCH.equals(invite.getStatus())) {
+			throw new ServiceException("不能重复拒绝");
+		}
+		qxInviteService.reject(inviteId);
+		log.info("/api/invite/reject, inviteId=" + inviteId);
+		return ResultGenerator.genSuccessResult();
+	}
 }

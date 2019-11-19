@@ -147,7 +147,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		UpdateWrapper<QxInvite> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.eq("id", invitedId);
 		QxInvite model = new QxInvite();
-		model.setInvitee(invitee);
+		if (invitee != null) {
+			model.setInvitee(invitee);
+		}
 		model.setStatus(status);
 		this.baseMapper.update(model, updateWrapper);
 	}
@@ -168,7 +170,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 				tag = SMS_CODE.INVITE_FAIL;
 				log.info("User " + inviteUser.getMobile() + "未被选中");
 			}
-//			noticeHelper.push(account, tag, pairs);
+			noticeHelper.push(account, tag, pairs);
 		}
 	}
 
@@ -177,7 +179,13 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		QxInvite invite = this.baseMapper.selectById(inviteId);
 		Long invitee = invite.getInvitee();
 		chooseApply(inviteId, invitee);
-		updateInviteStatus(inviteId, invitee, INVITE_STATUS.MATCHED);
+		updateInviteStatus(inviteId, null, INVITE_STATUS.MATCHED);
+		notifyInvitee(inviteId);
+	}
+
+	@Override
+	public void reject(Long inviteId) {
+		updateInviteStatus(inviteId, null, INVITE_STATUS.CANCEl);
 		notifyInvitee(inviteId);
 	}
 }
