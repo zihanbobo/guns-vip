@@ -88,4 +88,10 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	void choose(Long inviteId, Long userId);
 
+	/**
+	 * 同意邀请
+	 * @param inviteId
+	 */
+	void agree(Long inviteId);
+
 }

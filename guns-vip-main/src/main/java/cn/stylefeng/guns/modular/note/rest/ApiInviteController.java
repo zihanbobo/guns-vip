@@ -35,17 +35,15 @@ public class ApiInviteController extends ApiBaseController {
 
 	@Resource
 	private QxDateTypeService qxDateTypeService;
-	
+
 	@Resource
 	private QxInviteApplyService qxInviteApplyService;
-	
+
 	/**
-	 * 约单四种：
-	 * | 约单方式   | 约单类型 | inviter | invitee | apply | 事件 |
-	 * | 多人		| 主动	   | A       | B,C,D   | B,C,D | 报名 |
-	 * | 多人		| 被动	   | A 	     | B,C,D   | B,C,D | 报名 |
-	 * | 单人		| 主动	   | A       | B       | B	   | 同意 |
-	 * | 单人		| 被动	   | A 	     | B       | B     | 同意 |
+	 * 约单四种： | 约单方式 | 约单类型 | inviter | invitee | apply | 事件 | | 多人 | 主动 | A | B,C,D
+	 * | B,C,D | 报名 | | 多人 | 被动 | A | B,C,D | B,C,D | 报名 | | 单人 | 主动 | A | B | B |
+	 * 同意 | | 单人 | 被动 | A | B | B | 同意 |
+	 * 
 	 * @param inviteTo
 	 * @return
 	 */
@@ -58,7 +56,7 @@ public class ApiInviteController extends ApiBaseController {
 		log.info("/api/invite/add, inviteTo=" + inviteTo);
 		return ResultGenerator.genSuccessResult();
 	}
-	
+
 	@RequestMapping("/dateTypes")
 	public Object dateTypes() {
 		QueryWrapper<QxDateType> queryWrapper = new QueryWrapper<QxDateType>();
@@ -68,7 +66,7 @@ public class ApiInviteController extends ApiBaseController {
 		log.info("/api/invite/dateTypes");
 		return ResultGenerator.genSuccessResult(list);
 	}
-	
+
 	@RequestMapping("/apply")
 	public Object apply(Long inviteId) {
 		Long currentUserId = getRequestUserId();
@@ -82,7 +80,7 @@ public class ApiInviteController extends ApiBaseController {
 		log.info("/api/invite/apply, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
 	}
-	
+
 	private void checkRepeatApply(Long userId, Long inviteId) {
 		QueryWrapper<QxInviteApply> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("user_id", userId).eq("invite_id", inviteId);
@@ -91,21 +89,28 @@ public class ApiInviteController extends ApiBaseController {
 			throw new ServiceException("不能重复报名");
 		}
 	}
-	
+
 	@RequestMapping("/choose")
 	public Object choose(Long inviteId, Long userId) {
 		// 检查约单状态
 		QxInvite invite = qxInviteService.getById(inviteId);
 		if (!INVITE_STATUS.WAIT_MATCH.equals(invite.getStatus())) {
-			throw new ServiceException("改单已结束，不能选择报名者");
+			throw new ServiceException("报名已结束，不能选择报名者");
 		}
 		qxInviteService.choose(inviteId, userId);
 		log.info("/api/invite/choose, inviteId=" + inviteId + ", userId=" + userId);
 		return ResultGenerator.genSuccessResult();
 	}
-	
+
 	@RequestMapping("/agree")
-	public Object agree() {
-		return null;
+	public Object agree(Long inviteId) {
+		// 检查约单状态
+		QxInvite invite = qxInviteService.getById(inviteId);
+		if (!INVITE_STATUS.WAIT_MATCH.equals(invite.getStatus())) {
+			throw new ServiceException("不能重复同意");
+		}
+		qxInviteService.agree(inviteId);
+		log.info("/api/invite/agree, inviteId=" + inviteId);
+		return ResultGenerator.genSuccessResult();
 	}
 }

@@ -171,4 +171,13 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 //			noticeHelper.push(account, tag, pairs);
 		}
 	}
+
+	@Override
+	public void agree(Long inviteId) {
+		QxInvite invite = this.baseMapper.selectById(inviteId);
+		Long invitee = invite.getInvitee();
+		chooseApply(inviteId, invitee);
+		updateInviteStatus(inviteId, invitee, INVITE_STATUS.MATCHED);
+		notifyInvitee(inviteId);
+	}
 }
