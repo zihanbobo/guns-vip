@@ -173,4 +173,12 @@ public class ApiInviteController extends ApiBaseController {
 			throw new ServiceException("不能重复操作");
 		}
 	}
+	
+	@RequestMapping("/finish")
+	public Object finish(Long inviteId) {
+		checkRepeatOperate(inviteId, getRequestUserId(), INVITE_OPERATE_TYPE.CONFIRM_FINISH);
+		qxInviteService.finish(inviteId, getRequestUserId());
+		log.info("/api/invite/finish, inviteId=" + inviteId);
+		return ResultGenerator.genSuccessResult();
+	}
 }
