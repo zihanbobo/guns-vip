@@ -55,9 +55,6 @@ public class ApiUserController extends ApiBaseController {
 	@Resource
 	private ConfigEntity configEntity;
 
-	@Resource(name = "defaultMemcachedClient")
-	protected Cache cache;
-
 	@Resource
 	private QxUserService qxUserService;
 
