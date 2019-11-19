@@ -39,12 +39,14 @@ public class ConfigEntity {
 	private String smsTemplate;
 	private String smsInviteSuccessTemplate;
 	private String smsInviteFailTemplate;
+	private String smsEmergencyTemplate;
 	// 邮箱
 	private String emailAccountName;
 	private String emailFromAlias;
 	private String eTemplate;
 	private String eInviteSuccessTemplate;
 	private String eInviteFailTemplate;
+	private String eEmergencyTemplate;
 	
 	public String getAbsoluteUploadPath() {
 		return FileUtil.mergeDeployPath(baseUploadPath);
@@ -68,8 +70,11 @@ public class ConfigEntity {
 			map.put("template", isSms ? smsInviteSuccessTemplate : eInviteSuccessTemplate);
 			map.put("tagName", "约单成功通知");
 		} else if (SMS_CODE.INVITE_FAIL == tag) {
-			map.put("template", isSms ? eInviteFailTemplate : smsInviteFailTemplate);
+			map.put("template", isSms ? smsInviteFailTemplate : eInviteFailTemplate);
 			map.put("tagName", "约单失败通知");
+		} else if (SMS_CODE.EMERGENCY == tag) {
+			map.put("template", isSms ? smsEmergencyTemplate : eEmergencyTemplate);
+			map.put("tagName", "紧急通知");
 		} else {
 			map.put("template", isSms ? smsTemplate : eTemplate);
 			map.put("tagName", "验证码");

@@ -65,5 +65,12 @@ public interface QxEmergencyService extends IService<QxEmergency> {
      * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxEmergencyParam param);
+     
+     /**
+      * 获取默认紧急联系人
+      * @param userId
+      * @return
+      */
+     QxEmergency getDefaultEmergency(Long userId);
 
 }

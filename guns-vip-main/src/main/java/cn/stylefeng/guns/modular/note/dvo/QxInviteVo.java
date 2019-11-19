@@ -12,15 +12,7 @@ public class QxInviteVo {
 	private String status;
 	private Date createdTime;
 	private Date inviteTime;
-    private String province;
-    private String city;
-    private String district;
-    private String street;
-    private String streetNumber;
+    private String location;
     // 用户信息
     private QxUserVo userVo;
-   
-	public String getLocation() {
-		return province + city + district + street + streetNumber;
-	}
 }

@@ -1,7 +1,9 @@
 package cn.stylefeng.guns.modular.note.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -23,12 +25,14 @@ import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxInviteVo;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxDateType;
+import cn.stylefeng.guns.modular.note.entity.QxEmergency;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
 import cn.stylefeng.guns.modular.note.entity.QxInviteComment;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import cn.stylefeng.guns.modular.note.service.QxDateTypeService;
+import cn.stylefeng.guns.modular.note.service.QxEmergencyService;
 import cn.stylefeng.guns.modular.note.service.QxInviteApplyService;
 import cn.stylefeng.guns.modular.note.service.QxInviteCommentService;
 import cn.stylefeng.guns.modular.note.service.QxInviteOperateService;
@@ -60,6 +64,9 @@ public class ApiInviteController extends ApiBaseController {
 	
 	@Resource
 	private QxComplaintService qxComplaintService;
+	
+	@Resource
+	private QxEmergencyService qxEmergencyService;
 
 	/**
 	 * 约单四种： | 约单方式 | 约单类型 | inviter | invitee | apply | 事件 | | 多人 | 主动 | A | B,C,D
@@ -225,5 +232,14 @@ public class ApiInviteController extends ApiBaseController {
 		if (count > 0) {
 			throw new ServiceException("不能重复评价");
 		}
+	}
+	
+	@RequestMapping("/alert")
+	public Object alert(Long inviteId) {
+		QxInvite invite = qxInviteService.getById(inviteId);
+		QxEmergency emergency = qxEmergencyService.getDefaultEmergency(getRequestUserId());
+		qxInviteService.alert(getRequestUserId(), emergency.getContact(), invite);
+		log.info("/api/invite/alert, inviteId=" + inviteId);
+		return ResultGenerator.genSuccessResult();
 	}
 }

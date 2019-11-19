@@ -386,4 +386,8 @@ public class QxInvite implements Serializable {
         ", content=" + content +
         "}";
     }
+	
+	public String getLocation() {
+		return province + city + district + street + streetNumber;
+	}
 }

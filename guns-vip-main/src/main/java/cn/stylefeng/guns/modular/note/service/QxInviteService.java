@@ -137,4 +137,11 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	void comment(Long userId, QxInviteCommentTo commentTo);
 
+	/**
+	 * 紧急联系
+	 * @param invite
+	 * @param string
+	 */
+	void alert(Long userId, String emergencyContact, QxInvite invite);
+
 }

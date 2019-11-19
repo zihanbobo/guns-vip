@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.ALERT_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
@@ -28,17 +29,21 @@ import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
+import cn.stylefeng.guns.modular.note.entity.QxAlert;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
 import cn.stylefeng.guns.modular.note.entity.QxInviteComment;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteApplyMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteOperateMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
+import cn.stylefeng.guns.modular.note.service.QxAlertService;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import cn.stylefeng.guns.modular.note.service.QxInviteCommentService;
 import  cn.stylefeng.guns.modular.note.service.QxInviteService;
@@ -58,6 +63,9 @@ import lombok.extern.slf4j.Slf4j;
 public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> implements QxInviteService {
 
 	@Resource
+	private QxUserMapper qxUserMapper;
+	
+	@Resource
 	private QxInviteMapper qxInviteMapper;
 	
 	@Resource
@@ -71,6 +79,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	
 	@Resource
 	private QxInviteCommentService qxInviteCommentSerivce;
+	
+	@Resource
+	private QxAlertService qxAlertService;
 	
 	@Resource
 	private NoticeHelper noticeHelper;
@@ -291,5 +302,29 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			inviteComment.setCommenteeId(invite.getInviter());
 		}
 		qxInviteCommentSerivce.save(inviteComment);
+	}
+
+	@Override
+	public void alert(Long userId, String emergencyContact, QxInvite invite) {
+		Long otherUserId = userId.equals(invite.getInviter()) ? invite.getInvitee() : invite.getInviter();
+		QxUser otherUser = qxUserMapper.selectById(otherUserId);
+		saveAlert(userId, invite.getId());
+		sendAlert(invite, otherUser, emergencyContact);
+	}
+	
+	public void saveAlert(Long userId, Long inviteId) {
+		QxAlert alert = new QxAlert();
+		alert.setUserId(userId);
+		alert.setInviteId(inviteId);
+		alert.setStatus(ALERT_STATUS.UNHANDLE);
+		qxAlertService.save(alert);
+	}
+	
+	public void sendAlert(QxInvite invite, QxUser otherUser, String emergencyContact) {
+		Map<String, String> pairs = new HashMap<>();
+		pairs.put("inviteTime", invite.getInviteTime().toString());
+		pairs.put("location", invite.getLocation());
+		pairs.put("contact", otherUser.getMobile());
+		noticeHelper.send(emergencyContact, SMS_CODE.EMERGENCY, pairs);
 	}
 }

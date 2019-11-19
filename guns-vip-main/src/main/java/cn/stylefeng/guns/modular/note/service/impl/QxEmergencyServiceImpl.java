@@ -1,5 +1,15 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
+import java.io.Serializable;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxEmergency;
@@ -8,13 +18,6 @@ import cn.stylefeng.guns.modular.note.model.params.QxEmergencyParam;
 import cn.stylefeng.guns.modular.note.model.result.QxEmergencyResult;
 import  cn.stylefeng.guns.modular.note.service.QxEmergencyService;
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>
@@ -80,5 +83,12 @@ public class QxEmergencyServiceImpl extends ServiceImpl<QxEmergencyMapper, QxEme
         ToolUtil.copyProperties(param, entity);
         return entity;
     }
+
+	@Override
+	public QxEmergency getDefaultEmergency(Long userId) {
+		QueryWrapper<QxEmergency> queryWrapper = new QueryWrapper();
+		queryWrapper.eq("user_id", userId).eq("is_default", true);
+		return this.baseMapper.selectOne(queryWrapper);
+	}
 
 }

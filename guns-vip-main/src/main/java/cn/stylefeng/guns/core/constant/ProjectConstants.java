@@ -59,6 +59,7 @@ public interface ProjectConstants {
 		int LOGIN_OR_REGISTER = 0;
 		int INVITE_SUCCESS = 1;
 		int INVITE_FAIL = 2;
+		int EMERGENCY = 3;
 	}
 
 	/**
@@ -114,5 +115,13 @@ public interface ProjectConstants {
 		String CONFIRM_START = "0";
 		String CONFIRM_FINISH = "1";
 		String CONFIRM_CANCEL = "2";
+	}
+	
+	/**
+	 * 报警状态: 0-未处理；1-已处理
+	 */
+	public interface ALERT_STATUS {
+		String UNHANDLE = "0";
+		String HANDLED = "1";
 	}
 }
