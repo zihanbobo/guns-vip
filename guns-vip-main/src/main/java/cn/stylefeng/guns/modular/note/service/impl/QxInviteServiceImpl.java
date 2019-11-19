@@ -239,4 +239,13 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		model.setStatus(status);
 		this.baseMapper.update(model, updateWrapper);
 	}
+
+	@Override
+	public void finish(Long inviteId, Long requestUserId) {
+		createInviteOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH);
+		if (checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH)) {
+			changeQxInviteStatus(inviteId, INVITE_STATUS.FINISH);
+			// TODO：对应金币转入到对方
+		}
+	}
 }
