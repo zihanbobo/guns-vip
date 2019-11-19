@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -20,14 +21,17 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
+import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteApplyMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxInviteMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxInviteOperateMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
@@ -52,6 +56,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	
 	@Resource
 	private QxInviteApplyMapper qxInviteApplyMapper;
+	
+	@Resource
+	private QxInviteOperateMapper qxInviteOperateMapper;
 	
 	@Resource
 	private NoticeHelper noticeHelper;
@@ -200,5 +207,36 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	@Override
 	public List<QxInvite> getCurrentInvites(Page page, Long userId) {
 		return this.baseMapper.getCurrentInvites(page, userId);
+	}
+
+	@Override
+	public void start(Long inviteId, Long requestUserId) {
+		createInviteOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_START);
+		if (checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_START)) {
+			changeQxInviteStatus(inviteId, INVITE_STATUS.DATING);
+		}
+	}
+	
+	public void createInviteOperate(Long inviteId, Long userId, String type) {
+		QxInviteOperate inviteOperate = new QxInviteOperate();
+		inviteOperate.setInviteId(inviteId);
+		inviteOperate.setUserId(userId);
+		inviteOperate.setType(type);
+		qxInviteOperateMapper.insert(inviteOperate);
+	}
+	
+	public Boolean checkOtherSideOperate(Long inviteId, Long userId, String type) {
+		QueryWrapper<QxInviteOperate> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("invite_id", inviteId).eq("type", type).ne("user_id", userId);
+		int count = qxInviteOperateMapper.selectCount(queryWrapper);
+		return count > 0;
+	}
+	
+	public void changeQxInviteStatus(Long inviteId, String status) {
+		UpdateWrapper<QxInvite> updateWrapper = new UpdateWrapper<>();
+		updateWrapper.eq("id", inviteId);
+		QxInvite model = new QxInvite();
+		model.setStatus(status);
+		this.baseMapper.update(model, updateWrapper);
 	}
 }

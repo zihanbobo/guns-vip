@@ -109,4 +109,11 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	List<QxInvite> getCurrentInvites(Page page, Long requestUserId);
 
+	/**
+	 * 确认约单开始
+	 * @param inviteId
+	 * @param requestUserId
+	 */
+	void start(Long inviteId, Long requestUserId);
+
 }

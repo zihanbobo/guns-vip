@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
@@ -22,8 +23,10 @@ import cn.stylefeng.guns.modular.note.dvo.QxInviteVo;
 import cn.stylefeng.guns.modular.note.entity.QxDateType;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
+import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
 import cn.stylefeng.guns.modular.note.service.QxDateTypeService;
 import cn.stylefeng.guns.modular.note.service.QxInviteApplyService;
+import cn.stylefeng.guns.modular.note.service.QxInviteOperateService;
 import cn.stylefeng.guns.modular.note.service.QxInviteService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -43,6 +46,9 @@ public class ApiInviteController extends ApiBaseController {
 
 	@Resource
 	private QxInviteApplyService qxInviteApplyService;
+	
+	@Resource
+	private QxInviteOperateService qxInviteOperateService;
 
 	/**
 	 * 约单四种： | 约单方式 | 约单类型 | inviter | invitee | apply | 事件 | | 多人 | 主动 | A | B,C,D
@@ -149,5 +155,22 @@ public class ApiInviteController extends ApiBaseController {
 			vos.add(vo);
 		}
 		return vos;
+	}
+	
+	@RequestMapping("/start")
+	public Object start(Long inviteId) {
+		checkRepeatOperate(inviteId, getRequestUserId(), INVITE_OPERATE_TYPE.CONFIRM_START);
+		qxInviteService.start(inviteId, getRequestUserId());
+		log.info("/api/invite/start, inviteId=" + inviteId);
+		return ResultGenerator.genSuccessResult();
+	}
+	
+	public void checkRepeatOperate(Long inviteId, Long userId, String operateType) {
+		QueryWrapper<QxInviteOperate> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", userId).eq("invite_id", inviteId).eq("type", operateType);
+		int count = qxInviteOperateService.count(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("不能重复操作");
+		}
 	}
 }

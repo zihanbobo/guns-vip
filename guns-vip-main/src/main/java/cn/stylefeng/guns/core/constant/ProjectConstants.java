@@ -105,4 +105,14 @@ public interface ProjectConstants {
 		String ACTIVE = "0";
 		String PASSIVE = "1";
 	}
+	
+	/**
+	 * 操作类型：0-确认开始；1-确认结束；2-确认取消；
+	 * @author steven
+	 */
+	public interface INVITE_OPERATE_TYPE {
+		String CONFIRM_START = "0";
+		String CONFIRM_FINISH = "1";
+		String CONFIRM_CANCEL = "2";
+	}
 }
