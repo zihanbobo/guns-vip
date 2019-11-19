@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author 
- * @since 2019-11-18
+ * @since 2019-11-19
  */
 @TableName("qx_invite_apply")
 public class QxInviteApply implements Serializable {
@@ -75,10 +75,10 @@ public class QxInviteApply implements Serializable {
     private Long userId;
 
     /**
-     * 是否选中
+     * 状态：0-待确定；1-已选中；2-未选中
      */
-    @TableField("choosed")
-    private Boolean choosed;
+    @TableField("status")
+    private String status;
 
 
     public Long getId() {
@@ -153,12 +153,12 @@ public class QxInviteApply implements Serializable {
         this.userId = userId;
     }
 
-    public Boolean getChoosed() {
-        return choosed;
+    public String getStatus() {
+        return status;
     }
 
-    public void setChoosed(Boolean choosed) {
-        this.choosed = choosed;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -173,7 +173,7 @@ public class QxInviteApply implements Serializable {
         ", deleted=" + deleted +
         ", inviteId=" + inviteId +
         ", userId=" + userId +
-        ", choosed=" + choosed +
+        ", status=" + status +
         "}";
     }
 }

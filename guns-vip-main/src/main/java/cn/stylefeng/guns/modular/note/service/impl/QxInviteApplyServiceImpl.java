@@ -22,7 +22,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-18
+ * @since 2019-11-19
  */
 @Service
 public class QxInviteApplyServiceImpl extends ServiceImpl<QxInviteApplyMapper, QxInviteApply> implements QxInviteApplyService {

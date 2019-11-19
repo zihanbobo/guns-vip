@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.util.NoticeHelper;
@@ -124,7 +125,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		QxInviteApply inviteApply = new QxInviteApply();
 		inviteApply.setUserId(currentUserId);
 		inviteApply.setInviteId(inviteId);
-		inviteApply.setChoosed(false);
+		inviteApply.setStatus(INVITE_APPLY_STATUS.UN_SURE);
 		qxInviteApplyMapper.insert(inviteApply);
 	}
 
@@ -136,11 +137,18 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	}
 	
 	public void chooseApply(Long inviteId, Long userId) {
-		UpdateWrapper<QxInviteApply> updateWrapper = new UpdateWrapper<>();
-		updateWrapper.eq("invite_id", inviteId).eq("user_id", userId);
+		// 更新选中的报名状态
+		UpdateWrapper<QxInviteApply> chooseUpdateWrapper = new UpdateWrapper<>();
+		chooseUpdateWrapper.eq("invite_id", inviteId).eq("user_id", userId);
 		QxInviteApply model = new QxInviteApply();
-		model.setChoosed(true);
-		qxInviteApplyMapper.update(model, updateWrapper);
+		model.setStatus(INVITE_APPLY_STATUS.AGREE);
+		qxInviteApplyMapper.update(model, chooseUpdateWrapper);
+		// 更新未选中的报名状态
+		UpdateWrapper<QxInviteApply> rejectUpdateWrapper = new UpdateWrapper<>();
+		rejectUpdateWrapper.eq("invite_id", inviteId).ne("user_id", userId);
+		QxInviteApply rejectModel = new QxInviteApply();
+		rejectModel.setStatus(INVITE_APPLY_STATUS.REJECT);
+		qxInviteApplyMapper.update(rejectModel, rejectUpdateWrapper);
 	}
 	
 	public void updateInviteStatus(Long invitedId, Long invitee, String status) {

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author 
- * @since 2019-11-18
+ * @since 2019-11-19
  */
 @Data
 public class QxInviteApplyResult implements Serializable {
@@ -65,8 +65,8 @@ public class QxInviteApplyResult implements Serializable {
     private Long userId;
 
     /**
-     * 是否选中
+     * 状态：0-待确定；1-已选中；2-未选中
      */
-    private Boolean choosed;
+    private String status;
 
 }

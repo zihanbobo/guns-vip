@@ -75,6 +75,17 @@ public interface ProjectConstants {
 		String CANCEl = "4";
 		String COMPLAINT = "5";
 	}
+	
+	/**
+	 * 约单报名状态：0-待确定；1-已确定；2-未确定
+	 * @author steven
+	 *
+	 */
+	public interface INVITE_APPLY_STATUS {
+		String UN_SURE = "0";
+		String AGREE = "1";
+		String REJECT = "2";
+	}
 
 	/**
 	 * 约单方式：0-单独约；1-报名约
