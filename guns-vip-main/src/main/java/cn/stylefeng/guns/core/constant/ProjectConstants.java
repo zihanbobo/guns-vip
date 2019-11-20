@@ -173,4 +173,14 @@ public final class ProjectConstants {
 		String UNHANDLE = "0";
 		String HANDLED = "1";
 	}
+	
+	/**
+	 * 合作处理状态
+	 * @author steven
+	 *
+	 */
+	public interface COOPERATE_STATUS {
+		String UNHANDLE = "0";
+		String HANDLED = "1";
+	}
 }
