@@ -78,12 +78,12 @@ public class QxNoticeParam implements Serializable, BaseValidatingParam {
     /**
      * 发送状态 是否发送：0-未发送，1-已发送
      */
-    private Integer statusSend;
+    private Boolean statusSend;
 
     /**
      * 已读状态 读取状态：1-是.0-未读
      */
-    private Integer statusRead;
+    private Boolean statusRead;
 
     @Override
     public String checkParam() {

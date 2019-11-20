@@ -90,13 +90,13 @@ public class QxNotice implements Serializable {
      * 发送状态 是否发送：0-未发送，1-已发送
      */
     @TableField("status_send")
-    private Integer statusSend;
+    private Boolean statusSend;
 
     /**
      * 已读状态 读取状态：1-是.0-未读
      */
     @TableField("status_read")
-    private Integer statusRead;
+    private Boolean statusRead;
 
 
     public Long getId() {
@@ -187,23 +187,23 @@ public class QxNotice implements Serializable {
         this.type = type;
     }
 
-    public Integer getStatusSend() {
+    public Boolean getStatusSend() {
         return statusSend;
     }
 
-    public void setStatusSend(Integer statusSend) {
+    public void setStatusSend(Boolean statusSend) {
         this.statusSend = statusSend;
     }
 
-    public Integer getStatusRead() {
-        return statusRead;
-    }
+    public Boolean getStatusRead() {
+		return statusRead;
+	}
 
-    public void setStatusRead(Integer statusRead) {
-        this.statusRead = statusRead;
-    }
+	public void setStatusRead(Boolean statusRead) {
+		this.statusRead = statusRead;
+	}
 
-    @Override
+	@Override
     public String toString() {
         return "QxNotice{" +
         "id=" + id +

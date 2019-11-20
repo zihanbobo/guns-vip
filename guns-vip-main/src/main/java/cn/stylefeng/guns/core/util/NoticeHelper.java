@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.DateUtils;
-import cn.stylefeng.guns.core.constant.ProjectConstants.NOTICE_SEND_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.NOTICE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.exception.ServiceException;
@@ -141,7 +140,7 @@ public class NoticeHelper {
 	private void updateSuccess(Long noticeId) {
 		QxNotice model = new QxNotice();
 		model.setId(noticeId);
-		model.setStatusSend(NOTICE_SEND_STATUS.SEND);
+		model.setStatusSend(true);
 		model.setUpdatedTime(new Date());
 		noticeMapper.updateById(model);
 	}
