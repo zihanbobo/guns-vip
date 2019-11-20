@@ -163,4 +163,14 @@ public final class ProjectConstants {
 		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.COMPENSATION_OUT, "违约金支出");
 		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.COMPENSATION_IN, "违约金汇入");
 	}
+	
+	/**
+	 * 反馈处理状态
+	 * @author steven
+	 *
+	 */
+	public interface FEEDBACK_STATUS {
+		String UNHANDLE = "0";
+		String HANDLED = "1";
+	}
 }
