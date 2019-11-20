@@ -12,11 +12,12 @@
         <result column="updated_time" property="updatedTime" />
         <result column="deleted" property="deleted" />
         <result column="name" property="name" />
+        <result column="order_no" property="orderNo" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", name AS "name"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", name AS "name", order_no AS "orderNo"
     </sql>
 
 

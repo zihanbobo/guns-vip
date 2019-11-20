@@ -67,6 +67,12 @@ public class QxCategory implements Serializable {
      */
     @TableField("name")
     private String name;
+    
+    /**
+     * 分类排序
+     */
+    @TableField("order_no")
+    private Integer orderNo;
 
 
     public Long getId() {
@@ -133,7 +139,15 @@ public class QxCategory implements Serializable {
         this.name = name;
     }
 
-    @Override
+    public Integer getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	@Override
     public String toString() {
         return "QxCategory{" +
         "id=" + id +
@@ -144,6 +158,7 @@ public class QxCategory implements Serializable {
         ", updatedTime=" + updatedTime +
         ", deleted=" + deleted +
         ", name=" + name +
+        ", orderNo=" + orderNo +
         "}";
     }
 }

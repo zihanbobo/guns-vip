@@ -58,5 +58,10 @@ public class QxCategoryResult implements Serializable {
      * 品类名称
      */
     private String name;
+    
+    /**
+     * 排序
+     */
+    private Integer orderNo;
 
 }

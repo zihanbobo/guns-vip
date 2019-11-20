@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -58,4 +60,14 @@ public interface QxUserMapper extends BaseMapper<QxUser> {
      * 通过账号获取用户
      */
     QxUser getByAccount(@Param("account") String account);
+
+    /**
+     * 获取商品兑换的用户列表
+     * @param page
+     * @param id
+     * @return
+     */
+    @Select("select a.* from qx_user a inner join qx_user_product b on a.id = b.user_id and b.product_id = #{id}")
+    @ResultMap("BaseResultMap")
+	List<QxUser> getProductUsers(@Param("page") Page page, @Param("id") Long id);
 }

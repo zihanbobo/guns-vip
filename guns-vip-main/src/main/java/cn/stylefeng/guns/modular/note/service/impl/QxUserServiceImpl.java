@@ -87,4 +87,9 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	public QxUser getUserByAccount(String account) {
 		return this.baseMapper.getByAccount(account);
 	}
+
+	@Override
+	public List<QxUser> getProductUsers(Page page, Long id) {
+		return this.baseMapper.getProductUsers(page, id);
+	}
 }

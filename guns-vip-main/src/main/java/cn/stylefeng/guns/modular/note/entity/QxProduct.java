@@ -95,8 +95,8 @@ public class QxProduct implements Serializable {
     /**
      * 库存数量
      */
-    @TableField("untitled")
-    private String untitled;
+    @TableField("stock")
+    private Integer stock;
 
 
     public Long getId() {
@@ -195,15 +195,15 @@ public class QxProduct implements Serializable {
         this.price = price;
     }
 
-    public String getUntitled() {
-        return untitled;
-    }
+    public Integer getStock() {
+		return stock;
+	}
 
-    public void setUntitled(String untitled) {
-        this.untitled = untitled;
-    }
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
 
-    @Override
+	@Override
     public String toString() {
         return "QxProduct{" +
         "id=" + id +
@@ -218,7 +218,7 @@ public class QxProduct implements Serializable {
         ", headImages=" + headImages +
         ", detailImages=" + detailImages +
         ", price=" + price +
-        ", untitled=" + untitled +
+        ", stock=" + stock +
         "}";
     }
 }

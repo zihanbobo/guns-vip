@@ -16,12 +16,12 @@
         <result column="head_images" property="headImages" />
         <result column="detail_images" property="detailImages" />
         <result column="price" property="price" />
-        <result column="untitled" property="untitled" />
+        <result column="stock" property="stock" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", category_id AS "categoryId", product_name AS "productName", head_images AS "headImages", detail_images AS "detailImages", price AS "price", untitled AS "untitled"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", category_id AS "categoryId", product_name AS "productName", head_images AS "headImages", detail_images AS "detailImages", price AS "price", stock AS "stock"
     </sql>
 
 

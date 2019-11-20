@@ -82,6 +82,6 @@ public class QxProductResult implements Serializable {
     /**
      * 库存数量
      */
-    private String untitled;
+    private Integer stock;
 
 }

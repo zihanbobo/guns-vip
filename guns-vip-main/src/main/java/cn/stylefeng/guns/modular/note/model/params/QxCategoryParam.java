@@ -59,6 +59,11 @@ public class QxCategoryParam implements Serializable, BaseValidatingParam {
      * 品类名称
      */
     private String name;
+    
+    /**
+     * 排序
+     */
+    private Integer orderNo;
 
     @Override
     public String checkParam() {

@@ -83,7 +83,7 @@ public class QxProductParam implements Serializable, BaseValidatingParam {
     /**
      * 库存数量
      */
-    private String untitled;
+    private Integer stock;
 
     @Override
     public String checkParam() {
