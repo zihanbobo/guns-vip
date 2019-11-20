@@ -66,4 +66,11 @@ public interface QxFollowService extends IService<QxFollow> {
      */
      LayuiPageInfo findPageBySpec(QxFollowParam param);
 
+     /**
+      * 关注用户
+      * @param followerId
+      * @param followeeId
+      */
+	void follow(Long followerId, long followeeId);
+
 }

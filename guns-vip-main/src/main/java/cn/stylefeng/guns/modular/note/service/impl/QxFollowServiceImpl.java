@@ -81,4 +81,12 @@ public class QxFollowServiceImpl extends ServiceImpl<QxFollowMapper, QxFollow> i
         return entity;
     }
 
+	@Override
+	public void follow(Long followerId, long followeeId) {
+		QxFollow follow = new QxFollow();
+		follow.setFollowerId(followerId);
+		follow.setFolloweeId(followeeId);
+		this.baseMapper.insert(follow);
+	}
+
 }
