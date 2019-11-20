@@ -20,11 +20,12 @@
         <result column="status" property="status" />
         <result column="score" property="score" />
         <result column="balance" property="balance" />
+        <result column="freeze" property="freeze" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", mobile AS "mobile", nickname AS "nickname", age AS "age", height AS "height", sex AS "sex", avatar AS "avatar", status AS "status", score AS "score", balance AS "balance"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", mobile AS "mobile", nickname AS "nickname", age AS "age", height AS "height", sex AS "sex", avatar AS "avatar", status AS "status", score AS "score", balance AS "balance", freeze AS "freeze"
     </sql>
 
 

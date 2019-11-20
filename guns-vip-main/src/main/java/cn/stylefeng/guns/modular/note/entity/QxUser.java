@@ -1,11 +1,12 @@
 package cn.stylefeng.guns.modular.note.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -115,6 +116,12 @@ public class QxUser implements Serializable {
      */
     @TableField("balance")
     private Integer balance;
+    
+    /**
+     * 冻结金币
+     */
+    @TableField("freeze")
+    private Integer freeze;
 
 
     public Long getId() {
@@ -244,8 +251,16 @@ public class QxUser implements Serializable {
     public void setBalance(Integer balance) {
         this.balance = balance;
     }
+    
+    public Integer getFreeze() {
+		return freeze;
+	}
 
-    @Override
+	public void setFreeze(Integer freeze) {
+		this.freeze = freeze;
+	}
+
+	@Override
     public String toString() {
         return "QxUser{" +
         "id=" + id +
@@ -264,6 +279,7 @@ public class QxUser implements Serializable {
         ", status=" + status +
         ", score=" + score +
         ", balance=" + balance +
+        ", freeze=" + freeze +
         "}";
     }
 }

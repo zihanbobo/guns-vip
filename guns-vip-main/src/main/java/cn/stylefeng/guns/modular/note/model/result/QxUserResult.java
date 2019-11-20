@@ -98,5 +98,10 @@ public class QxUserResult implements Serializable {
      * 金币余额
      */
     private Integer balance;
+    
+    /**
+     * 冻结金币
+     */
+    private Integer freeze;
 
 }

@@ -99,6 +99,11 @@ public class QxUserParam implements Serializable, BaseValidatingParam {
      * 金币余额
      */
     private Integer balance;
+    
+    /**
+     * 冻结金币
+     */
+    private Integer freeze;
 
     @Override
     public String checkParam() {
