@@ -167,15 +167,15 @@ public class QxEmergency implements Serializable {
         this.contact = contact;
     }
 
-    public Boolean getDefault() {
-        return isDefault;
-    }
+    public Boolean getIsDefault() {
+		return isDefault;
+	}
 
-    public void setDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
-    }
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
+	}
 
-    @Override
+	@Override
     public String toString() {
         return "QxEmergency{" +
         "id=" + id +
