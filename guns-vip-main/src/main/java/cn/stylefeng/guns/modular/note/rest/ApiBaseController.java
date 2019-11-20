@@ -42,7 +42,11 @@ public class ApiBaseController extends BaseController {
 	protected Long getRequestUserId() {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
-		return Long.valueOf((String) request.getAttribute("userId"));
+		Object userIdObj = request.getAttribute("userId");
+		if (userIdObj == null) {
+			throw new ServiceException("用户ID为空");
+		}
+		return Long.valueOf((String) userIdObj);
 	}
 	
 	protected QxUserVo createQxUserVo(QxUser user) {

@@ -56,14 +56,14 @@ public class CommonUtils {
 	public static boolean isEmpty(Object pObj) {
 		if (pObj == null)
 			return true;
-		if (pObj == "")
+		if (pObj.equals(""))
 			return true;
 		if (pObj instanceof String) {
 			if (((String) pObj).length() == 0) {
 				return true;
 			}
 		} else if (pObj instanceof Collection) {
-			if (((Collection<?>) pObj).size() == 0) {
+			if (((Collection<?>) pObj).isEmpty()) {
 				return true;
 			}
 		} else if (pObj instanceof Map) {
@@ -91,14 +91,14 @@ public class CommonUtils {
 	public static boolean isNotEmpty(Object pObj) {
 		if (pObj == null)
 			return false;
-		if (pObj == "")
+		if (pObj.equals(""))
 			return false;
 		if (pObj instanceof String) {
 			if (((String) pObj).length() == 0) {
 				return false;
 			}
 		} else if (pObj instanceof Collection) {
-			if (((Collection<?>) pObj).size() == 0) {
+			if (((Collection<?>) pObj).isEmpty()) {
 				return false;
 			}
 		} else if (pObj instanceof Map) {
