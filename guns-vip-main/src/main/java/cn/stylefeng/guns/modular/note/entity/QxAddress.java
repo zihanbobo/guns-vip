@@ -195,15 +195,15 @@ public class QxAddress implements Serializable {
         this.address = address;
     }
 
-    public Boolean getDefault() {
-        return isDefault;
-    }
+    public Boolean getIsDefault() {
+		return isDefault;
+	}
 
-    public void setDefault(Boolean isDefault) {
-        this.isDefault = isDefault;
-    }
+	public void setIsDefault(Boolean isDefault) {
+		this.isDefault = isDefault;
+	}
 
-    @Override
+	@Override
     public String toString() {
         return "QxAddress{" +
         "id=" + id +
