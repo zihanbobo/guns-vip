@@ -3,6 +3,8 @@ package cn.stylefeng.guns.modular.note.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -12,7 +14,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxUserSocialMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
 import cn.stylefeng.guns.modular.note.model.result.QxUserResult;
 import cn.stylefeng.guns.modular.note.service.QxUserService;
@@ -29,6 +33,9 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 @Service
 public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> implements QxUserService {
 
+	@Resource
+	private QxUserSocialMapper qxUserSocialMapper;
+	
 	@Override
 	public void add(QxUserParam param) {
 		QxUser entity = getEntity(param);
@@ -96,5 +103,26 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	@Override
 	public QxUser getUserByUnionId(String unionId) {
 		return this.baseMapper.getUserByUnionId(unionId);
+	}
+
+	@Override
+	public QxUser performRegister(String mobile) {
+		QxUser user = new QxUser();
+		user.setMobile(mobile);
+		this.baseMapper.insert(user);
+		return user;
+	}
+
+	@Override
+	public QxUser bindUser(String mobile, String unionId) {
+		QxUser user = getUserByAccount(mobile);
+		if (user == null) {
+			user = performRegister(mobile);
+		}
+		QxUserSocial qxUserSocial = new QxUserSocial();
+		qxUserSocial.setUserId(user.getId());
+		qxUserSocial.setOpenId(unionId);
+		qxUserSocialMapper.insert(qxUserSocial);
+		return user;
 	}
 }

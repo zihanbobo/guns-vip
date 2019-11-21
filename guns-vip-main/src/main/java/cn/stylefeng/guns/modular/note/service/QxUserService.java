@@ -91,4 +91,19 @@ public interface QxUserService extends IService<QxUser> {
 	 * @return
 	 */
 	QxUser getUserByUnionId(String unionId);
+
+	/**
+	 * 根据手机号创建用户
+	 * @param mobile
+	 * @return
+	 */
+	QxUser performRegister(String mobile);
+
+	/**
+	 * 绑定用户微信
+	 * @param mobile
+	 * @param unionId
+	 * @return
+	 */
+	QxUser bindUser(String mobile, String unionId);
 }

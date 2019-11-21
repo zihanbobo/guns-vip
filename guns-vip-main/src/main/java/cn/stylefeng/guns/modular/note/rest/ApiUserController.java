@@ -15,7 +15,6 @@
  */
 package cn.stylefeng.guns.modular.note.rest;
 
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,30 +22,26 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpUtils;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.utils.HttpsUtils;
 
-import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CacheCodeUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.TokenUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.TOKEN;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxUserTo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
-import cn.stylefeng.guns.modular.note.service.QxUserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -68,37 +63,42 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
 public class ApiUserController extends ApiBaseController {
 
 	private final WxMpService wxMpService;
-	
-	@Resource
-	private ConfigEntity configEntity;
-
-	@Resource
-	private QxUserService qxUserService;
 
 	@Resource
 	private NoticeHelper noticeHelper;
 
-	@RequestMapping("/login")
+	@PostMapping("/login")
 	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
-//		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 		QxUser user = qxUserService.getUserByAccount(mobile);
 		if (user == null) {
-			user = performRegister(mobile);
+			user = qxUserService.performRegister(mobile);
 		}
 		JSONObject result = generateToken(user);
 		return ResultGenerator.genSuccessResult(result);
+	}
+	
+	@PostMapping("/wx/login")
+	public Object wxLogin(String unionId) {
+		QxUser qxUser = qxUserService.getUserByUnionId(unionId);
+		if (qxUser == null) {
+			throw new ServiceException("请先绑定手机号");
+		}
+		JSONObject result = generateToken(qxUser);
+		return ResultGenerator.genSuccessResult(result);
+	}
+	
+	@PostMapping("/bindUser")
+	public Object bindUser(String mobile, String code, String unionId) {
+		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+		QxUser qxUser = qxUserService.bindUser(mobile, unionId);
+		log.info("/api/user/bindUser, mobile=" + mobile + ", code=" + code + ", unionId=" + unionId);
+		return ResultGenerator.genSuccessResult(qxUser);
 	}
 
 	private void validateCode(String mobile, String code,  int type, String name) {
 		String codeKey = CacheCodeUtil.createCodeKey(mobile, type);
 		validateCache(cache, codeKey, code, name);
-	}
-	
-	private QxUser performRegister(String mobile) {
-		QxUser user = new QxUser();
-		user.setMobile(mobile);
-		qxUserService.save(user);
-		return user;
 	}
 	
 	private JSONObject generateToken(QxUser user) {
@@ -111,7 +111,7 @@ public class ApiUserController extends ApiBaseController {
 		return result;
 	}
 
-	@RequestMapping(value = "/getCaptcha", method = RequestMethod.POST)
+	@PostMapping(value = "/getCaptcha")
 	public Object getCaptcha(@RequestParam("mobile") String mobile, @RequestParam("type") int type) {
 		String code = CacheCodeUtil.createCode(configEntity.getCodeLength());
 		Map<String, String> pairs = new HashMap<>();
@@ -124,7 +124,7 @@ public class ApiUserController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult();
 	}
 	
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@PostMapping(value = "/update")
 	public Object update(QxUserTo userTo) {
 		QxUser user = getUser();
 		BeanUtils.copyProperties(userTo, user);
@@ -133,7 +133,7 @@ public class ApiUserController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult();
 	}
 	
-	@RequestMapping(value = "/detail")
+	@PostMapping(value = "/detail")
 	public Object detail() {
 		QxUser user = getUser();
 		log.info("/api/user/detail");
@@ -150,7 +150,7 @@ public class ApiUserController extends ApiBaseController {
 	 * @param response
 	 * @throws Exception
 	 */
-	@GetMapping("/wx/mp/oauthInfo")
+	@GetMapping("/wx/oauthInfo")
 	public void wxMpAuthorize(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String backUrl = request.getParameter("backUrl");
         backUrl = URLEncoder.encode(backUrl, "UTF-8");
@@ -169,7 +169,7 @@ public class ApiUserController extends ApiBaseController {
 	 * @param code
 	 * @return
 	 */
-	@GetMapping("/wx/mp/getInfo")
+	@GetMapping("/wx/getInfo")
     public Object wxMpGetInfo(@PathVariable String appid, @RequestParam String code) {
         if (!this.wxMpService.switchover(appid)) {
             throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));

@@ -35,11 +35,10 @@ wx:
         secret: 1111（公众号的appsecret）
         token: 111 （接口配置里的Token值）
         aesKey: 111 （接口配置里的EncodingAESKey值）
-  open:
-    appId: ""
-    secret: ""
-    token: ""
-    aesKey: ""
+      - appId: 2222 （一个公众号的appid）
+        secret: 2222（公众号的appsecret）
+        token: 2222 （接口配置里的Token值）
+        aesKey: 2222 （接口配置里的EncodingAESKey值）
   pay:
     appId: #微信公众号或者小程序等的appid
     mchId: #微信支付商户号
