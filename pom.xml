@@ -311,6 +311,23 @@
 				<version>3.3.10</version>
 			</dependency>
 
+			<!-- 微信SDK -->
+			<dependency>
+				<groupId>com.github.binarywang</groupId>
+				<artifactId>weixin-java-pay</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.binarywang</groupId>
+				<artifactId>weixin-java-open</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.github.binarywang</groupId>
+				<artifactId>weixin-java-mp</artifactId>
+				<version>3.5.0</version>
+			</dependency>
+
 			<!--常用库依赖 -->
 			<dependency>
 				<groupId>org.apache.commons</groupId>

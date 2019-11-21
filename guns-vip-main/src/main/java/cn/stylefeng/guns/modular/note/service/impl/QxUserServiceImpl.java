@@ -92,4 +92,9 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	public List<QxUser> getProductUsers(Page page, Long id) {
 		return this.baseMapper.getProductUsers(page, id);
 	}
+
+	@Override
+	public QxUser getUserByUnionId(String unionId) {
+		return this.baseMapper.getUserByUnionId(unionId);
+	}
 }

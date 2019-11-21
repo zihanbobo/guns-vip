@@ -1,14 +1,14 @@
 package cn.stylefeng.guns.modular.note.service;
 
-import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
-import cn.stylefeng.guns.modular.note.entity.QxUser;
-import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
-import cn.stylefeng.guns.modular.note.model.result.QxUserResult;
+import java.util.List;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.util.List;
+import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
+import cn.stylefeng.guns.modular.note.model.result.QxUserResult;
 
 /**
  * <p>
@@ -84,4 +84,11 @@ public interface QxUserService extends IService<QxUser> {
 	 * @return
 	 */
 	List<QxUser> getProductUsers(Page page, Long id);
+
+	/**
+	 * 根据unionId获取用户
+	 * @param unionId
+	 * @return
+	 */
+	QxUser getUserByUnionId(String unionId);
 }
