@@ -13,13 +13,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
-import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.modular.note.dto.QxTweetTo;
 import cn.stylefeng.guns.modular.note.dvo.QxTweetVo;
-import cn.stylefeng.guns.modular.note.dvo.QxUserVo;
 import cn.stylefeng.guns.modular.note.entity.QxTweet;
-import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.service.QxTweetService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,9 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/tweet")
 public class ApiTweetController extends ApiBaseController {
-
-	@Resource
-	private ConfigEntity configEntity;
 
 	@Resource
 	private QxTweetService qxTweetService;
@@ -112,6 +106,16 @@ public class ApiTweetController extends ApiBaseController {
 		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
 		page.setRecords(vos);
 		log.info("/api/tweet/myTweet");
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@RequestMapping("/followList")
+	public Object followList() {
+		Page page = LayuiPageFactory.defaultPage();
+		qxTweetService.followList(page, getRequestUserId());
+		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/tweet/followList");
 		return ResultGenerator.genSuccessResult(page);
 	}
 }

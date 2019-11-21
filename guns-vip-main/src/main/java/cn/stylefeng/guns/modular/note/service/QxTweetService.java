@@ -1,12 +1,14 @@
 package cn.stylefeng.guns.modular.note.service;
 
+import java.util.List;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxTweet;
 import cn.stylefeng.guns.modular.note.model.params.QxTweetParam;
 import cn.stylefeng.guns.modular.note.model.result.QxTweetResult;
-import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>
@@ -65,5 +67,12 @@ public interface QxTweetService extends IService<QxTweet> {
      * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxTweetParam param);
+
+     /**
+      * 查询我关注的人动态
+      * @param page
+      * @param requestUserId
+      */
+     Page<List<QxTweet>> followList(Page page, Long userId);
 
 }
