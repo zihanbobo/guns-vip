@@ -88,7 +88,7 @@ public class QxAddressServiceImpl extends ServiceImpl<QxAddressMapper, QxAddress
 
 	@Override
 	public void updateAddress(Long userId, QxAddressTo addressTo) {
-		if (addressTo.getIsDefault()) {
+		if (Boolean.TRUE.equals(addressTo.getIsDefault())) {
 			unsetDefaultAddress(userId);
 		}
 		QxAddress address = new QxAddress();
@@ -111,7 +111,7 @@ public class QxAddressServiceImpl extends ServiceImpl<QxAddressMapper, QxAddress
 
 	@Override
 	public void addAddress(Long userId, QxAddressTo addressTo) {
-		if (addressTo.getIsDefault()) {
+		if (Boolean.TRUE.equals(addressTo.getIsDefault())) {
 			unsetDefaultAddress(userId);
 		}
 		QxAddress model = new QxAddress();
