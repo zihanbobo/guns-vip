@@ -71,6 +71,12 @@
 			<artifactId>aliyun-java-sdk-dm</artifactId>
 		</dependency>
 
+
+		<dependency>
+			<groupId>com.alipay.sdk</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+		</dependency>
+
 		<!-- 微信SDK -->
 		<dependency>
 			<groupId>com.github.binarywang</groupId>

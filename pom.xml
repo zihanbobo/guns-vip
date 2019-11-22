@@ -285,7 +285,7 @@
 				<version>4.0.0</version>
 			</dependency>
 
-			<!-- 阿里云消息及邮件服务 -->
+			<!-- 阿里云 -->
 			<dependency>
 				<groupId>com.aliyun</groupId>
 				<artifactId>aliyun-java-sdk-core</artifactId>
@@ -303,6 +303,13 @@
 				<artifactId>aliyun-java-sdk-dm</artifactId>
 				<version>3.1.0</version>
 			</dependency>
+			
+			<dependency>
+			    <groupId>com.alipay.sdk</groupId>
+			    <artifactId>alipay-sdk-java</artifactId>
+			    <version>4.8.62.ALL</version>
+			</dependency>
+
 
 			<!-- 极光推送 -->
 			<dependency>

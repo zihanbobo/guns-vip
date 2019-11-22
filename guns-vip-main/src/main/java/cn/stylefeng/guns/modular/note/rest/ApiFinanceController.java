@@ -1,8 +1,12 @@
 package cn.stylefeng.guns.modular.note.rest;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +18,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
@@ -25,11 +36,13 @@ import com.github.binarywang.wxpay.service.WxPayService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.core.alipay.AlipayProperties;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxPackageTo;
 import cn.stylefeng.guns.modular.note.dvo.QxPayLogVo;
 import cn.stylefeng.guns.modular.note.entity.QxCoinOrder;
+import cn.stylefeng.guns.modular.note.entity.QxPackage;
 import cn.stylefeng.guns.modular.note.entity.QxPayLog;
 import cn.stylefeng.guns.modular.note.service.QxCoinOrderService;
 import cn.stylefeng.guns.modular.note.service.QxPayLogService;
@@ -41,15 +54,19 @@ import lombok.extern.slf4j.Slf4j;
 public class ApiFinanceController extends ApiBaseController {
 
 	private WxPayService wxPayService;
-	
+
+	@Resource
+	private AlipayProperties alipayProperties;
+
 	@Resource
 	private QxCoinOrderService qxCoinOrderService;
-	
+
 	@Resource
 	private QxPayLogService qxPayLogService;
-	
+
 	/**
 	 * 微信购买金币
+	 * 
 	 * @param packageTo
 	 * @return
 	 */
@@ -66,7 +83,7 @@ public class ApiFinanceController extends ApiBaseController {
 			throw new ServiceException("微信支付失败，请联系管理员");
 		}
 	}
-	
+
 	public WxPayUnifiedOrderRequest createWxPayOrderRequest(String tradeType, QxCoinOrder coinOrder) {
 		WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
 		orderRequest.setBody("金币充值");
@@ -75,7 +92,7 @@ public class ApiFinanceController extends ApiBaseController {
 		orderRequest.setTradeType(tradeType);
 		return orderRequest;
 	}
-	
+
 	@PostMapping("/wx/payNotify")
 	public String wxPayNotify(HttpServletRequest request, HttpServletResponse response) {
 		try {
@@ -84,12 +101,11 @@ public class ApiFinanceController extends ApiBaseController {
 			// 判断订单信息是否正确
 			String orderNo = result.getOutTradeNo();
 			String totalFee = BaseWxPayResult.fenToYuan(result.getTotalFee());
-			QueryWrapper<QxCoinOrder> queryWrapper = new QueryWrapper<>();
-			queryWrapper.eq("sn", orderNo).eq("amount", new BigDecimal(totalFee));
-			QxCoinOrder coinOrder = qxCoinOrderService.getOne(queryWrapper);
+
+			QxCoinOrder coinOrder = getCoinOrder(orderNo, new BigDecimal(totalFee), COIN_ORDER_STATUS.WAIT_PAY);
 			if (coinOrder == null) {
 				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + orderNo + ", amount=" + totalFee);
-				throw new Exception("订单记录不存在");
+				throw new ServiceException("订单记录不存在");
 			}
 			coinOrder.setStatus(COIN_ORDER_STATUS.PAID);
 			qxCoinOrderService.updateById(coinOrder);
@@ -99,25 +115,106 @@ public class ApiFinanceController extends ApiBaseController {
 			return WxPayNotifyResponse.fail(e.getMessage());
 		}
 	}
-	
+
+	public QxCoinOrder getCoinOrder(String orderNo, BigDecimal totalFee, String status) {
+		QueryWrapper<QxCoinOrder> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("sn", orderNo).eq("amount", totalFee).eq("status", status);
+		return qxCoinOrderService.getOne(queryWrapper);
+	}
+
+	/**
+	 * 支付宝购买金币
+	 * 
+	 * @return
+	 */
+	@PostMapping("/alipay/pay")
+	public Object alipay(QxPackage packageTo) {
+		try {
+			// 创建订单
+			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId());
+			AlipayClient alipayClient = new DefaultAlipayClient(alipayProperties.getGatewayUrl(),
+					alipayProperties.getAppID(), alipayProperties.getMerchantPrivateKey(), alipayProperties.getFormat(),
+					alipayProperties.getCharset(), alipayProperties.getAlipayPublicKey(),
+					alipayProperties.getSignType());
+			AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+			AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+			model.setSubject("金币充值");
+			model.setOutTradeNo(coinOrder.getSn());
+			model.setTotalAmount(coinOrder.toString());
+			request.setBizModel(model);
+			request.setNotifyUrl(alipayProperties.getNotifyUrl());
+			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+			log.info("/api/finance/alipay/pay, packageTo=" + packageTo);
+			return ResultGenerator.genSuccessResult(response.getBody());
+		} catch (AlipayApiException e) {
+			log.error("支付宝支付出错, /api/finance/alipay/pay, packageTo=" + packageTo + ", error=" + e.getMessage());
+			throw new ServiceException("支付宝支付出错");
+		}
+	}
+
+	/**
+	 * 支付宝支付回调验证
+	 * 
+	 * @return
+	 */
+	@PostMapping("/alipay/payNotify")
+	public void alipayNotify(HttpServletRequest request, HttpServletResponse response) {
+		Map<String, String> params = new HashMap<>();
+		Map requestParams = request.getParameterMap();
+		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) {
+				valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
+			}
+			// 乱码解决，这段代码在出现乱码时使用。
+			// valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+			params.put(name, valueStr);
+		}
+		try {
+			boolean flag = AlipaySignature.rsaCheckV1(params, alipayProperties.getAlipayPublicKey(),
+					alipayProperties.getCharset(), alipayProperties.getSignType());
+			if (!flag) {
+				log.error("支付宝验证签名错误, params=" + params);
+			}
+			String outTradeNo = params.get("out_trade_no");
+			BigDecimal tradePrice = new BigDecimal(request.getParameter("total_amount"));
+			QxCoinOrder coinOrder = getCoinOrder(outTradeNo, tradePrice, COIN_ORDER_STATUS.WAIT_PAY);
+			if (coinOrder == null) {
+				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + outTradeNo + ", amount=" + tradePrice);
+				throw new ServiceException("订单记录不存在");
+			}
+			coinOrder.setStatus(COIN_ORDER_STATUS.PAID);
+			qxCoinOrderService.updateById(coinOrder);
+			response.getWriter().write("success");
+		} catch (AlipayApiException e) {
+			log.error("支付宝回调出错, /api/finance/alipay/payNotify, error=" + e.getMessage());
+			throw new ServiceException("支付宝回调出错");
+		} catch (IOException e) {
+			log.error("响应, /api/finance/alipay/payNotify, error=" + e.getMessage());
+			throw new ServiceException("响应出错");
+		}
+	}
+
 	@PostMapping("/withdraw")
 	public Object withdraw() {
 		// TODO: 提现操作
 		log.info("/api/finance/withdraw");
 		return ResultGenerator.genSuccessResult();
 	}
-	
+
 	@PostMapping("/log")
 	public Object log() {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxPayLog> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("user_id", getRequestUserId()).orderByDesc("created_time");
 		qxPayLogService.page(page, queryWrapper);
-		List<QxPayLogVo> vos =  createPayLogVos(page.getRecords());
+		List<QxPayLogVo> vos = createPayLogVos(page.getRecords());
 		page.setRecords(vos);
 		return ResultGenerator.genSuccessResult(page);
 	}
-	
+
 	public List<QxPayLogVo> createPayLogVos(List<QxPayLog> list) {
 		List<QxPayLogVo> vos = new ArrayList<>();
 		for (QxPayLog log : list) {
