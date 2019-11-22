@@ -183,4 +183,15 @@ public final class ProjectConstants {
 		String UNHANDLE = "0";
 		String HANDLED = "1";
 	}
+	
+	/**
+	 * 金币订单状态
+	 * @author steven
+	 *
+	 */
+	public interface COIN_ORDER_STATUS {
+		String WAIT_PAY = "0";
+		String PAID = "1";
+		String CANCEL = "2";
+	}
 }

@@ -79,21 +79,32 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	@PostMapping("/wx/login")
-	public Object wxLogin(String unionId) {
-		QxUser qxUser = qxUserService.getUserByUnionId(unionId);
-		if (qxUser == null) {
-			throw new ServiceException("请先绑定手机号");
+	public Object wxLogin(String code) {
+		try {
+			QxUser qxUser = getUserByCode(code);
+			if (qxUser == null) {
+				throw new ServiceException("请先绑定手机号");
+			}
+			JSONObject result = generateToken(qxUser);
+			return ResultGenerator.genSuccessResult(result);
+		} catch (WxErrorException e) {
+			log.error("微信登录失败, /api/user/wx/login, code=" + code + ", error=" + e.getMessage());
+			throw new ServiceException("微信登录失败");
 		}
-		JSONObject result = generateToken(qxUser);
-		return ResultGenerator.genSuccessResult(result);
 	}
 	
 	@PostMapping("/bindUser")
-	public Object bindUser(String mobile, String code, String unionId) {
-		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
-		QxUser qxUser = qxUserService.bindUser(mobile, unionId);
-		log.info("/api/user/bindUser, mobile=" + mobile + ", code=" + code + ", unionId=" + unionId);
-		return ResultGenerator.genSuccessResult(qxUser);
+	public Object bindUser(String mobile, String code) {
+		try {
+			validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+			WxMpUser wxUser = getWxUserByCode(code);
+			QxUser qxUser = qxUserService.bindUser(mobile, wxUser.getUnionId());
+			log.info("/api/user/bindUser, mobile=" + mobile + ",code=" + code);
+			return ResultGenerator.genSuccessResult(qxUser);
+		} catch (WxErrorException e) {
+			log.error("/api/user/bindUser, mobile=" + mobile + ", code=" + code + ", error=" + e.getMessage());
+			throw new ServiceException("微信绑定失败");
+		}
 	}
 
 	private void validateCode(String mobile, String code,  int type, String name) {
@@ -176,9 +187,7 @@ public class ApiUserController extends ApiBaseController {
         }
 
         try {
-            WxMpOAuth2AccessToken accessToken = wxMpService.oauth2getAccessToken(code);
-            WxMpUser wxUser = wxMpService.oauth2getUserInfo(accessToken, null);
-            QxUser qxUser = qxUserService.getUserByUnionId(wxUser.getUnionId());
+            QxUser qxUser = getUserByCode(code);
             log.info("/api/wx/mp/getInfo, appid=" + appid + ", code=" + code);
             return ResultGenerator.genSuccessResult(qxUser);
         } catch (WxErrorException e) {
@@ -186,4 +195,14 @@ public class ApiUserController extends ApiBaseController {
             throw new ServiceException("获取用户信息出错");
         }
     }
+	
+	public WxMpUser getWxUserByCode(String code) throws WxErrorException{
+		WxMpOAuth2AccessToken accessToken = wxMpService.oauth2getAccessToken(code);
+        return wxMpService.oauth2getUserInfo(accessToken, null);
+	}
+	
+	public QxUser getUserByCode(String code) throws WxErrorException {
+		WxMpUser wxUser = getWxUserByCode(code);
+        return qxUserService.getUserByUnionId(wxUser.getUnionId());
+	}
 }

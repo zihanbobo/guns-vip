@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class ApiPackageController extends ApiBaseController {
 	@Resource
 	private QxPackageService qxPackageService;
 	
-	@RequestMapping("/list")
+	@PostMapping("/list")
 	public Object list() {
 		QueryWrapper<QxPackage> queryWrapper = new QueryWrapper<>();
 		queryWrapper.orderByAsc("order_no");
