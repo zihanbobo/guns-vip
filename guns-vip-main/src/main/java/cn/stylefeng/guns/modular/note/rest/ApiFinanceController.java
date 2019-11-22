@@ -25,6 +25,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxPackageTo;
 import cn.stylefeng.guns.modular.note.dvo.QxPayLogVo;
@@ -90,6 +91,8 @@ public class ApiFinanceController extends ApiBaseController {
 				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + orderNo + ", amount=" + totalFee);
 				throw new Exception("订单记录不存在");
 			}
+			coinOrder.setStatus(COIN_ORDER_STATUS.PAID);
+			qxCoinOrderService.updateById(coinOrder);
 			return WxPayNotifyResponse.success("处理成功");
 		} catch (Exception e) {
 			log.error("/api/finance/wx/payNotify, error=" + e.getMessage());
