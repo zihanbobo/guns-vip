@@ -79,6 +79,11 @@ public class QxWithdrawLogParam implements Serializable, BaseValidatingParam {
      * 状态 0-已申请；1-已提现;2-已取消
      */
     private String status;
+    
+    /**
+     * 订单号
+     */
+    private String sn;
 
     @Override
     public String checkParam() {

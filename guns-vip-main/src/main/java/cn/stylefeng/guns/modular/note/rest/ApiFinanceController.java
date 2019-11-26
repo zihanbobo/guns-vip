@@ -27,17 +27,24 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.binarywang.wxpay.bean.entpay.EntPayRequest;
+import com.github.binarywang.wxpay.bean.entpay.EntPayResult;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.request.BaseWxPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.bean.result.BaseWxPayResult;
+import com.github.binarywang.wxpay.constant.WxPayConstants.CheckNameOption;
+import com.github.binarywang.wxpay.constant.WxPayConstants.ResultCode;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.EntPayService;
 import com.github.binarywang.wxpay.service.WxPayService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.alipay.AlipayProperties;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.WITHDRAW_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxPackageTo;
 import cn.stylefeng.guns.modular.note.dvo.QxPayLogVo;
@@ -45,8 +52,10 @@ import cn.stylefeng.guns.modular.note.entity.QxCoinOrder;
 import cn.stylefeng.guns.modular.note.entity.QxPackage;
 import cn.stylefeng.guns.modular.note.entity.QxPayLog;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
+import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
 import cn.stylefeng.guns.modular.note.service.QxCoinOrderService;
 import cn.stylefeng.guns.modular.note.service.QxPayLogService;
+import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -64,6 +73,9 @@ public class ApiFinanceController extends ApiBaseController {
 
 	@Resource
 	private QxPayLogService qxPayLogService;
+	
+	@Resource
+	private QxWithdrawLogService qxWithdrawLogService;
 
 	/**
 	 * 微信购买金币
@@ -126,7 +138,29 @@ public class ApiFinanceController extends ApiBaseController {
 	@PostMapping("/wx/withdraw")
 	public Object wxWithdraw(String appId, BigDecimal amount) {
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
-		return null;
+		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
+		EntPayService entPayService = wxPayService.getEntPayService();
+		EntPayRequest request = new EntPayRequest();
+		request.setPartnerTradeNo(withdrawLog.getSn());
+		request.setOpenid(withdrawLog.getPayeeAccount());
+		request.setCheckName(CheckNameOption.NO_CHECK);
+		request.setAmount(BaseWxPayRequest.yuanToFen(amount.toString()));
+		request.setDescription("用户提现");
+		request.setSpbillCreateIp("192.168.0.1");
+		try {
+			EntPayResult entPayResult = entPayService.entPay(request);
+			if (ResultCode.SUCCESS.equals(entPayResult.getReturnCode()) && ResultCode.SUCCESS.equals(entPayResult.getResultCode())) {
+				// 更新提现状态
+				withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
+				qxWithdrawLogService.updateById(withdrawLog);
+				return ResultGenerator.genSuccessResult();
+			} else {
+				throw new ServiceException(entPayResult.getReturnMsg());
+			}
+		} catch (WxPayException e) {
+			log.error("微信提现出错, error=" + e.getMessage());
+			throw new ServiceException("微信提现出错");
+		}
 	}
 
 	/**

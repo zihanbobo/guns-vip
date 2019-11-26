@@ -1,11 +1,13 @@
 package cn.stylefeng.guns.modular.note.service;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
 import cn.stylefeng.guns.modular.note.model.params.QxWithdrawLogParam;
 import cn.stylefeng.guns.modular.note.model.result.QxWithdrawLogResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -65,5 +67,13 @@ public interface QxWithdrawLogService extends IService<QxWithdrawLog> {
      * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxWithdrawLogParam param);
+
+     /**
+      * 创建提现记录
+      * @param userSocial
+      * @param amount
+     * @return 
+      */
+	 QxWithdrawLog createWithdrawLog(QxUserSocial userSocial, BigDecimal amount);
 
 }

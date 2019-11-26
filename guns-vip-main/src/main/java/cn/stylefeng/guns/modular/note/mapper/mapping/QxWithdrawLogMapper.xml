@@ -16,11 +16,12 @@
         <result column="pay_way" property="payWay" />
         <result column="payee_account" property="payeeAccount" />
         <result column="status" property="status" />
+        <result column="sn" property="sn" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", amount AS "amount", pay_way AS "payWay", payee_account AS "payeeAccount", status AS "status"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", amount AS "amount", pay_way AS "payWay", payee_account AS "payeeAccount", status AS "status", sn AS "sn"
     </sql>
 
 

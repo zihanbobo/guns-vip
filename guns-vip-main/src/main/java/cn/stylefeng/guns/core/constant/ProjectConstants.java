@@ -24,6 +24,21 @@ public final class ProjectConstants {
 		String WECHAT = "0";
 		String ALIPAY = "1";
 	}
+	
+	public interface WITHDRAW_PAY_WAY {
+		String WECHAT = "0";
+		String ALIPAY = "1";
+	}
+	
+	/**
+	 * 状态 0-已申请；1-已提现;2-已取消
+	 * @author steven
+	 */
+	public interface WITHDRAW_STATUS {
+		String WAIT_OUT = "0";
+		String OUT = "1";
+		String CANCEL = "2";
+	}
 
 	/**
 	 * 通知类型：0-短信，1-邮箱，2-消息；

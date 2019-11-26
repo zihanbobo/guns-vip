@@ -131,9 +131,9 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	}
 
 	@Override
-	public QxUserSocial getUserSocialByAppId(Long requestUserId, String appId) {
+	public QxUserSocial getUserSocialByAppId(Long userId, String appId) {
 		QueryWrapper<QxUserSocial> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("user_id", requestUserId).eq("app_id", appId);
+		queryWrapper.eq("user_id", userId).eq("app_id", appId);
 		return qxUserSocialMapper.selectOne(queryWrapper);
 	}
 }

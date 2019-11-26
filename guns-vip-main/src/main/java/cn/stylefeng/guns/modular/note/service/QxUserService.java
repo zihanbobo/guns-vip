@@ -116,5 +116,5 @@ public interface QxUserService extends IService<QxUser> {
 	 * @param appId
 	 * @return
 	 */
-	QxUserSocial getUserSocialByAppId(Long requestUserId, String appId);
+	QxUserSocial getUserSocialByAppId(Long userId, String appId);
 }

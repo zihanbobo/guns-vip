@@ -92,6 +92,12 @@ public class QxWithdrawLog implements Serializable {
      */
     @TableField("status")
     private String status;
+    
+    /**
+     * 订单号
+     */
+    @TableField("sn")
+    private String sn;
 
 
     public Long getId() {
@@ -190,7 +196,16 @@ public class QxWithdrawLog implements Serializable {
         this.status = status;
     }
 
-    @Override
+    
+    public String getSn() {
+		return sn;
+	}
+
+	public void setSn(String sn) {
+		this.sn = sn;
+	}
+
+	@Override
     public String toString() {
         return "QxWithdrawLog{" +
         "id=" + id +
@@ -205,6 +220,7 @@ public class QxWithdrawLog implements Serializable {
         ", payWay=" + payWay +
         ", payeeAccount=" + payeeAccount +
         ", status=" + status +
+        ", sn=" + sn +
         "}";
     }
 }
