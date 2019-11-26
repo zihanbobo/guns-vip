@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * 用户社交账号表控制器
  *
  * @author 
- * @Date 2019-11-18 15:18:06
+ * @Date 2019-11-26 10:55:26
  */
 @Controller
 @RequestMapping("/qxUserSocial")
@@ -31,7 +31,7 @@ public class QxUserSocialController extends BaseController {
      * 跳转到主页面
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @RequestMapping("")
     public String index() {
@@ -42,7 +42,7 @@ public class QxUserSocialController extends BaseController {
      * 新增页面
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @RequestMapping("/add")
     public String add() {
@@ -53,7 +53,7 @@ public class QxUserSocialController extends BaseController {
      * 编辑页面
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @RequestMapping("/edit")
     public String edit() {
@@ -64,7 +64,7 @@ public class QxUserSocialController extends BaseController {
      * 新增接口
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @RequestMapping("/addItem")
     @ResponseBody
@@ -77,7 +77,7 @@ public class QxUserSocialController extends BaseController {
      * 编辑接口
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @RequestMapping("/editItem")
     @ResponseBody
@@ -90,7 +90,7 @@ public class QxUserSocialController extends BaseController {
      * 删除接口
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @RequestMapping("/delete")
     @ResponseBody
@@ -103,7 +103,7 @@ public class QxUserSocialController extends BaseController {
      * 查看详情接口
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @RequestMapping("/detail")
     @ResponseBody
@@ -116,7 +116,7 @@ public class QxUserSocialController extends BaseController {
      * 查询列表
      *
      * @author 
-     * @Date 2019-11-18
+     * @Date 2019-11-26
      */
     @ResponseBody
     @RequestMapping("/list")

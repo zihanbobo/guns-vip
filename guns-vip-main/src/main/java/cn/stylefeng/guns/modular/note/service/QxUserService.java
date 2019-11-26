@@ -87,10 +87,11 @@ public interface QxUserService extends IService<QxUser> {
 
 	/**
 	 * 根据unionId获取用户
+	 * @param appId
 	 * @param unionId
 	 * @return
 	 */
-	QxUser getUserByUnionId(String unionId);
+	QxUser getUserByUnionId(String appId, String unionId);
 
 	/**
 	 * 根据手机号创建用户
@@ -102,8 +103,9 @@ public interface QxUserService extends IService<QxUser> {
 	/**
 	 * 绑定用户微信
 	 * @param mobile
+	 * @param openId
 	 * @param unionId
 	 * @return
 	 */
-	QxUser bindUser(String mobile, String unionId);
+	QxUser wxBindUser(String mobile, String openId, String unionId);
 }

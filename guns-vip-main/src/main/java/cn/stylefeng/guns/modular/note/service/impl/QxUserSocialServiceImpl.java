@@ -22,7 +22,7 @@ import java.util.List;
  * </p>
  *
  * @author 
- * @since 2019-11-18
+ * @since 2019-11-26
  */
 @Service
 public class QxUserSocialServiceImpl extends ServiceImpl<QxUserSocialMapper, QxUserSocial> implements QxUserSocialService {

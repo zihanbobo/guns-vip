@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author 
- * @since 2019-11-18
+ * @since 2019-11-26
  */
 @TableName("qx_user_social")
 public class QxUserSocial implements Serializable {
@@ -69,13 +69,25 @@ public class QxUserSocial implements Serializable {
     private Long userId;
 
     /**
+     * APPID
+     */
+    @TableField("app_id")
+    private String appId;
+
+    /**
      * 社交开放平台ID
      */
     @TableField("open_id")
     private String openId;
 
     /**
-     * 社交平台类型 0-微信;
+     * UnionId，微信特有
+     */
+    @TableField("union_id")
+    private String unionId;
+
+    /**
+     * 社交平台类型 0-微信;1-支付宝;
      */
     @TableField("type")
     private String type;
@@ -145,12 +157,28 @@ public class QxUserSocial implements Serializable {
         this.userId = userId;
     }
 
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
     public String getOpenId() {
         return openId;
     }
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 
     public String getType() {
@@ -172,7 +200,9 @@ public class QxUserSocial implements Serializable {
         ", updatedTime=" + updatedTime +
         ", deleted=" + deleted +
         ", userId=" + userId +
+        ", appId=" + appId +
         ", openId=" + openId +
+        ", unionId=" + unionId +
         ", type=" + type +
         "}";
     }

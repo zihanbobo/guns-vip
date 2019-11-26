@@ -12,13 +12,15 @@
         <result column="updated_time" property="updatedTime" />
         <result column="deleted" property="deleted" />
         <result column="user_id" property="userId" />
+        <result column="app_id" property="appId" />
         <result column="open_id" property="openId" />
+        <result column="union_id" property="unionId" />
         <result column="type" property="type" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", open_id AS "openId", type AS "type"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", app_id AS "appId", open_id AS "openId", union_id AS "unionId", type AS "type"
     </sql>
 
 

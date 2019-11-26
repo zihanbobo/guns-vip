@@ -79,9 +79,9 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	@PostMapping("/wx/login")
-	public Object wxLogin(String code) {
+	public Object wxLogin(String appId, String code) {
 		try {
-			QxUser qxUser = getUserByCode(code);
+			QxUser qxUser = getUserByCode(appId, code);
 			if (qxUser == null) {
 				throw new ServiceException("请先绑定手机号");
 			}
@@ -93,16 +93,16 @@ public class ApiUserController extends ApiBaseController {
 		}
 	}
 	
-	@PostMapping("/bindUser")
-	public Object bindUser(String mobile, String code) {
+	@PostMapping("/wx/bindUser")
+	public Object bindUser(String mobile, String code, String openCode) {
 		try {
 			validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
-			WxMpUser wxUser = getWxUserByCode(code);
-			QxUser qxUser = qxUserService.bindUser(mobile, wxUser.getUnionId());
+			WxMpUser wxUser = getWxUserByCode(openCode);
+			QxUser qxUser = qxUserService.wxBindUser(mobile, wxUser.getOpenId(), wxUser.getUnionId());
 			log.info("/api/user/bindUser, mobile=" + mobile + ",code=" + code);
 			return ResultGenerator.genSuccessResult(qxUser);
 		} catch (WxErrorException e) {
-			log.error("/api/user/bindUser, mobile=" + mobile + ", code=" + code + ", error=" + e.getMessage());
+			log.error("/api/user/bindUser, mobile=" + mobile + ",code=" + code + ", error=" + e.getMessage());
 			throw new ServiceException("微信绑定失败");
 		}
 	}
@@ -176,22 +176,22 @@ public class ApiUserController extends ApiBaseController {
 	
 	/**
 	 * 微信公众号
-	 * @param appid
+	 * @param appId
 	 * @param code
 	 * @return
 	 */
 	@GetMapping("/wx/getInfo")
-    public Object wxMpGetInfo(@PathVariable String appid, @RequestParam String code) {
-        if (!this.wxMpService.switchover(appid)) {
-            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appid));
+    public Object wxMpGetInfo(@PathVariable String appId, @RequestParam String code) {
+        if (!this.wxMpService.switchover(appId)) {
+            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appId));
         }
 
         try {
-            QxUser qxUser = getUserByCode(code);
-            log.info("/api/wx/mp/getInfo, appid=" + appid + ", code=" + code);
+            QxUser qxUser = getUserByCode(appId, code);
+            log.info("/api/wx/mp/getInfo, appid=" + appId + ", code=" + code);
             return ResultGenerator.genSuccessResult(qxUser);
         } catch (WxErrorException e) {
-        	log.error("获取用户信息出错，/api/user/getInfo, appid=" + appid + ", code=" + code + ", " + e.getMessage());
+        	log.error("获取用户信息出错，/api/user/getInfo, appid=" + appId + ", code=" + code + ", " + e.getMessage());
             throw new ServiceException("获取用户信息出错");
         }
     }
@@ -201,8 +201,8 @@ public class ApiUserController extends ApiBaseController {
         return wxMpService.oauth2getUserInfo(accessToken, null);
 	}
 	
-	public QxUser getUserByCode(String code) throws WxErrorException {
+	public QxUser getUserByCode(String appId, String code) throws WxErrorException {
 		WxMpUser wxUser = getWxUserByCode(code);
-        return qxUserService.getUserByUnionId(wxUser.getUnionId());
+        return qxUserService.getUserByUnionId(appId, wxUser.getUnionId());
 	}
 }

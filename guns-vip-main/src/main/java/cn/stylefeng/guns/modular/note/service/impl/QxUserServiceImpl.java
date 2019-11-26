@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
@@ -101,8 +102,8 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	}
 
 	@Override
-	public QxUser getUserByUnionId(String unionId) {
-		return this.baseMapper.getUserByUnionId(unionId);
+	public QxUser getUserByUnionId(String appId, String unionId) {
+		return this.baseMapper.getUserByUnionId(appId, unionId);
 	}
 
 	@Override
@@ -114,14 +115,16 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	}
 
 	@Override
-	public QxUser bindUser(String mobile, String unionId) {
+	public QxUser wxBindUser(String mobile, String openId, String unionId) {
 		QxUser user = getUserByAccount(mobile);
 		if (user == null) {
 			user = performRegister(mobile);
 		}
 		QxUserSocial qxUserSocial = new QxUserSocial();
 		qxUserSocial.setUserId(user.getId());
-		qxUserSocial.setOpenId(unionId);
+		qxUserSocial.setOpenId(openId);
+		qxUserSocial.setUnionId(unionId);
+		qxUserSocial.setType(SOCIAL_TYPE.WECHAT);
 		qxUserSocialMapper.insert(qxUserSocial);
 		return user;
 	}

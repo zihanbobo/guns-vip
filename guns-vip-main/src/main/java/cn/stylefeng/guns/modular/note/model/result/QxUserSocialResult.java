@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author 
- * @since 2019-11-18
+ * @since 2019-11-26
  */
 @Data
 public class QxUserSocialResult implements Serializable {
@@ -60,12 +60,22 @@ public class QxUserSocialResult implements Serializable {
     private Long userId;
 
     /**
+     * APPID
+     */
+    private String appId;
+
+    /**
      * 社交开放平台ID
      */
     private String openId;
 
     /**
-     * 社交平台类型 0-微信;
+     * UnionId，微信特有
+     */
+    private String unionId;
+
+    /**
+     * 社交平台类型 0-微信;1-支付宝;
      */
     private String type;
 

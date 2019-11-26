@@ -19,6 +19,11 @@ public final class ProjectConstants {
 		String ADMIN = "ADMIN_";
 		String USER = "USER_";
 	}
+	
+	public interface SOCIAL_TYPE {
+		String WECHAT = "0";
+		String ALIPAY = "1";
+	}
 
 	/**
 	 * 通知类型：0-短信，1-邮箱，2-消息；
