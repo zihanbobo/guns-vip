@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -127,5 +128,12 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 		qxUserSocial.setType(SOCIAL_TYPE.WECHAT);
 		qxUserSocialMapper.insert(qxUserSocial);
 		return user;
+	}
+
+	@Override
+	public QxUserSocial getUserSocialByAppId(Long requestUserId, String appId) {
+		QueryWrapper<QxUserSocial> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", requestUserId).eq("app_id", appId);
+		return qxUserSocialMapper.selectOne(queryWrapper);
 	}
 }

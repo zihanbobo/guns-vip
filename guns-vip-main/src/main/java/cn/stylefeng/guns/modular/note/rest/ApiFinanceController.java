@@ -44,6 +44,7 @@ import cn.stylefeng.guns.modular.note.dvo.QxPayLogVo;
 import cn.stylefeng.guns.modular.note.entity.QxCoinOrder;
 import cn.stylefeng.guns.modular.note.entity.QxPackage;
 import cn.stylefeng.guns.modular.note.entity.QxPayLog;
+import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.service.QxCoinOrderService;
 import cn.stylefeng.guns.modular.note.service.QxPayLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -120,6 +121,12 @@ public class ApiFinanceController extends ApiBaseController {
 		QueryWrapper<QxCoinOrder> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("sn", orderNo).eq("amount", totalFee).eq("status", status);
 		return qxCoinOrderService.getOne(queryWrapper);
+	}
+	
+	@PostMapping("/wx/withdraw")
+	public Object wxWithdraw(String appId, BigDecimal amount) {
+		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
+		return null;
 	}
 
 	/**

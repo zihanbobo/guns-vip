@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
 import cn.stylefeng.guns.modular.note.model.result.QxUserResult;
 
@@ -108,4 +109,12 @@ public interface QxUserService extends IService<QxUser> {
 	 * @return
 	 */
 	QxUser wxBindUser(String mobile, String openId, String unionId);
+
+	/**
+	 * 根据用户ID、appID获取用户三方信息
+	 * @param requestUserId
+	 * @param appId
+	 * @return
+	 */
+	QxUserSocial getUserSocialByAppId(Long requestUserId, String appId);
 }

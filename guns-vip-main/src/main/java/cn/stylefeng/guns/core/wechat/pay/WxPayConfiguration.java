@@ -41,5 +41,4 @@ public class WxPayConfiguration {
     wxPayService.setConfig(payConfig);
     return wxPayService;
   }
-
 }
