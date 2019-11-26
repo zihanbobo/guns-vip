@@ -21,9 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayFundTransUniTransferModel;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.Participant;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayFundTransUniTransferRequest;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -51,6 +55,7 @@ import cn.stylefeng.guns.modular.note.dvo.QxPayLogVo;
 import cn.stylefeng.guns.modular.note.entity.QxCoinOrder;
 import cn.stylefeng.guns.modular.note.entity.QxPackage;
 import cn.stylefeng.guns.modular.note.entity.QxPayLog;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
 import cn.stylefeng.guns.modular.note.service.QxCoinOrderService;
@@ -105,6 +110,22 @@ public class ApiFinanceController extends ApiBaseController {
 		orderRequest.setTradeType(tradeType);
 		return orderRequest;
 	}
+	
+	/**
+	 * 金币和费用转化
+	 * @param coinCount
+	 * @return
+	 */
+	public BigDecimal getTranAmount(int coinCount) {
+		// TODO: 汇率设置，平台手续费扣除
+		return new BigDecimal(coinCount);
+	}
+	
+	public void checkWithdrawLimit(QxUser user, int coinCount) {
+		if (user.getBalance() < coinCount) {
+			throw new ServiceException("提现金币不能超过金币余额");
+		}
+	}
 
 	@PostMapping("/wx/payNotify")
 	public String wxPayNotify(HttpServletRequest request, HttpServletResponse response) {
@@ -136,7 +157,10 @@ public class ApiFinanceController extends ApiBaseController {
 	}
 	
 	@PostMapping("/wx/withdraw")
-	public Object wxWithdraw(String appId, BigDecimal amount) {
+	public Object wxWithdraw(String appId, int coinCount) {
+		QxUser user = getUser();
+		checkWithdrawLimit(user, coinCount);
+		BigDecimal amount = getTranAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
 		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
 		EntPayService entPayService = wxPayService.getEntPayService();
@@ -153,8 +177,13 @@ public class ApiFinanceController extends ApiBaseController {
 				// 更新提现状态
 				withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
 				qxWithdrawLogService.updateById(withdrawLog);
+				// 更新用户金币余额
+				user.setBalance(user.getBalance()-coinCount);
+				qxUserService.updateById(user);
+				log.info("/api/finance/wx/withdraw");
 				return ResultGenerator.genSuccessResult();
 			} else {
+				log.error(entPayResult.getReturnMsg() + ", /api/finance/wx/withdraw, appId=" + appId + ", amount=" + amount);
 				throw new ServiceException(entPayResult.getReturnMsg());
 			}
 		} catch (WxPayException e) {
@@ -162,7 +191,7 @@ public class ApiFinanceController extends ApiBaseController {
 			throw new ServiceException("微信提现出错");
 		}
 	}
-
+	
 	/**
 	 * 支付宝购买金币
 	 * 
@@ -209,8 +238,6 @@ public class ApiFinanceController extends ApiBaseController {
 			for (int i = 0; i < values.length; i++) {
 				valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";
 			}
-			// 乱码解决，这段代码在出现乱码时使用。
-			// valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
 			params.put(name, valueStr);
 		}
 		try {
@@ -238,11 +265,49 @@ public class ApiFinanceController extends ApiBaseController {
 		}
 	}
 
-	@PostMapping("/withdraw")
-	public Object withdraw() {
-		// TODO: 提现操作
-		log.info("/api/finance/withdraw");
-		return ResultGenerator.genSuccessResult();
+	@PostMapping("/alipay/withdraw")
+	public Object withdraw(String appId, String name, int coinCount) {
+		QxUser user = getUser();
+		checkWithdrawLimit(getUser(), coinCount);
+		BigDecimal amount = getTranAmount(coinCount);
+		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
+		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
+		AlipayClient alipayClient = new DefaultAlipayClient(alipayProperties.getGatewayUrl(),
+				alipayProperties.getAppID(), alipayProperties.getMerchantPrivateKey(), alipayProperties.getFormat(),
+				alipayProperties.getCharset(), alipayProperties.getAlipayPublicKey(),
+				alipayProperties.getSignType());
+		AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
+		AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
+		Participant payeeInfo = new Participant();
+		payeeInfo.setIdentity(userSocial.getOpenId());
+		payeeInfo.setIdentityType("ALIPAY_USER_ID ");
+		payeeInfo.setName(name);
+		model.setOutBizNo(withdrawLog.getSn());
+		model.setTransAmount(amount.toString());
+		model.setProductCode("TRANS_ACCOUNT_NO_PWD");
+		model.setBizScene("DIRECT_TRANSFER");
+		model.setPayeeInfo(payeeInfo);
+		model.setOrderTitle("用户提现");
+		AlipayFundTransUniTransferResponse response;
+		try {
+			response = alipayClient.certificateExecute(request);
+			if(response.isSuccess()){
+				// 更新提现状态
+				withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
+				qxWithdrawLogService.updateById(withdrawLog);
+				// 更新用户金币余额
+				user.setBalance(user.getBalance()-coinCount);
+				qxUserService.updateById(user);
+				log.info("/api/finance/withdraw");
+				return ResultGenerator.genSuccessResult();
+			} else {
+				log.error("支付宝提现失败, error=" + response.getMsg());
+				throw new ServiceException("支付宝提现失败");
+			}
+		} catch (AlipayApiException e) {
+			log.error("支付宝提现失败, error=" + e.getMessage());
+			throw new ServiceException("支付宝提现失败");
+		}
 	}
 
 	@PostMapping("/log")
