@@ -48,16 +48,9 @@ public class ApiFileController extends ApiBaseController {
 		return sb.append(scheme).append("://").append(host).append("/resource/").append(relativePath).toString();
 	}
 	
-	@PostMapping("/green")
-	public Object checkImage(String url) {
-		aliyunGreen.checkImage(url);
+	@PostMapping("/checkText")
+	public Object checkText(String text) {
+		aliyunGreen.checkText(text);
 		return ResultGenerator.genSuccessResult();
-	}
-	
-	@RequestMapping("/test")
-	public Object test(HttpServletRequest request) {
-		String scheme = request.getHeader("X-Forwarded-Proto");
-		String host = request.getHeader("Host");
-		return ResultGenerator.genSuccessResult(scheme+"://"+host);
 	}
 }
