@@ -51,3 +51,35 @@ mail:
 
 memcached:
   server: 127.0.0.1:11211
+  
+wx:
+  mp:
+    configs:
+      - appId: 1111 （一个公众号的appid）
+        secret: 1111（公众号的appsecret）
+        token: 111 （接口配置里的Token值）
+        aesKey: 111 （接口配置里的EncodingAESKey值）
+      - appId: 2222 （一个公众号的appid）
+        secret: 2222（公众号的appsecret）
+        token: 2222 （接口配置里的Token值）
+        aesKey: 2222 （接口配置里的EncodingAESKey值）
+  pay:
+    appId: #微信公众号或者小程序等的appid
+    mchId: #微信支付商户号
+    mchKey: #微信支付商户密钥
+    subAppId: #服务商模式下的子商户公众账号ID
+    subMchId: #服务商模式下的子商户号
+    keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+    
+alipay:
+  gateway: https://openapi.alipaydev.com/gateway.do
+  appID: 2016101700704174
+  privateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCyp5fPnabWcAKXnxBaa/fnsh8KX5Ylu9pBkQmskNQQnxqa2ev8UdAQQGxbQnS6luHwnVZZwJaM/IRHmrrL+gMPPleTe290E2Ga0ZsYGdmlVTfFfX4jltXG0I3nDARomWGKjeaKUzZBENhGEAwv7jCB5I2fjP1OJwzba0++EiaVw8kuTor/A9a1iApA/EEoDVIZwfhGoYMbPathIJKW+D3G+81h4Od8bM1Aq5f8aRRIBFZoZ717v8wx8sCD68WLmA9re7PUYNoTcoBKRJfTpY2zWNnSYIkmxI8TRSTUW60UKnLg4T4fg8A8bD1YRFyGQyzouMo58GmvZDYq33O0jkFJAgMBAAECggEAJCC6FXUXGQQ7sferse1li4g8uLdNwMG1SE8ROsFq8RWLpsbs7vCId9DfWLEes+DxPdxDaxEEIOyrv2Mt5TPgzINZ6GwsxLdqpIlAqOYJWmLaTWisSnwlLPhdydxnQ9PIouFBPrXHIe9LHRf/ru2nB411ik9TpitFcVXJIXHANcazQDbYrURHrVUk4TyC9yeqWTDCuTy/M3wJf1hg4/E6s4oLq1/drwg5ZzQeaBc7e1lga4dXIbbbJt+FuSbRmhba5GstPgyqz5hZIY7gaoP3BrDBfyVFsvXf3PIif/UFUpG/6DuAUqaJaelaUY8Df5ujRjrvuPKXqLyLZ4fRP2h3EQKBgQD87NyRRMUnDpvFTu4gQemF/Fjsgf9bNxosB2lqwWeLinMH3pnA2Rotki0HxjEKmwColw27ZmIGHUCV470xh45nx54QwEutGiJuQNbkuI2/DxNE0uCpQnay30VJtOPTUz0toulWP5ev7xKNqtjR3L+p03ZsJ4m5u4sMXRG0br0pFQKBgQC005dQ8FThukMXpCn6lOvstFO93XwJQDwMhshwcDW5FDTgX6/TRTwD4wFrhqPU2obIoXiNzDwWrIxfRObNo2iJijZYKkdrl69JQ6DtW0ExFanFwSaT9GI0J3Ge7mnv+bI/7i8QB9AraeeKkoZ3s2asyicwsy9Bw/p2Rql5q+PcZQKBgHGxt+TFWSqZcoRbWse9WVAVg5OtTDCgsG8iVczba8RaVCMxeUQrU40wrHVWLi1qR/2BCXc4KtA8zg+S9DUTjnwwS2mUR3Bk0x1koDTokS9Vg3/om3z6l4kIvIjJe7A/Nr0RAnr20yUO/vQX3KdZ5/5bRFyR2WNYXsUMAS1uqjGRAoGBAJaPApNit9oGgyxhBI7ehh1c+8i/bDIrqJPpeWSdGS4T0/7pzPTE1baKwTjtLuXgWY8dWsn9vh5G5s3ACcg4gabbTGpWMYc1Eb6Xr5tRetNKrUO5kcxpE4dHPERPUCd+KNswD0Fyr/IlyKLJY2qxFhFSdBUJbJR+f8ERDrT+2Mc9AoGBAL1GSQCw2vLSceIZrQEDrqc2oMBejm/hYaLR2xryUlxvlf2669EFjzb9auxZA0XehGlJcB5YvVnnKBOwj6j8bZ1m9iyt/avSsQtqEGUs2/2S5TcVzN5wCLrFZeX6wzItCNC5oHGp5qo3F3htaNYLK9z4Ymt7UZ7QJ/pGFIVpxFAr
+  signType: RSA2
+  appCertPath: classpath:/cert/dev/appCertPublicKey_2016101700704174.crt
+  alipayCertPath: classpath:/cert/dev/alipayCertPublicKey_RSA2.crt
+  alipayRootCertPath: classpath:/cert/dev/alipayRootCert.crt
+  alipayNotifyUrl: http://qianxun.demo.yxxurl.com/api/finance/alipay/payNotify
+  withdrawIdentityType: ALIPAY_USER_ID
+  withdrawProductCode: TRANS_ACCOUNT_NO_PWD
+  withdrawBizScene: DIRECT_TRANSFER

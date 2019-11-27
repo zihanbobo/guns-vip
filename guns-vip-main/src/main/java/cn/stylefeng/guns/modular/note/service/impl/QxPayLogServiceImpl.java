@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -80,5 +81,14 @@ public class QxPayLogServiceImpl extends ServiceImpl<QxPayLogMapper, QxPayLog> i
         ToolUtil.copyProperties(param, entity);
         return entity;
     }
+
+	@Override
+	public void createPayLog(Long userId, BigDecimal amount, String type) {
+		QxPayLog entity = new QxPayLog();
+		entity.setUserId(userId);
+		entity.setAmount(amount);
+		entity.setType(type);
+		this.save(entity);
+	}
 
 }

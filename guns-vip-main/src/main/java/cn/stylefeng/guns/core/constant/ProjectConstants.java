@@ -153,11 +153,11 @@ public final class ProjectConstants {
 	 * 用户费用类型：
 	 * 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；
 	 * 5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出；
-	 * 9-违约金汇入；
+	 * 9-违约金汇入；10-购买金币支出；11-金币提现汇入；
 	 * @author steven
 	 *
 	 */
-	public interface FINANCE_LOG_TYPE {
+	public interface USER_PAY_LOG_TYPE {
 		String INVITE_OUT = "0";
 		String INVITE_IN = "1";
 		String REWARD_OUT = "2";
@@ -168,20 +168,24 @@ public final class ProjectConstants {
 		String NOTE_IN = "7";
 		String COMPENSATION_OUT = "8";
 		String COMPENSATION_IN = "9";
+		String BUY_COIN_OUT = "10";
+		String WITHDRAW_COIN_IN = "11";
 	}
 	
 	public static Map<String, String> FINANCE_LOG_MAP = new HashMap<>();
 	static {
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.INVITE_OUT, "约单支出");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.INVITE_IN, "约单汇入");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.REWARD_OUT, "打赏支出");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.REWARD_IN, "打赏汇入");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.BUY_PRODUCT_OUT, "兑换商品支出");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.BUY_GIFT_OUT, "购买礼物支出");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.NOTE_OUT, "付费日记支出");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.NOTE_IN, "付费日记汇入");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.COMPENSATION_OUT, "违约金支出");
-		FINANCE_LOG_MAP.put(FINANCE_LOG_TYPE.COMPENSATION_IN, "违约金汇入");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.INVITE_OUT, "约单支出");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.INVITE_IN, "约单汇入");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.REWARD_OUT, "打赏支出");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.REWARD_IN, "打赏汇入");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.BUY_PRODUCT_OUT, "兑换商品支出");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.BUY_GIFT_OUT, "购买礼物支出");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.NOTE_OUT, "付费日记支出");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.NOTE_IN, "付费日记汇入");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.COMPENSATION_OUT, "违约金支出");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.COMPENSATION_IN, "违约金汇入");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.BUY_COIN_OUT, "购买金币支出");
+		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.WITHDRAW_COIN_IN, "金币提现汇入");
 	}
 	
 	/**

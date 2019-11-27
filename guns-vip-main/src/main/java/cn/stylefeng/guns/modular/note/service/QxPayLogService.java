@@ -1,12 +1,14 @@
 package cn.stylefeng.guns.modular.note.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxPayLog;
 import cn.stylefeng.guns.modular.note.model.params.QxPayLogParam;
 import cn.stylefeng.guns.modular.note.model.result.QxPayLogResult;
-import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>
@@ -66,4 +68,11 @@ public interface QxPayLogService extends IService<QxPayLog> {
      */
      LayuiPageInfo findPageBySpec(QxPayLogParam param);
 
+     /**
+      * 创建用户流水
+      * @param userId
+      * @param amount
+      * @param type
+      */
+     void createPayLog(Long userId, BigDecimal amount, String type);
 }
