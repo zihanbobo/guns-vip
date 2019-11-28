@@ -92,7 +92,12 @@ public class QxCoinOrder implements Serializable {
      */
     @TableField("status")
     private String status;
-
+    
+    /**
+     * 充值类型：0-支付宝；1-微信；2-平台虚拟
+     */
+    @TableField("type")
+    private String type;
 
     public Long getId() {
         return id;
@@ -190,7 +195,15 @@ public class QxCoinOrder implements Serializable {
         this.status = status;
     }
 
-    @Override
+    public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	@Override
     public String toString() {
         return "QxCoinOrder{" +
         "id=" + id +
@@ -205,6 +218,7 @@ public class QxCoinOrder implements Serializable {
         ", packageId=" + packageId +
         ", amount=" + amount +
         ", status=" + status +
+        ", type=" + type +
         "}";
     }
 }

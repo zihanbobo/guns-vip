@@ -46,6 +46,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.alipay.AlipayProperties;
+import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_PAY_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.WITHDRAW_STATUS;
@@ -100,7 +101,7 @@ public class ApiFinanceController extends ApiBaseController {
 	public Object wxPay(QxPackageTo packageTo) {
 		try {
 			// 创建订单
-			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId());
+			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.WECHAT);
 			WxPayUnifiedOrderRequest request = createWxPayOrderRequest(packageTo.getTradeType(), coinOrder);
 			log.info("/api/finance/wx/pay");
 			return ResultGenerator.genSuccessResult(wxPayService.createOrder(request));
@@ -146,7 +147,7 @@ public class ApiFinanceController extends ApiBaseController {
 
 			QxCoinOrder coinOrder = getCoinOrder(orderNo, new BigDecimal(totalFee), COIN_ORDER_STATUS.WAIT_PAY);
 			if (coinOrder == null) {
-				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + orderNo + ", amount=" + totalFee);
+				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + orderNo + ",amount=" + totalFee);
 				throw new ServiceException("订单记录不存在");
 			}
 			coinOrder.setStatus(COIN_ORDER_STATUS.PAID);
@@ -215,7 +216,7 @@ public class ApiFinanceController extends ApiBaseController {
 	public Object alipay(QxPackage packageTo) {
 		try {
 			// 创建订单
-			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId());
+			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.ALIPAY);
 			
 			AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 			AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();

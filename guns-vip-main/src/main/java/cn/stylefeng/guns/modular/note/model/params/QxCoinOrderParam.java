@@ -79,6 +79,11 @@ public class QxCoinOrderParam implements Serializable, BaseValidatingParam {
      * 状态 状态：0-待支付；1-已支付;2-已取消
      */
     private String status;
+    
+    /**
+     * 充值类型
+     */
+    private String type;
 
     @Override
     public String checkParam() {

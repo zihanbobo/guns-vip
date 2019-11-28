@@ -3,7 +3,6 @@ package cn.stylefeng.guns.core.constant;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * 程序常量配置
  * 
@@ -19,25 +18,10 @@ public final class ProjectConstants {
 		String ADMIN = "ADMIN_";
 		String USER = "USER_";
 	}
-	
+
 	public interface SOCIAL_TYPE {
 		String WECHAT = "0";
 		String ALIPAY = "1";
-	}
-	
-	public interface WITHDRAW_PAY_WAY {
-		String WECHAT = "0";
-		String ALIPAY = "1";
-	}
-	
-	/**
-	 * 状态 0-已申请；1-已提现;2-已取消
-	 * @author steven
-	 */
-	public interface WITHDRAW_STATUS {
-		String WAIT_OUT = "0";
-		String OUT = "1";
-		String CANCEL = "2";
 	}
 
 	/**
@@ -100,9 +84,10 @@ public final class ProjectConstants {
 		String CANCEl = "4";
 		String COMPLAINT = "5";
 	}
-	
+
 	/**
 	 * 约单报名状态：0-待确定；1-已确定；2-未确定
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -130,9 +115,10 @@ public final class ProjectConstants {
 		String ACTIVE = "0";
 		String PASSIVE = "1";
 	}
-	
+
 	/**
 	 * 操作类型：0-确认开始；1-确认结束；2-确认取消；
+	 * 
 	 * @author steven
 	 */
 	public interface INVITE_OPERATE_TYPE {
@@ -140,7 +126,7 @@ public final class ProjectConstants {
 		String CONFIRM_FINISH = "1";
 		String CONFIRM_CANCEL = "2";
 	}
-	
+
 	/**
 	 * 报警状态: 0-未处理；1-已处理
 	 */
@@ -148,12 +134,11 @@ public final class ProjectConstants {
 		String UNHANDLE = "0";
 		String HANDLED = "1";
 	}
-	
+
 	/**
-	 * 用户费用类型：
-	 * 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；
-	 * 5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出；
-	 * 9-违约金汇入；10-购买金币支出；11-金币提现汇入；
+	 * 用户费用类型： 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；
+	 * 5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出； 9-违约金汇入；10-购买金币支出；11-金币提现汇入；
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -171,7 +156,7 @@ public final class ProjectConstants {
 		String BUY_COIN_OUT = "10";
 		String WITHDRAW_COIN_IN = "11";
 	}
-	
+
 	public static Map<String, String> FINANCE_LOG_MAP = new HashMap<>();
 	static {
 		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.INVITE_OUT, "约单支出");
@@ -187,9 +172,10 @@ public final class ProjectConstants {
 		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.BUY_COIN_OUT, "购买金币支出");
 		FINANCE_LOG_MAP.put(USER_PAY_LOG_TYPE.WITHDRAW_COIN_IN, "金币提现汇入");
 	}
-	
+
 	/**
 	 * 反馈处理状态
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -197,9 +183,10 @@ public final class ProjectConstants {
 		String UNHANDLE = "0";
 		String HANDLED = "1";
 	}
-	
+
 	/**
 	 * 合作处理状态
+	 * 
 	 * @author steven
 	 *
 	 */
@@ -207,15 +194,44 @@ public final class ProjectConstants {
 		String UNHANDLE = "0";
 		String HANDLED = "1";
 	}
-	
+
 	/**
-	 * 金币订单状态
+	 * 充值订单状态
+	 * 
 	 * @author steven
 	 *
 	 */
 	public interface COIN_ORDER_STATUS {
 		String WAIT_PAY = "0";
 		String PAID = "1";
+		String CANCEL = "2";
+	}
+
+	/**
+	 * 充值方式：0-微信；1-支付宝；2-平台
+	 */
+	public interface COIN_ORDER_PAY_TYPE {
+		String WECHAT = "0";
+		String ALIPAY = "1";
+		String PLATFORM = "2";
+	}
+
+	/**
+	 * 提现方式：0-微信；1-支付宝
+	 */
+	public interface WITHDRAW_PAY_WAY {
+		String WECHAT = "0";
+		String ALIPAY = "1";
+	}
+
+	/**
+	 * 提现状态 0-已申请；1-已提现;2-已取消
+	 * 
+	 * @author steven
+	 */
+	public interface WITHDRAW_STATUS {
+		String WAIT_OUT = "0";
+		String OUT = "1";
 		String CANCEL = "2";
 	}
 }

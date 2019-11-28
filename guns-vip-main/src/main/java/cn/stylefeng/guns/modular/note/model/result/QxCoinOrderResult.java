@@ -79,4 +79,8 @@ public class QxCoinOrderResult implements Serializable {
      */
     private String status;
 
+    /**
+     * 充值类型
+     */
+    private String type;
 }

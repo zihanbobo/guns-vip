@@ -73,6 +73,6 @@ public interface QxCoinOrderService extends IService<QxCoinOrder> {
 	 * @param id
 	 * @return
 	 */
-	QxCoinOrder createOrder(Long requestUserId, Long id);
+	QxCoinOrder createOrder(Long userId, Long packageId, String type);
 
 }

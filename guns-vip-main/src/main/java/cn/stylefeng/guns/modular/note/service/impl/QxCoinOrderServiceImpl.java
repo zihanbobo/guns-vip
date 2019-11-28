@@ -93,16 +93,17 @@ public class QxCoinOrderServiceImpl extends ServiceImpl<QxCoinOrderMapper, QxCoi
     }
 
 	@Override
-	public QxCoinOrder createOrder(Long requestUserId, Long id) {
-		QxPackage qxPackage = qxPackageMapper.selectById(id);
-		QxCoinOrder coinOrder = new QxCoinOrder();
-		coinOrder.setPackageId(qxPackage.getId());
-		coinOrder.setSn(CommonUtils.getSerialNumber());
-		coinOrder.setAmount(qxPackage.getAmount());
-		coinOrder.setStatus(COIN_ORDER_STATUS.WAIT_PAY);
-		coinOrder.setUserId(requestUserId);
-		this.baseMapper.insert(coinOrder);
-		return coinOrder;
+	public QxCoinOrder createOrder(Long userId, Long packageId, String type) {
+		QxPackage qxPackage = qxPackageMapper.selectById(packageId);
+		QxCoinOrder entity = new QxCoinOrder();
+		entity.setPackageId(qxPackage.getId());
+		entity.setSn(CommonUtils.getSerialNumber());
+		entity.setAmount(qxPackage.getAmount());
+		entity.setStatus(COIN_ORDER_STATUS.WAIT_PAY);
+		entity.setUserId(userId);
+		entity.setType(type);
+		this.baseMapper.insert(entity);
+		return entity;
 	}
 
 }
