@@ -9,14 +9,16 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 
+import cn.stylefeng.guns.core.FileUtil;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Configuration
 @EnableConfigurationProperties(AlipayProperties.class)
 public class AlipayConfiugration {
-	private final AlipayProperties properties;
 	
+	private final AlipayProperties properties;
+		
 	@Bean
 	public AlipayClient alipayClient() throws AlipayApiException {
 		CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
@@ -26,9 +28,13 @@ public class AlipayConfiugration {
 		certAlipayRequest.setFormat(properties.getFormat());
 		certAlipayRequest.setCharset(properties.getCharset());
 		certAlipayRequest.setSignType(properties.getSignType());
-		certAlipayRequest.setCertPath(properties.getAlipayCertPath());
-		certAlipayRequest.setAlipayPublicCertPath(properties.getAlipayCertPath());
-		certAlipayRequest.setRootCertPath(properties.getAlipayRootCertPath());
+		certAlipayRequest.setCertPath(constructAbsolutePath(properties.getAlipayCertPath()));
+		certAlipayRequest.setAlipayPublicCertPath(constructAbsolutePath(properties.getAlipayCertPath()));
+		certAlipayRequest.setRootCertPath(constructAbsolutePath(properties.getAlipayRootCertPath()));
 		return new DefaultAlipayClient(certAlipayRequest);
+	}
+	
+	public String constructAbsolutePath(String relativePath) {
+		return FileUtil.mergeDeployPath(relativePath);
 	}
 }

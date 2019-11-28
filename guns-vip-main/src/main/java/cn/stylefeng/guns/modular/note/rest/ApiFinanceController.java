@@ -76,7 +76,6 @@ public class ApiFinanceController extends ApiBaseController {
 	
 	private AlipayClient alipayClient;
 
-	@Resource
 	private AlipayProperties alipayProperties;
 
 	@Resource
@@ -224,7 +223,7 @@ public class ApiFinanceController extends ApiBaseController {
 			model.setOutTradeNo(coinOrder.getSn());
 			model.setTotalAmount(coinOrder.toString());
 			request.setBizModel(model);
-			request.setNotifyUrl(alipayProperties.getAlipayNotifyUrl());
+//			request.setNotifyUrl(alipayProperties.getAlipayNotifyUrl());
 			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
 			log.info("/api/finance/alipay/pay, packageTo=" + packageTo);
 			return ResultGenerator.genSuccessResult(response.getBody());

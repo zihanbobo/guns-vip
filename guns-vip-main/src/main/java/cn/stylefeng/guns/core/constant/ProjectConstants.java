@@ -234,4 +234,12 @@ public final class ProjectConstants {
 		String OUT = "1";
 		String CANCEL = "2";
 	}
+	
+	/**
+	 * 平台比例类型：0-金币兑换比例;1-提现手续费
+	 */
+	public interface COST_RATE_TYPE {
+		String COIN_RATE = "0";
+		String WITHDRAW_RATE = "1";
+	}
 }
