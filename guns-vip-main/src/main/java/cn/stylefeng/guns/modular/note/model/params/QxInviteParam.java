@@ -96,7 +96,7 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
     /**
      * 经度
      */
-    private BigDecimal longitude;
+    private String longitude;
 
     /**
      * 纬度

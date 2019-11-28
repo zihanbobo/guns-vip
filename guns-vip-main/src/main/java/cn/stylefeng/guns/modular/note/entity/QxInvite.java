@@ -1,12 +1,14 @@
 package cn.stylefeng.guns.modular.note.entity;
 
-import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -109,7 +111,7 @@ public class QxInvite implements Serializable {
      * 经度
      */
     @TableField("longitude")
-    private BigDecimal longitude;
+    private String longitude;
 
     /**
      * 纬度
@@ -276,16 +278,16 @@ public class QxInvite implements Serializable {
     public void setGiftId(Long giftId) {
         this.giftId = giftId;
     }
+    
+    public String getLongitude() {
+		return longitude;
+	}
 
-    public BigDecimal getLongitude() {
-        return longitude;
-    }
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
 
-    public void setLongitude(BigDecimal longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getLatitude() {
+	public String getLatitude() {
         return latitude;
     }
 
@@ -386,8 +388,9 @@ public class QxInvite implements Serializable {
         ", content=" + content +
         "}";
     }
-	
+
 	public String getLocation() {
-		return province + city + district + street + streetNumber;
+		return Stream.of(province, city, district, street, streetNumber).filter(s -> s != null)
+				.collect(Collectors.joining());
 	}
 }

@@ -1,6 +1,5 @@
 package cn.stylefeng.guns.modular.note.dto;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -13,7 +12,7 @@ public class QxInviteTo {
 	private Long invitee;
 	private Long dateTypeId;
 	private Long giftId;
-    private BigDecimal longitude;
+    private String longitude;
     private String latitude;
     private String province;
     private String city;

@@ -1,13 +1,12 @@
 package cn.stylefeng.guns.modular.note.rest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +14,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
-import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
+import cn.stylefeng.guns.modular.note.dto.QxInviteQueryTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxInviteVo;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
@@ -30,9 +29,11 @@ import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
 import cn.stylefeng.guns.modular.note.entity.QxInviteComment;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import cn.stylefeng.guns.modular.note.service.QxDateTypeService;
 import cn.stylefeng.guns.modular.note.service.QxEmergencyService;
+import cn.stylefeng.guns.modular.note.service.QxGiftService;
 import cn.stylefeng.guns.modular.note.service.QxInviteApplyService;
 import cn.stylefeng.guns.modular.note.service.QxInviteCommentService;
 import cn.stylefeng.guns.modular.note.service.QxInviteOperateService;
@@ -43,9 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/invite")
 public class ApiInviteController extends ApiBaseController {
-
-	@Resource
-	private ConfigEntity configEntity;
 
 	@Resource
 	private QxInviteService qxInviteService;
@@ -67,11 +65,17 @@ public class ApiInviteController extends ApiBaseController {
 	
 	@Resource
 	private QxEmergencyService qxEmergencyService;
+	
+	@Resource
+	private QxGiftService qxGiftService;
 
 	/**
-	 * 约单四种： | 约单方式 | 约单类型 | inviter | invitee | apply | 事件 | | 多人 | 主动 | A | B,C,D
-	 * | B,C,D | 报名 | | 多人 | 被动 | A | B,C,D | B,C,D | 报名 | | 单人 | 主动 | A | B | B |
-	 * 同意 | | 单人 | 被动 | A | B | B | 同意 |
+	 * 约单四种： 
+	 * | 约单方式 | 约单类型 | inviter | invitee | apply | 事件 | 
+	 * | 多人 | 主动 | A | B,C | B,C,D | 报名 |
+	 * | 多人 | 被动 | A | B,C,D | B,C,D | 报名 |
+	 * | 单人 | 主动 | A | B | B | 同意 |
+	 * | 单人 | 被动 | A | B | B | 同意 |
 	 * 
 	 * @param inviteTo
 	 * @return
@@ -84,6 +88,28 @@ public class ApiInviteController extends ApiBaseController {
 		qxInviteService.addInvite(getRequestUserId(), inviteTo);
 		log.info("/api/invite/add, inviteTo=" + inviteTo);
 		return ResultGenerator.genSuccessResult();
+	}
+	
+	@PostMapping("/list")
+	public Object list(QxInviteQueryTo inviteQueryTo) {
+		Page page = LayuiPageFactory.defaultPage();
+		qxInviteService.search(page, inviteQueryTo);
+		List<QxInviteVo> vos = listQxInviteVos(page.getRecords());
+		page.setRecords(vos);
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	private List<QxInviteVo> listQxInviteVos(List<QxInviteSearchPojo> list) {
+		List<QxInviteVo> vos = new ArrayList<>();
+		for (QxInviteSearchPojo invite : list) {
+			QxInviteVo vo = new QxInviteVo();
+			BeanUtils.copyProperties(invite, vo);
+			vo.setUserVo(createQxUserVo(getUser(invite.getInviter())));
+			vo.setGift(qxGiftService.getById(invite.getGiftId()));
+			vo.setDateType(qxDateTypeService.getById(invite.getDateTypeId()));
+			vos.add(vo);
+		}
+		return vos;
 	}
 
 	@RequestMapping("/dateTypes")
@@ -170,6 +196,9 @@ public class ApiInviteController extends ApiBaseController {
 		for (QxInvite invite : list) {
 			QxInviteVo vo = new QxInviteVo();
 			BeanUtils.copyProperties(invite, vo);
+			vo.setUserVo(createQxUserVo(getUser(invite.getInviter())));
+			vo.setGift(qxGiftService.getById(invite.getGiftId()));
+			vo.setDateType(qxDateTypeService.getById(invite.getDateTypeId()));
 			vos.add(vo);
 		}
 		return vos;

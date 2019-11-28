@@ -70,4 +70,16 @@
 		WHERE
 			a.invite_id = #{inviteId}
     </select>
+    
+    <select id="search" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo">
+    	SELECT
+    		<include refid="Base_Column_List"/>,
+    		ST_Distance_Sphere ( Point ( ${longitude}, ${latitude} ), Point ( longitude, latitude ) ) AS distance
+    	FROM
+    		qx_invite
+    	WHERE
+    		ST_Contains (ST_MakeEnvelope (Point ( ( ${longitude}+ ( ${inviteRange} / 111 ) ), ( ${latitude}+ ( ${inviteRange} / 111 ) ) ), Point ( ( ${longitude}- ( ${inviteRange} / 111 ) ), ( ${latitude}- ( ${inviteRange} / 111 ) ) ) ), Point ( longitude, latitude )) and content like '%${content}%'
+    	ORDER BY
+    		distance
+    </select>
 </mapper>

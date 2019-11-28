@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.ALERT_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
@@ -28,6 +29,7 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
+import cn.stylefeng.guns.modular.note.dto.QxInviteQueryTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxAlert;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
@@ -42,6 +44,7 @@ import cn.stylefeng.guns.modular.note.mapper.QxInviteOperateMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 import cn.stylefeng.guns.modular.note.service.QxAlertService;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
@@ -62,6 +65,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> implements QxInviteService {
 
+	@Resource
+	private ConfigEntity configEntity;
+	
 	@Resource
 	private QxUserMapper qxUserMapper;
 	
@@ -326,5 +332,10 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		pairs.put("location", invite.getLocation());
 		pairs.put("contact", otherUser.getMobile());
 		noticeHelper.send(emergencyContact, SMS_CODE.EMERGENCY, pairs);
+	}
+
+	@Override
+	public Page<List<QxInviteSearchPojo>> search(Page page, QxInviteQueryTo inviteQueryTo) {
+		return this.baseMapper.search(page, configEntity.getInviteRange(), inviteQueryTo.getLongitude(), inviteQueryTo.getLatitude(), inviteQueryTo.getContent());
 	}
 }

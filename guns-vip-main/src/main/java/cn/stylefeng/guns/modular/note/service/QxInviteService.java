@@ -7,10 +7,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
+import cn.stylefeng.guns.modular.note.dto.QxInviteQueryTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo;
 
 /**
  * <p>
@@ -143,5 +145,12 @@ public interface QxInviteService extends IService<QxInvite> {
 	 * @param string
 	 */
 	void alert(Long userId, String emergencyContact, QxInvite invite);
+
+	/**
+	 * 搜索约单列表
+	 * @param inviteQueryTo
+	 * @return
+	 */
+	Page<List<QxInviteSearchPojo>> search(Page page, QxInviteQueryTo inviteQueryTo);
 
 }

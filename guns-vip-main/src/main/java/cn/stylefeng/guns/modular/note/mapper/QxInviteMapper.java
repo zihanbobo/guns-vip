@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 
 /**
@@ -66,5 +68,10 @@ public interface QxInviteMapper extends BaseMapper<QxInvite> {
 
     @Select("select a.* from qx_invite a inner join qx_invite_apply b on a.id = b.invite_id and b.user_id = #{userId} order by created_time desc")
     @ResultMap("BaseResultMap")
-	List<QxInvite> getCurrentInvites(@Param("page")  Page page, @Param("userId") Long userId);
+	List<QxInvite> getCurrentInvites(@Param("page") Page page, @Param("userId") Long userId);
+
+    /**
+     * 根据条件搜索附近约单
+     */
+	Page<List<QxInviteSearchPojo>> search(@Param("page") Page page, @Param("inviteRange") int inviteRange, @Param("longitude") String longitude, @Param("latitude") String latitude, @Param("content") String content);
 }

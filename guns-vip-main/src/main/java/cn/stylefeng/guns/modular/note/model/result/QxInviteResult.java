@@ -95,7 +95,7 @@ public class QxInviteResult implements Serializable {
     /**
      * 经度
      */
-    private BigDecimal longitude;
+    private String longitude;
 
     /**
      * 纬度
