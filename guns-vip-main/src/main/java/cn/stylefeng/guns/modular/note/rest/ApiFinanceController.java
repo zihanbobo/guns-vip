@@ -44,10 +44,12 @@ import com.github.binarywang.wxpay.service.EntPayService;
 import com.github.binarywang.wxpay.service.WxPayService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
+import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.alipay.AlipayProperties;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_PAY_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.COST_RATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.WITHDRAW_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
@@ -60,6 +62,7 @@ import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
 import cn.stylefeng.guns.modular.note.service.QxCoinOrderService;
+import cn.stylefeng.guns.modular.note.service.QxCostRateService;
 import cn.stylefeng.guns.modular.note.service.QxPackageService;
 import cn.stylefeng.guns.modular.note.service.QxPayLogService;
 import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
@@ -89,6 +92,9 @@ public class ApiFinanceController extends ApiBaseController {
 	
 	@Resource
 	private QxPackageService qxPackageService;
+	
+	@Resource
+	private QxCostRateService qxCostRateService;
 
 	/**
 	 * 微信购买金币
@@ -124,9 +130,11 @@ public class ApiFinanceController extends ApiBaseController {
 	 * @param coinCount
 	 * @return
 	 */
-	public BigDecimal getTranAmount(int coinCount) {
-		// TODO: 汇率设置，平台手续费扣除
-		return new BigDecimal(coinCount);
+	public BigDecimal caculateWithdrawAmount(int coinCount) {
+		BigDecimal withdrawRate = qxCostRateService.getRateByType(COST_RATE_TYPE.WITHDRAW_RATE);
+		BigDecimal coinRate = qxCostRateService.getRateByType(COST_RATE_TYPE.COIN_RATE);
+		BigDecimal realAmount = CommonUtils.divide(new BigDecimal(coinCount), coinRate);
+		return CommonUtils.roundHalfUp(realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate)));
 	}
 	
 	public void checkWithdrawLimit(QxUser user, int coinCount) {
@@ -174,7 +182,7 @@ public class ApiFinanceController extends ApiBaseController {
 	public Object wxWithdraw(String appId, int coinCount) {
 		QxUser user = getUser();
 		checkWithdrawLimit(user, coinCount);
-		BigDecimal amount = getTranAmount(coinCount);
+		BigDecimal amount = caculateWithdrawAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
 		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
 		EntPayService entPayService = wxPayService.getEntPayService();
@@ -223,7 +231,7 @@ public class ApiFinanceController extends ApiBaseController {
 			model.setOutTradeNo(coinOrder.getSn());
 			model.setTotalAmount(coinOrder.toString());
 			request.setBizModel(model);
-//			request.setNotifyUrl(alipayProperties.getAlipayNotifyUrl());
+			request.setNotifyUrl(alipayProperties.getAlipayNotifyUrl());
 			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
 			log.info("/api/finance/alipay/pay, packageTo=" + packageTo);
 			return ResultGenerator.genSuccessResult(response.getBody());
@@ -301,7 +309,7 @@ public class ApiFinanceController extends ApiBaseController {
 	public Object withdraw(String appId, String name, int coinCount) {
 		QxUser user = getUser();
 		checkWithdrawLimit(getUser(), coinCount);
-		BigDecimal amount = getTranAmount(coinCount);
+		BigDecimal amount = caculateWithdrawAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
 		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
 		AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();

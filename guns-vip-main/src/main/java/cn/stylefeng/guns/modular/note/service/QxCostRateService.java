@@ -1,12 +1,14 @@
 package cn.stylefeng.guns.modular.note.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxCostRate;
 import cn.stylefeng.guns.modular.note.model.params.QxCostRateParam;
 import cn.stylefeng.guns.modular.note.model.result.QxCostRateResult;
-import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>
@@ -65,5 +67,12 @@ public interface QxCostRateService extends IService<QxCostRate> {
      * @Date 2019-11-28
      */
      LayuiPageInfo findPageBySpec(QxCostRateParam param);
+     
+     /**
+      * 根据类型，获取比例
+      * @param type
+      * @return
+      */
+     BigDecimal getRateByType(String type);
 
 }
