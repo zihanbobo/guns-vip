@@ -122,6 +122,18 @@ public class QxUser implements Serializable {
      */
     @TableField("freeze")
     private Integer freeze;
+    
+    /**
+     * 我的邀请码
+     */
+    @TableField("invite_code")
+    private String inviteCode;
+    
+    /**
+     * 邀请人ID
+     */
+    @TableField("parent_id")
+    private Long parentId;
 
 
     public Long getId() {
@@ -260,6 +272,22 @@ public class QxUser implements Serializable {
 		this.freeze = freeze;
 	}
 
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
 	@Override
     public String toString() {
         return "QxUser{" +
@@ -280,6 +308,8 @@ public class QxUser implements Serializable {
         ", score=" + score +
         ", balance=" + balance +
         ", freeze=" + freeze +
+        ", inviteCode=" + inviteCode +
+        ", parentId=" + parentId +
         "}";
     }
 }

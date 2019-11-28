@@ -29,6 +29,8 @@ public class ConfigEntity {
 	private String aliyunSecret;
 	// 验证码长度
 	private int codeLength;
+	// 邀请码长度
+	private int inviteCodeLength;
 	// 验证码, 失效时间
 	private int codeExpirationMin;
 	// 验证码, 可重发时间

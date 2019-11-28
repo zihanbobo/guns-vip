@@ -104,4 +104,13 @@ public class QxUserResult implements Serializable {
      */
     private Integer freeze;
 
+    /**
+     * 我的邀请码
+     */
+    private String inviteCode;
+    
+    /**
+     * 邀请人ID
+     */
+    private Long parentId;
 }

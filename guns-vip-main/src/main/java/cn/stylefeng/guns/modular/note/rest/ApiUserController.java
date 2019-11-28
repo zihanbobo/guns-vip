@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
 
 import cn.stylefeng.guns.core.CacheCodeUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
@@ -139,6 +140,14 @@ public class ApiUserController extends ApiBaseController {
 	public Object update(QxUserTo userTo) {
 		QxUser user = getUser();
 		BeanUtils.copyProperties(userTo, user);
+		String parentInviteCode = userTo.getParentInviteCode();
+		if (!Strings.isNullOrEmpty(parentInviteCode)) {
+			QxUser parentUser = qxUserService.getUserByInviteCode(parentInviteCode);
+			if (parentUser == null) {
+				throw new ServiceException("邀请码对应用户不存在");
+			}
+			user.setParentId(parentUser.getId());
+		}
 		qxUserService.updateById(user);
 		log.info("/api/user/update, userTo=" + userTo);
 		return ResultGenerator.genSuccessResult();

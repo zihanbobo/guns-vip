@@ -8,4 +8,5 @@ public class QxUserTo {
 	private String nickname;
 	private Integer age;
 	private Integer height;
+	private String parentInviteCode;
 }

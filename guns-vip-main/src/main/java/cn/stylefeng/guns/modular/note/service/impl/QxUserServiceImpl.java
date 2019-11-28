@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.config.ConfigEntity;
+import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
@@ -36,8 +38,11 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> implements QxUserService {
 
 	@Resource
-	private QxUserSocialMapper qxUserSocialMapper;
+	private ConfigEntity configEntity;
 	
+	@Resource
+	private QxUserSocialMapper qxUserSocialMapper;
+
 	@Override
 	public void add(QxUserParam param) {
 		QxUser entity = getEntity(param);
@@ -111,8 +116,30 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	public QxUser performRegister(String mobile) {
 		QxUser user = new QxUser();
 		user.setMobile(mobile);
+		user.setInviteCode(generateInviteCode());
 		this.baseMapper.insert(user);
 		return user;
+	}
+
+	public String generateInviteCode() {
+		while (true) {
+			String inviteCode = CommonUtils.getRandomNumber(configEntity.getInviteCodeLength());
+			if (isValidCode(inviteCode)) {
+				return inviteCode;
+			}
+		}
+	}
+	
+	/**
+	 * 检查code是否有效
+	 * @param code
+	 * @return
+	 */
+	public boolean isValidCode(String code) {
+		QueryWrapper<QxUser> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("invite_code", code);
+		int count = this.count(queryWrapper);
+		return count == 0;
 	}
 
 	@Override
@@ -135,5 +162,12 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 		QueryWrapper<QxUserSocial> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("user_id", userId).eq("app_id", appId);
 		return qxUserSocialMapper.selectOne(queryWrapper);
+	}
+
+	@Override
+	public QxUser getUserByInviteCode(String parentInviteCode) {
+		QueryWrapper<QxUser> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("invite_code", parentInviteCode);
+		return this.getOne(queryWrapper);
 	}
 }

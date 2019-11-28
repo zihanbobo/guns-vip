@@ -1,10 +1,10 @@
 package cn.stylefeng.guns.modular.note.model.params;
 
-import lombok.Data;
-import cn.stylefeng.roses.kernel.model.validator.BaseValidatingParam;
-import java.util.Date;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Date;
+
+import cn.stylefeng.roses.kernel.model.validator.BaseValidatingParam;
+import lombok.Data;
 
 /**
  * <p>
@@ -104,7 +104,17 @@ public class QxUserParam implements Serializable, BaseValidatingParam {
      * 冻结金币
      */
     private Integer freeze;
-
+    
+    /**
+     * 我的邀请码
+     */
+    private String inviteCode;
+    
+    /**
+     * 邀请人ID
+     */
+    private Long parentId;
+    
     @Override
     public String checkParam() {
         return null;
