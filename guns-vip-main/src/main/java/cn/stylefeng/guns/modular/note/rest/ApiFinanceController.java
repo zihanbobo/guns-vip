@@ -183,7 +183,7 @@ public class ApiFinanceController extends ApiBaseController {
 	}
 	
 	@PostMapping("/wx/withdraw")
-	public Object wxWithdraw(String appId, int coinCount) {
+	public Object wxWithdraw(String appId, String name, int coinCount) {
 		QxUser user = getUser();
 		checkWithdrawLimit(user, coinCount);
 		BigDecimal amount = caculateWithdrawAmount(coinCount);
@@ -193,7 +193,8 @@ public class ApiFinanceController extends ApiBaseController {
 		EntPayRequest request = new EntPayRequest();
 		request.setPartnerTradeNo(withdrawLog.getSn());
 		request.setOpenid(withdrawLog.getPayeeAccount());
-		request.setCheckName(CheckNameOption.NO_CHECK);
+		request.setCheckName(CheckNameOption.FORCE_CHECK);
+		request.setReUserName(name);
 		request.setAmount(BaseWxPayRequest.yuanToFen(amount.toString()));
 		request.setDescription("用户提现");
 		request.setSpbillCreateIp("192.168.0.1");
