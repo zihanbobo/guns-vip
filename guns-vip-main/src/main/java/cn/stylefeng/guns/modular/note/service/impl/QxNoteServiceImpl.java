@@ -1,5 +1,17 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
@@ -8,13 +20,6 @@ import cn.stylefeng.guns.modular.note.model.params.QxNoteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxNoteResult;
 import  cn.stylefeng.guns.modular.note.service.QxNoteService;
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>
@@ -27,6 +32,10 @@ import java.util.List;
 @Service
 public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> implements QxNoteService {
 
+	@Resource
+	private QxCoinHelper qxCoinHelper;
+	
+	
     @Override
     public void add(QxNoteParam param){
         QxNote entity = getEntity(param);
@@ -81,4 +90,20 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
         return entity;
     }
 
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void rewardNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
+		qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxNote note = this.getById(noteId);
+		note.setGiftCount(note.getGiftCount() + 1);
+		this.updateById(note);
+	}
+
+	@Override
+	public void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
+		qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxNote note = this.getById(noteId);
+		note.setWatchCount(note.getWatchCount()+1);
+		this.updateById(note);
+	}
 }

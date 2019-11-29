@@ -66,32 +66,4 @@ public interface QxGiftService extends IService<QxGift> {
 	 */
 	LayuiPageInfo findPageBySpec(QxGiftParam param);
 
-	/**
-	 * 打赏
-	 * 
-	 * @param requestUserId
-	 * @param userId
-	 * @param tweetId
-	 * @param giftId
-	 */
-	void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId);
-
-	/**
-	 * 打赏日记
-	 * @param requestUserId
-	 * @param userId
-	 * @param noteId
-	 * @param giftId
-	 */
-	void rewardNote(Long requestUserId, Long userId, Long noteId, Long giftId);
-
-	/**
-	 * 解锁日记
-	 * @param requestUserId
-	 * @param userId
-	 * @param noteId
-	 * @param giftId
-	 */
-	void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId);
-
 }

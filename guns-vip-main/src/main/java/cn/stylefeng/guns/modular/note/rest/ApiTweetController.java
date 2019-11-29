@@ -130,7 +130,7 @@ public class ApiTweetController extends ApiBaseController {
 		if (getRequestUserId().equals(userId)) {
 			throw new ServiceException("不能给自己打赏");
 		}
-		qxGiftService.rewardTweet(getRequestUserId(), userId, tweetId, giftId);
+		qxTweetService.rewardTweet(getRequestUserId(), userId, tweetId, giftId);
 		log.info("/api/tweet/reward, userId=" + userId + ",giftId=" + giftId);
 		return ResultGenerator.genSuccessResult();
 	}

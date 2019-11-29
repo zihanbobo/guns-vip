@@ -25,6 +25,7 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.ALERT_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
@@ -91,6 +92,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	
 	@Resource
 	private NoticeHelper noticeHelper;
+	
+	@Resource
+	private QxCoinHelper qxCoinHelper;
     
 	@Override
     public void add(QxInviteParam param){
@@ -272,10 +276,24 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	@Override
 	public void finish(Long inviteId, Long requestUserId) {
 		createInviteOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH);
-		if (checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH)) {
+		if (Boolean.TRUE.equals(checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH))) {
 			changeQxInviteStatus(inviteId, INVITE_STATUS.FINISH);
-			// TODO：对应金币转入到对方
+			payCoin(inviteId);
 		}
+	}
+	
+	public void payCoin(Long inviteId) {
+		QxInvite invite = this.getById(inviteId);
+		Long payerId;
+		Long payeeId;
+		if (invite.getInviteType().equals(INVITE_TYPE.ACTIVE)) {
+			payerId = invite.getInviter();
+			payeeId = invite.getInvitee();
+		} else {
+			payerId = invite.getInvitee();
+			payeeId = invite.getInviter();
+		}
+		qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId());
 	}
 
 	@Override

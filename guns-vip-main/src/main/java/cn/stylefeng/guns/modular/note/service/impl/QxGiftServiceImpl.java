@@ -108,49 +108,4 @@ public class QxGiftServiceImpl extends ServiceImpl<QxGiftMapper, QxGift> impleme
 		ToolUtil.copyProperties(param, entity);
 		return entity;
 	}
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId) {
-		reward(requestUserId, userId, giftId);
-		QxTweet tweet = qxTweetMapper.selectById(tweetId);
-		tweet.setGiftCount(tweet.getGiftCount() + 1);
-		qxTweetMapper.updateById(tweet);
-	}
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void rewardNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
-		reward(requestUserId, userId, giftId);
-		QxNote note = qxNoteMapper.selectById(noteId);
-		note.setGiftCount(note.getGiftCount() + 1);
-		qxNoteMapper.updateById(note);
-	}
-
-	public void reward(Long requestUserId, Long userId, Long giftId) {
-		// 检查用户金币是否足够打赏
-		QxGift gift = qxGiftMapper.selectById(giftId);
-		QxUser currentUser = qxUserMapper.selectById(requestUserId);
-		if (currentUser.getFreeze() < gift.getPrice()) {
-			throw new ServiceException("用户金币余额不足，请先充值");
-		}
-		// 金币转账到对方账户
-		Integer giftPrice = gift.getPrice();
-		QxUser rewardUser = qxUserMapper.selectById(userId);
-		currentUser.setFreeze(currentUser.getFreeze() - giftPrice);
-		rewardUser.setBalance(rewardUser.getBalance() + giftPrice);
-		qxUserMapper.updateById(currentUser);
-		qxUserMapper.updateById(rewardUser);
-		// 记录流水日志
-		qxPayLogHelper.createPayLog(currentUser.getId(), giftPrice, USER_PAY_LOG_TYPE.REWARD_OUT);
-		qxPayLogHelper.createPayLog(rewardUser.getId(), giftPrice, USER_PAY_LOG_TYPE.REWARD_IN);
-	}
-
-	@Override
-	public void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
-		reward(requestUserId, userId, giftId);
-		QxNote note = qxNoteMapper.selectById(noteId);
-		note.setWatchCount(note.getWatchCount()+1);
-		qxNoteMapper.updateById(note);
-	}
 }

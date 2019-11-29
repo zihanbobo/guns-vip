@@ -74,5 +74,16 @@ public interface QxTweetService extends IService<QxTweet> {
       * @param requestUserId
       */
      Page<List<QxTweet>> followList(Page page, Long userId);
+     
+
+ 	/**
+ 	 * 打赏
+ 	 * 
+ 	 * @param requestUserId
+ 	 * @param userId
+ 	 * @param tweetId
+ 	 * @param giftId
+ 	 */
+ 	void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId);
 
 }
