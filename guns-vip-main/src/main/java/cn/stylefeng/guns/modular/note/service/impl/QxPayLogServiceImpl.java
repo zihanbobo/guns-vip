@@ -81,14 +81,4 @@ public class QxPayLogServiceImpl extends ServiceImpl<QxPayLogMapper, QxPayLog> i
         ToolUtil.copyProperties(param, entity);
         return entity;
     }
-
-	@Override
-	public void createPayLog(Long userId, BigDecimal amount, String type) {
-		QxPayLog entity = new QxPayLog();
-		entity.setUserId(userId);
-		entity.setAmount(amount);
-		entity.setType(type);
-		this.save(entity);
-	}
-
 }

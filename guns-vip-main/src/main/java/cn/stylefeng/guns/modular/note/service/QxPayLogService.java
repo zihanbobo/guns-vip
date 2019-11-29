@@ -67,12 +67,4 @@ public interface QxPayLogService extends IService<QxPayLog> {
      * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxPayLogParam param);
-
-     /**
-      * 创建用户流水
-      * @param userId
-      * @param amount
-      * @param type
-      */
-     void createPayLog(Long userId, BigDecimal amount, String type);
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,9 +15,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxTweetTo;
 import cn.stylefeng.guns.modular.note.dvo.QxTweetVo;
 import cn.stylefeng.guns.modular.note.entity.QxTweet;
+import cn.stylefeng.guns.modular.note.service.QxGiftService;
 import cn.stylefeng.guns.modular.note.service.QxTweetService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,8 +30,11 @@ public class ApiTweetController extends ApiBaseController {
 
 	@Resource
 	private QxTweetService qxTweetService;
+	
+	@Resource
+	private QxGiftService qxGiftService;
 
-	@RequestMapping("/add")
+	@PostMapping("/add")
 	public Object add(QxTweetTo tweetTo) {
 		QxTweet tweet = new QxTweet();
 		BeanUtils.copyProperties(tweetTo, tweet);
@@ -38,7 +44,7 @@ public class ApiTweetController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult();
 	}
 
-	@RequestMapping("/list")
+	@PostMapping("/list")
 	public Object list(String keywords) {
 		//获取分页参数
         Page page = LayuiPageFactory.defaultPage();
@@ -68,7 +74,7 @@ public class ApiTweetController extends ApiBaseController {
 		return vo;
 	}
 	
-	@RequestMapping("/userList")
+	@PostMapping("/userList")
 	public Object userList(Long userId) {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxTweet> queryWrapper = new QueryWrapper<>();
@@ -80,7 +86,7 @@ public class ApiTweetController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult(page);
 	}
 	
-	@RequestMapping("/detail")
+	@PostMapping("/detail")
 	public Object detail(Long id) {
 		QxTweet tweet = qxTweetService.getById(id);
 		QxTweetVo vo = createQxTweetVo(tweet);
@@ -88,7 +94,7 @@ public class ApiTweetController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult(vo);
 	}
 	
-	@RequestMapping("/like")
+	@PostMapping("/like")
 	public Object like(Long id) {
 		QxTweet tweet = qxTweetService.getById(id);
 		tweet.setFavoriteCount(tweet.getFavoriteCount()+1);
@@ -97,7 +103,7 @@ public class ApiTweetController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult();
 	}
 	
-	@RequestMapping("/myTweet")
+	@PostMapping("/myTweet")
 	public Object myTweet() {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxTweet> queryWrapper = new QueryWrapper<>();
@@ -109,7 +115,7 @@ public class ApiTweetController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult(page);
 	}
 	
-	@RequestMapping("/followList")
+	@PostMapping("/followList")
 	public Object followList() {
 		Page page = LayuiPageFactory.defaultPage();
 		qxTweetService.followList(page, getRequestUserId());
@@ -117,5 +123,15 @@ public class ApiTweetController extends ApiBaseController {
 		page.setRecords(vos);
 		log.info("/api/tweet/followList");
 		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@PostMapping("/reward")
+	public Object reward(Long userId, Long tweetId, Long giftId) {
+		if (getRequestUserId().equals(userId)) {
+			throw new ServiceException("不能给自己打赏");
+		}
+		qxGiftService.rewardTweet(getRequestUserId(), userId, tweetId, giftId);
+		log.info("/api/tweet/reward, userId=" + userId + ",giftId=" + giftId);
+		return ResultGenerator.genSuccessResult();
 	}
 }

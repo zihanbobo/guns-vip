@@ -66,6 +66,7 @@ import cn.stylefeng.guns.modular.note.service.QxCostRateService;
 import cn.stylefeng.guns.modular.note.service.QxPackageService;
 import cn.stylefeng.guns.modular.note.service.QxPayLogService;
 import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
+import cn.stylefeng.guns.modular.note.service.impl.QxPayLogHelper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -95,6 +96,9 @@ public class ApiFinanceController extends ApiBaseController {
 	
 	@Resource
 	private QxCostRateService qxCostRateService;
+	
+	@Resource
+	private QxPayLogHelper qxPayLogHelper;
 
 	/**
 	 * 微信购买金币
@@ -196,12 +200,7 @@ public class ApiFinanceController extends ApiBaseController {
 		try {
 			EntPayResult entPayResult = entPayService.entPay(request);
 			if (ResultCode.SUCCESS.equals(entPayResult.getReturnCode()) && ResultCode.SUCCESS.equals(entPayResult.getResultCode())) {
-				// 更新提现状态
-				withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
-				qxWithdrawLogService.updateById(withdrawLog);
-				// 更新用户金币余额
-				user.setBalance(user.getBalance()-coinCount);
-				qxUserService.updateById(user);
+				updateWithdrawSuccess(withdrawLog, user, coinCount);
 				log.info("/api/finance/wx/withdraw");
 				return ResultGenerator.genSuccessResult();
 			} else {
@@ -282,7 +281,7 @@ public class ApiFinanceController extends ApiBaseController {
 		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
 		qxUserService.updateById(qxUser);
 		// 用户流水
-		qxPayLogService.createPayLog(order.getUserId(), amount, USER_PAY_LOG_TYPE.BUY_COIN_OUT);
+		qxPayLogHelper.createPayLog(order.getUserId(), qxPackage.getCoins(), USER_PAY_LOG_TYPE.BUY_COIN_OUT);
 	}
 	
 	/**
@@ -306,7 +305,7 @@ public class ApiFinanceController extends ApiBaseController {
 	}
 
 	@PostMapping("/alipay/withdraw")
-	public Object withdraw(String appId, String name, int coinCount) {
+	public Object alipayWithdraw(String appId, String name, int coinCount) {
 		QxUser user = getUser();
 		checkWithdrawLimit(getUser(), coinCount);
 		BigDecimal amount = caculateWithdrawAmount(coinCount);
@@ -328,15 +327,7 @@ public class ApiFinanceController extends ApiBaseController {
 		try {
 			AlipayFundTransUniTransferResponse response = alipayClient.certificateExecute(request);
 			if(response.isSuccess()){
-				// 更新提现状态
-				withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
-				qxWithdrawLogService.updateById(withdrawLog);
-				// 更新用户金币余额
-				user.setBalance(user.getBalance()-coinCount);
-				qxUserService.updateById(user);
-				// 更新用户流水
-				qxPayLogService.createPayLog(user.getId(), amount, USER_PAY_LOG_TYPE.WITHDRAW_COIN_IN);
-				// TODO:更新平台流水
+				updateWithdrawSuccess(withdrawLog, user, coinCount);
 				log.info("/api/alipay/withdraw");
 				return ResultGenerator.genSuccessResult();
 			} else {
@@ -347,6 +338,17 @@ public class ApiFinanceController extends ApiBaseController {
 			log.error("支付宝提现失败, error=" + e.getMessage());
 			throw new ServiceException("支付宝提现失败");
 		}
+	}
+	
+	public void updateWithdrawSuccess(QxWithdrawLog withdrawLog, QxUser user, Integer coinCount) {
+		// 更新提现状态
+		withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
+		qxWithdrawLogService.updateById(withdrawLog);
+		// 更新用户金币余额
+		user.setBalance(user.getBalance()-coinCount);
+		qxUserService.updateById(user);
+		// 更新用户流水
+		qxPayLogHelper.createPayLog(user.getId(), coinCount, USER_PAY_LOG_TYPE.WITHDRAW_COIN_IN);
 	}
 
 	@PostMapping("/log")
