@@ -145,4 +145,12 @@ public class QxGiftServiceImpl extends ServiceImpl<QxGiftMapper, QxGift> impleme
 		qxPayLogHelper.createPayLog(currentUser.getId(), giftPrice, USER_PAY_LOG_TYPE.REWARD_OUT);
 		qxPayLogHelper.createPayLog(rewardUser.getId(), giftPrice, USER_PAY_LOG_TYPE.REWARD_IN);
 	}
+
+	@Override
+	public void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
+		reward(requestUserId, userId, giftId);
+		QxNote note = qxNoteMapper.selectById(noteId);
+		note.setWatchCount(note.getWatchCount()+1);
+		qxNoteMapper.updateById(note);
+	}
 }

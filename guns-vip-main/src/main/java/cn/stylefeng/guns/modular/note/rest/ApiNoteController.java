@@ -131,13 +131,18 @@ public class ApiNoteController extends ApiBaseController {
 			throw new ServiceException("不能给自己打赏");
 		}
 		qxGiftService.rewardNote(getRequestUserId(), userId, noteId, giftId);
-		log.info("/api/tweet/reward, userId=" + userId + ",giftId=" + giftId);
+		log.info("/api/note/reward, userId=" + userId + ",giftId=" + giftId);
 		return ResultGenerator.genSuccessResult();
 	}
 	
 	@RequestMapping("/unlock")
 	public Object unlock(Long noteId) {
-		// TODO
-		return null;
+		QxNote note = qxNoteService.getById(noteId);
+		if (note.getUserId().equals(getRequestUserId())) {
+			throw new ServiceException("不能解锁自己的日记");
+		}
+		qxGiftService.unlockNote(getRequestUserId(), note.getUserId(), noteId, note.getGiftId());
+		log.info("/api/note/unlock, noteId=" + noteId);
+		return ResultGenerator.genSuccessResult();
 	}
 }
