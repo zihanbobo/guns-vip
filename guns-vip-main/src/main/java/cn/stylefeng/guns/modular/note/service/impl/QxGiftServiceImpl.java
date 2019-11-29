@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,9 +17,11 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.entity.QxGift;
+import cn.stylefeng.guns.modular.note.entity.QxNote;
 import cn.stylefeng.guns.modular.note.entity.QxTweet;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.mapper.QxGiftMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxNoteMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxTweetMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxGiftParam;
@@ -50,6 +51,9 @@ public class QxGiftServiceImpl extends ServiceImpl<QxGiftMapper, QxGift> impleme
 
 	@Resource
 	private QxTweetMapper qxTweetMapper;
+
+	@Resource
+	private QxNoteMapper qxNoteMapper;
 
 	@Override
 	public void add(QxGiftParam param) {
@@ -110,8 +114,17 @@ public class QxGiftServiceImpl extends ServiceImpl<QxGiftMapper, QxGift> impleme
 	public void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId) {
 		reward(requestUserId, userId, giftId);
 		QxTweet tweet = qxTweetMapper.selectById(tweetId);
-		tweet.setGiftCount(tweet.getGiftCount()+1);
+		tweet.setGiftCount(tweet.getGiftCount() + 1);
 		qxTweetMapper.updateById(tweet);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void rewardNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
+		reward(requestUserId, userId, giftId);
+		QxNote note = qxNoteMapper.selectById(noteId);
+		note.setGiftCount(note.getGiftCount() + 1);
+		qxNoteMapper.updateById(note);
 	}
 
 	public void reward(Long requestUserId, Long userId, Long giftId) {
