@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -80,16 +79,19 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	@PostMapping("/wx/login")
-	public Object wxLogin(String appId, String code) {
+	public Object wxLogin(String appId, String openCode) {
 		try {
-			QxUser qxUser = getUserByCode(appId, code);
+	        if (!this.wxMpService.switchover(appId)) {
+	            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appId));
+	        }
+			QxUser qxUser = getUserByCode(appId, openCode);
 			if (qxUser == null) {
 				throw new ServiceException("请先绑定手机号");
 			}
 			JSONObject result = generateToken(qxUser);
 			return ResultGenerator.genSuccessResult(result);
 		} catch (WxErrorException e) {
-			log.error("微信登录失败, /api/user/wx/login, code=" + code + ", error=" + e.getMessage());
+			log.error("微信登录失败, /api/user/wx/login, code=" + openCode + ", error=" + e.getMessage());
 			throw new ServiceException("微信登录失败");
 		}
 	}
@@ -181,28 +183,6 @@ public class ApiUserController extends ApiBaseController {
         String redirectUri = wxMpService.oauth2buildAuthorizationUrl(host, WxConsts.OAuth2Scope.SNSAPI_USERINFO, "1");
         log.info("redirectUri地址={}", redirectUri);// 日志
         response.sendRedirect(redirectUri);
-    }
-	
-	/**
-	 * 微信公众号
-	 * @param appId
-	 * @param code
-	 * @return
-	 */
-	@GetMapping("/wx/getInfo")
-    public Object wxMpGetInfo(@PathVariable String appId, @RequestParam String code) {
-        if (!this.wxMpService.switchover(appId)) {
-            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appId));
-        }
-
-        try {
-            QxUser qxUser = getUserByCode(appId, code);
-            log.info("/api/wx/mp/getInfo, appid=" + appId + ", code=" + code);
-            return ResultGenerator.genSuccessResult(qxUser);
-        } catch (WxErrorException e) {
-        	log.error("获取用户信息出错，/api/user/getInfo, appid=" + appId + ", code=" + code + ", " + e.getMessage());
-            throw new ServiceException("获取用户信息出错");
-        }
     }
 	
 	public WxMpUser getWxUserByCode(String code) throws WxErrorException{
