@@ -229,7 +229,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 				tag = SMS_CODE.INVITE_FAIL;
 				log.info("User " + inviteUser.getMobile() + "未被选中");
 			}
-//			noticeHelper.push(account, tag, pairs);
+			noticeHelper.push(account, tag, pairs);
 		}
 	}
 
