@@ -105,7 +105,7 @@ public class ApiProductController extends ApiBaseController {
 	
 	@RequestMapping("/exchange")
 	public Object exchange(Long productId) {
-		// TODO: 兑换功能待定
+		qxProductService.exchange(getRequestUserId(), productId);
 		return ResultGenerator.genSuccessResult();
 	}
 }

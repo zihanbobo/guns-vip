@@ -13,57 +13,65 @@ import java.util.List;
  * 商品表 服务类
  * </p>
  *
- * @author 
+ * @author
  * @since 2019-11-18
  */
 public interface QxProductService extends IService<QxProduct> {
 
-    /**
-     * 新增
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    void add(QxProductParam param);
+	/**
+	 * 新增
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	void add(QxProductParam param);
 
-    /**
-     * 删除
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    void delete(QxProductParam param);
+	/**
+	 * 删除
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	void delete(QxProductParam param);
 
-    /**
-     * 更新
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    void update(QxProductParam param);
+	/**
+	 * 更新
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	void update(QxProductParam param);
 
-    /**
-     * 查询单条数据，Specification模式
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    QxProductResult findBySpec(QxProductParam param);
+	/**
+	 * 查询单条数据，Specification模式
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	QxProductResult findBySpec(QxProductParam param);
 
-    /**
-     * 查询列表，Specification模式
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    List<QxProductResult> findListBySpec(QxProductParam param);
+	/**
+	 * 查询列表，Specification模式
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	List<QxProductResult> findListBySpec(QxProductParam param);
 
-    /**
-     * 查询分页数据，Specification模式
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-     LayuiPageInfo findPageBySpec(QxProductParam param);
+	/**
+	 * 查询分页数据，Specification模式
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	LayuiPageInfo findPageBySpec(QxProductParam param);
+
+	/**
+	 * 兑换商品
+	 * 
+	 * @param requestUserId
+	 * @param productId
+	 */
+	void exchange(Long userId, Long productId);
 
 }
