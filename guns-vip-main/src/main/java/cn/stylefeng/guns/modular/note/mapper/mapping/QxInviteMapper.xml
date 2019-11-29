@@ -62,7 +62,7 @@
     
     <select id="getInviteUsers" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo">
 		SELECT
-			a.invite_id AS inviteId, a.user_id AS userId, a.choosed, b.mobile 
+			a.invite_id AS inviteId, a.user_id AS userId, a.status, b.mobile 
 		FROM
 			qx_invite_apply a
 		LEFT JOIN

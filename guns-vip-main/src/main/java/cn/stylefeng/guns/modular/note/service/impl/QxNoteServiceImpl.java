@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
+import cn.stylefeng.guns.modular.note.dto.QxPayResult;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
 import cn.stylefeng.guns.modular.note.mapper.QxNoteMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxNoteParam;
@@ -35,6 +37,8 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	@Resource
 	private QxCoinHelper qxCoinHelper;
 	
+	@Resource
+	private QxPayLogHelper qxPayLogHelper;
 	
     @Override
     public void add(QxNoteParam param){
@@ -93,7 +97,9 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void rewardNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
-		qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_OUT);
+		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_IN);
 		QxNote note = this.getById(noteId);
 		note.setGiftCount(note.getGiftCount() + 1);
 		this.updateById(note);
@@ -101,7 +107,9 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 
 	@Override
 	public void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
-		qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.NOTE_OUT);
+		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.NOTE_IN);
 		QxNote note = this.getById(noteId);
 		note.setWatchCount(note.getWatchCount()+1);
 		this.updateById(note);

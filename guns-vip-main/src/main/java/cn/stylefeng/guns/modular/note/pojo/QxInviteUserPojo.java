@@ -7,6 +7,6 @@ public class QxInviteUserPojo {
 
 	private Long inviteId;
 	private Long userId;
-	private Boolean choosed;
+	private String status;
 	private String mobile;
 }

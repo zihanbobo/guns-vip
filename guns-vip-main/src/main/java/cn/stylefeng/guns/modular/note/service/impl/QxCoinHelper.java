@@ -4,8 +4,9 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
-import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
+import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.exception.ServiceException;
+import cn.stylefeng.guns.modular.note.dto.QxPayResult;
 import cn.stylefeng.guns.modular.note.entity.QxGift;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.mapper.QxGiftMapper;
@@ -23,7 +24,7 @@ public class QxCoinHelper {
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
 
-	public void payCoin(Long payerId, Long apyeeId, Long giftId) {
+	public QxPayResult payCoin(Long payerId, Long payeeId, Long giftId) {
 		// 检查用户金币是否足够打赏
 		QxGift gift = qxGiftMapper.selectById(giftId);
 		QxUser payUser = qxUserMapper.selectById(payerId);
@@ -32,13 +33,17 @@ public class QxCoinHelper {
 		}
 		// 金币转账到对方账户
 		Integer giftPrice = gift.getPrice();
-		QxUser payeeUser = qxUserMapper.selectById(apyeeId);
+		QxUser payeeUser = qxUserMapper.selectById(payeeId);
 		payUser.setFreeze(payUser.getFreeze() - giftPrice);
 		payeeUser.setBalance(payeeUser.getBalance() + giftPrice);
 		qxUserMapper.updateById(payUser);
 		qxUserMapper.updateById(payeeUser);
-		// 记录流水日志
-		qxPayLogHelper.createPayLog(payUser.getId(), giftPrice, USER_PAY_LOG_TYPE.REWARD_OUT);
-		qxPayLogHelper.createPayLog(payeeUser.getId(), giftPrice, USER_PAY_LOG_TYPE.REWARD_IN);
+		
+		QxPayResult payResult = new QxPayResult();
+		payResult.setSn(CommonUtils.getSerialNumber());
+		payResult.setPayerId(payerId);
+		payResult.setPayeeId(payeeId);
+		payResult.setPrice(giftPrice);
+		return payResult;
 	}
 }

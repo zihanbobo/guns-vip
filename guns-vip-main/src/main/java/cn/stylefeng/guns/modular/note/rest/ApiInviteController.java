@@ -22,6 +22,7 @@ import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteQueryTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxInviteVo;
+import cn.stylefeng.guns.modular.note.dvo.QxUserVo;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxDateType;
 import cn.stylefeng.guns.modular.note.entity.QxEmergency;
@@ -29,7 +30,9 @@ import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.entity.QxInviteApply;
 import cn.stylefeng.guns.modular.note.entity.QxInviteComment;
 import cn.stylefeng.guns.modular.note.entity.QxInviteOperate;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import cn.stylefeng.guns.modular.note.service.QxDateTypeService;
 import cn.stylefeng.guns.modular.note.service.QxEmergencyService;
@@ -294,5 +297,16 @@ public class ApiInviteController extends ApiBaseController {
 		page.setRecords(vos);
 		log.info("/api/invite/current");
 		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@PostMapping("/applicants")
+	public Object applicants(Long inviteId) {
+		List<QxInviteUserPojo> list = qxInviteService.applicants(inviteId);
+		List<QxUserVo> vos = new ArrayList<>();
+		for (QxInviteUserPojo userPojo : list) {
+			QxUser user = qxUserService.getById(userPojo.getUserId());
+			vos.add(createQxUserVo(user));
+		}
+		return ResultGenerator.genSuccessResult(vos);
 	}
 }

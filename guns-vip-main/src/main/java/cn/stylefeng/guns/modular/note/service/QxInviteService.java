@@ -13,6 +13,7 @@ import cn.stylefeng.guns.modular.note.entity.QxInvite;
 import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxInviteResult;
 import cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo;
+import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 
 /**
  * <p>
@@ -86,6 +87,13 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	void apply(Long currentUserId, Long inviteId);
 
+	/**
+	 * 列出约单所有报名人
+	 * @param inviteId
+	 * @return
+	 */
+	List<QxInviteUserPojo> applicants(Long inviteId);
+	
 	/**
 	 * 选中报名人
 	 * @param inviteId

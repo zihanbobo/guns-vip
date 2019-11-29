@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
+import cn.stylefeng.guns.modular.note.dto.QxPayResult;
 import cn.stylefeng.guns.modular.note.entity.QxTweet;
 import cn.stylefeng.guns.modular.note.mapper.QxTweetMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxTweetParam;
@@ -35,6 +37,9 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 	@Resource
 	private QxCoinHelper qxCoinHelper;
 
+	@Resource
+	private QxPayLogHelper qxPayLogHelper;
+	
 	@Override
 	public void add(QxTweetParam param) {
 		QxTweet entity = getEntity(param);
@@ -97,7 +102,9 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId) {
-		qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_OUT);
+		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_IN);
 		QxTweet tweet = this.getById(tweetId);
 		tweet.setGiftCount(tweet.getGiftCount() + 1);
 		this.updateById(tweet);
