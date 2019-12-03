@@ -70,12 +70,16 @@ public class ApiUserController extends ApiBaseController {
 
 	@PostMapping("/login")
 	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
+		boolean newUser;
 		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 		QxUser user = qxUserService.getUserByAccount(mobile);
 		if (user == null) {
 			user = qxUserService.performRegister(mobile);
+			newUser = true;
+		} else {
+			newUser = false;
 		}
-		JSONObject result = generateToken(user);
+		JSONObject result = generateToken(user, newUser);
 		return ResultGenerator.genSuccessResult(result);
 	}
 	
@@ -86,7 +90,7 @@ public class ApiUserController extends ApiBaseController {
 			if (qxUser == null) {
 				throw new ServiceException("请先绑定手机号");
 			}
-			JSONObject result = generateToken(qxUser);
+			JSONObject result = generateToken(qxUser, false);
 			return ResultGenerator.genSuccessResult(result);
 		} catch (WxErrorException e) {
 			log.error("微信登录失败, /api/user/wx/login, code=" + code + ", error=" + e.getMessage());
@@ -97,11 +101,19 @@ public class ApiUserController extends ApiBaseController {
 	@PostMapping("/wx/bindUser")
 	public Object bindUser(String mobile, String code, String openCode) {
 		try {
+			boolean newUser;
 			validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 			WxMpUser wxUser = getWxUserByCode(openCode);
-			QxUser qxUser = qxUserService.wxBindUser(mobile, wxUser.getOpenId(), wxUser.getUnionId());
+			QxUser user = qxUserService.getUserByAccount(mobile);
+			if (user == null) {
+				newUser = true;
+			} else {
+				newUser = false;
+			}
+			user = qxUserService.wxBindUser(mobile, wxUser.getOpenId(), wxUser.getUnionId());
+			JSONObject result = generateToken(user, newUser);
 			log.info("/api/user/bindUser, mobile=" + mobile + ",code=" + code);
-			return ResultGenerator.genSuccessResult(qxUser);
+			return ResultGenerator.genSuccessResult(result);
 		} catch (WxErrorException e) {
 			log.error("/api/user/bindUser, mobile=" + mobile + ",code=" + code + ", error=" + e.getMessage());
 			throw new ServiceException("微信绑定失败");
@@ -113,13 +125,14 @@ public class ApiUserController extends ApiBaseController {
 		validateCache(cache, codeKey, code, name);
 	}
 	
-	private JSONObject generateToken(QxUser user) {
+	private JSONObject generateToken(QxUser user, boolean newUser) {
 		String accessId = TOKEN.USER + user.getId();
 		String token = TokenUtils.createToken(accessId);
 		cacheValueSecond(accessId, 60 * 60 * 24 * 30, token);
 		JSONObject result = new JSONObject();
 		result.put("id", user.getId());
 		result.put("token",token);
+		result.put("newUser", newUser);
 		return result;
 	}
 
