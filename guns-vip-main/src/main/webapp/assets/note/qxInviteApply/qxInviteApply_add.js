@@ -11,7 +11,7 @@ var QxInviteApplyInfoDlg = {
         deleted: "",
         inviteId: "",
         userId: "",
-        choosed: ""
+        status: ""
     }
 };
 

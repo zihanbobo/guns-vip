@@ -1,9 +1,9 @@
 package cn.stylefeng.guns.modular.note.model.result;
 
-import lombok.Data;
-import java.util.Date;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.util.Date;
+
+import lombok.Data;
 
 /**
  * <p>
@@ -62,7 +62,7 @@ public class QxPayLogResult implements Serializable {
     /**
      * 金额
      */
-    private BigDecimal amount;
+    private Integer amount;
 
     /**
      * 付费类型 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出；9-违约金汇入；

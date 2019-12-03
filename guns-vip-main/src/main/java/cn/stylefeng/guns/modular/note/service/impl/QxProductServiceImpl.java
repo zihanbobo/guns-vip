@@ -1,20 +1,28 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
+import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.entity.QxProduct;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.mapper.QxProductMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxProductParam;
 import cn.stylefeng.guns.modular.note.model.result.QxProductResult;
 import  cn.stylefeng.guns.modular.note.service.QxProductService;
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>
@@ -27,6 +35,12 @@ import java.util.List;
 @Service
 public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct> implements QxProductService {
 
+	@Resource
+	private QxUserMapper qxUserMapper;
+	
+	@Resource
+	private QxPayLogHelper qxPayLogHelper;
+	
     @Override
     public void add(QxProductParam param){
         QxProduct entity = getEntity(param);
@@ -81,4 +95,20 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
         return entity;
     }
 
+	@Override
+	public void exchange(Long userId, Long productId) {
+		QxProduct product = this.baseMapper.selectById(productId);
+		QxUser user = qxUserMapper.selectById(userId);
+		if (product.getStock() <= 0) {
+			throw new ServiceException("商品库存不足，无法兑换");
+		}
+		if (user.getBalance() < product.getPrice()) {
+			throw new ServiceException("金币不足，无法兑换");
+		}
+		user.setBalance(user.getBalance()-product.getPrice());
+		qxUserMapper.updateById(user);
+		product.setStock(product.getStock()-1);
+		this.updateById(product);
+		qxPayLogHelper.createPayLog(userId, product.getPrice(), USER_PAY_LOG_TYPE.BUY_PRODUCT_OUT);
+	}
 }

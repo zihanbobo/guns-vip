@@ -9,7 +9,8 @@ var QxCategoryInfoDlg = {
         updatedBy: "",
         updatedTime: "",
         deleted: "",
-        name: ""
+        name: "",
+        orderNo: ""
     }
 };
 

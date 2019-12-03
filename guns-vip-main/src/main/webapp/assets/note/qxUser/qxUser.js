@@ -33,7 +33,10 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'avatar', sort: true, title: '头像'},
             {field: 'status', sort: true, title: '状态 0-正常；1-禁用'},
             {field: 'score', sort: true, title: '信用分'},
-            {field: 'balance', sort: true, title: '金币余额'},
+            {field: 'balance', sort: true, title: '金币余额（可提现）'},
+            {field: 'freeze', sort: true, title: '冻结余额（不可提现）'},
+            {field: 'inviteCode', sort: true, title: '我的邀请码'},
+            {field: 'parentId', sort: true, title: '邀请人ID'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

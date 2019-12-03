@@ -24,7 +24,8 @@ var QxInviteInfoDlg = {
         street: "",
         streetNumber: "",
         status: "",
-        inviteWay: ""
+        inviteWay: "",
+        content: ""
     }
 };
 

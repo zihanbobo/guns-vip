@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,14 +14,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
-import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxNoteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxNoteVo;
 import cn.stylefeng.guns.modular.note.dvo.QxTweetVo;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
-import cn.stylefeng.guns.modular.note.entity.QxTweet;
 import cn.stylefeng.guns.modular.note.entity.QxUserNote;
+import cn.stylefeng.guns.modular.note.service.QxGiftService;
 import cn.stylefeng.guns.modular.note.service.QxNoteService;
 import cn.stylefeng.guns.modular.note.service.QxUserNoteService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +32,14 @@ import lombok.extern.slf4j.Slf4j;
 public class ApiNoteController extends ApiBaseController {
 
 	@Resource
-	private ConfigEntity configEntity;
-
-	@Resource
 	private QxNoteService qxNoteService;
 
 	@Resource
 	private QxUserNoteService qxUserNoteService;
 
+	@Resource
+	private QxGiftService qxGiftService;
+	
 	@RequestMapping("/list")
 	public Object list(Long userId) {
 		Page page = LayuiPageFactory.defaultPage();
@@ -124,15 +125,24 @@ public class ApiNoteController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult(page);
 	}
 	
-	@RequestMapping("/reward")
-	public Object reward(Long noteId) {
-		// TODO
-		return null;
+	@PostMapping("/reward")
+	public Object reward(Long userId, Long noteId, Long giftId) {
+		if (getRequestUserId().equals(userId)) {
+			throw new ServiceException("不能给自己打赏");
+		}
+		qxNoteService.rewardNote(getRequestUserId(), userId, noteId, giftId);
+		log.info("/api/note/reward, userId=" + userId + ",giftId=" + giftId);
+		return ResultGenerator.genSuccessResult();
 	}
 	
 	@RequestMapping("/unlock")
 	public Object unlock(Long noteId) {
-		// TODO
-		return null;
+		QxNote note = qxNoteService.getById(noteId);
+		if (note.getUserId().equals(getRequestUserId())) {
+			throw new ServiceException("不能解锁自己的日记");
+		}
+		qxNoteService.unlockNote(getRequestUserId(), note.getUserId(), noteId, note.getGiftId());
+		log.info("/api/note/unlock, noteId=" + noteId);
+		return ResultGenerator.genSuccessResult();
 	}
 }

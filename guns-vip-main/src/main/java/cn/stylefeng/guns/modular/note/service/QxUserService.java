@@ -124,4 +124,12 @@ public interface QxUserService extends IService<QxUser> {
 	 * @return
 	 */
 	QxUser getUserByInviteCode(String parentInviteCode);
+	
+	/**
+	 * 根据openId获取用户
+	 * @param appId
+	 * @param openId
+	 * @return
+	 */
+	QxUser getUserByOpenId(String appId, String openId);
 }

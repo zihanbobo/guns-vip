@@ -66,4 +66,21 @@ public interface QxNoteService extends IService<QxNote> {
      */
      LayuiPageInfo findPageBySpec(QxNoteParam param);
 
+ 	/**
+ 	 * 打赏日记
+ 	 * @param requestUserId
+ 	 * @param userId
+ 	 * @param noteId
+ 	 * @param giftId
+ 	 */
+ 	void rewardNote(Long requestUserId, Long userId, Long noteId, Long giftId);
+
+ 	/**
+ 	 * 解锁日记
+ 	 * @param requestUserId
+ 	 * @param userId
+ 	 * @param noteId
+ 	 * @param giftId
+ 	 */
+ 	void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId);
 }

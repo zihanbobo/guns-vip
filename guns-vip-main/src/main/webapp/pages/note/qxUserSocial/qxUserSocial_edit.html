@@ -50,15 +50,27 @@
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">APPID<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="appId" name="appId" placeholder="请输入APPID" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">社交开放平台ID<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
                             <input id="openId" name="openId" placeholder="请输入社交开放平台ID" type="text" class="layui-input" lay-verify="required" required/>
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">社交平台类型 0-微信;<span style="color: red;">*</span></label>
+                        <label class="layui-form-label">UnionId，微信特有<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="type" name="type" placeholder="请输入社交平台类型 0-微信;" type="text" class="layui-input" lay-verify="required" required/>
+                            <input id="unionId" name="unionId" placeholder="请输入UnionId，微信特有" type="text" class="layui-input" lay-verify="required" required/>
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">社交平台类型 0-微信;1-支付宝;<span style="color: red;">*</span></label>
+                        <div class="layui-input-block">
+                            <input id="type" name="type" placeholder="请输入社交平台类型 0-微信;1-支付宝;" type="text" class="layui-input" lay-verify="required" required/>
                         </div>
                     </div>
                 </div>

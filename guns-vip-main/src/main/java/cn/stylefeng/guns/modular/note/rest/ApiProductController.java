@@ -99,13 +99,19 @@ public class ApiProductController extends ApiBaseController {
 	
 	@RequestMapping("/recommend")
 	public Object recommend() {
-		// TODO: 随机算法待定
-		return ResultGenerator.genSuccessResult();
+		Page page = LayuiPageFactory.defaultPage();
+		QueryWrapper<QxProduct> queryWrapper = new QueryWrapper<>();
+		queryWrapper.orderByDesc("created_time");
+		qxProductService.page(page, queryWrapper);
+		List<QxProductVo> vos = createProductVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/product/recommend");
+		return ResultGenerator.genSuccessResult(vos);
 	}
 	
 	@RequestMapping("/exchange")
 	public Object exchange(Long productId) {
-		// TODO: 兑换功能待定
+		qxProductService.exchange(getRequestUserId(), productId);
 		return ResultGenerator.genSuccessResult();
 	}
 }

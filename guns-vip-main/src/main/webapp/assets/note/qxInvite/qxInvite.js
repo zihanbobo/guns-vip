@@ -41,6 +41,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'streetNumber', sort: true, title: '门牌号码'},
             {field: 'status', sort: true, title: '状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉'},
             {field: 'inviteWay', sort: true, title: '约单方式：0-单独约；1-报名约'},
+            {field: 'content', sort: true, title: '约单描述'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

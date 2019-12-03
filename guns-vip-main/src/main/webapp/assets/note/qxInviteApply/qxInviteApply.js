@@ -27,7 +27,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'inviteId', sort: true, title: '约单ID'},
             {field: 'userId', sort: true, title: '报名用户ID'},
-            {field: 'choosed', sort: true, title: '是否选中'},
+            {field: 'status', sort: true, title: '状态：0-待确定；1-已选中；2-未选中'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

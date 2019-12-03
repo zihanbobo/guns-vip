@@ -25,6 +25,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'updatedBy', sort: true, title: '更新人'},
             {field: 'updatedTime', sort: true, title: '更新时间'},
             {field: 'deleted', sort: true, title: '删除标识'},
+            {field: 'sn', sort: true, title: '订单号'},
             {field: 'userId', sort: true, title: '用户ID'},
             {field: 'amount', sort: true, title: '金额'},
             {field: 'payWay', sort: true, title: '提现方式 0-支付宝；1-微信'},

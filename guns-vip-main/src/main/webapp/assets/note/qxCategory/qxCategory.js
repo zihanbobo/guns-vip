@@ -26,6 +26,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'updatedTime', sort: true, title: '更新时间'},
             {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'name', sort: true, title: '品类名称'},
+            {field: 'orderNo', sort: true, title: '排序'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

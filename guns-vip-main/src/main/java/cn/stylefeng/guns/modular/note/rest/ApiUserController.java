@@ -25,24 +25,30 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.request.AlipaySystemOauthTokenRequest;
+import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.google.common.base.Strings;
 
 import cn.stylefeng.guns.core.CacheCodeUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.TokenUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
+import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.TOKEN;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxUserTo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
+import cn.stylefeng.guns.modular.note.service.QxUserSocialService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -64,7 +70,12 @@ import me.chanjar.weixin.mp.bean.result.WxMpUser;
 public class ApiUserController extends ApiBaseController {
 
 	private final WxMpService wxMpService;
+	
+	private final AlipayClient alipayClient;
 
+	@Resource
+	private QxUserSocialService qxUserSocialService;
+	
 	@Resource
 	private NoticeHelper noticeHelper;
 
@@ -84,16 +95,19 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	@PostMapping("/wx/login")
-	public Object wxLogin(String appId, String code) {
+	public Object wxLogin(String appId, String openCode) {
 		try {
-			QxUser qxUser = getUserByCode(appId, code);
+	        if (!this.wxMpService.switchover(appId)) {
+	            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appId));
+	        }
+			QxUser qxUser = getUserByCode(appId, openCode);
 			if (qxUser == null) {
 				throw new ServiceException("请先绑定手机号");
 			}
 			JSONObject result = generateToken(qxUser, false);
 			return ResultGenerator.genSuccessResult(result);
 		} catch (WxErrorException e) {
-			log.error("微信登录失败, /api/user/wx/login, code=" + code + ", error=" + e.getMessage());
+			log.error("微信登录失败, /api/user/wx/login, code=" + openCode + ", error=" + e.getMessage());
 			throw new ServiceException("微信登录失败");
 		}
 	}
@@ -196,28 +210,6 @@ public class ApiUserController extends ApiBaseController {
         response.sendRedirect(redirectUri);
     }
 	
-	/**
-	 * 微信公众号
-	 * @param appId
-	 * @param code
-	 * @return
-	 */
-	@GetMapping("/wx/getInfo")
-    public Object wxMpGetInfo(@PathVariable String appId, @RequestParam String code) {
-        if (!this.wxMpService.switchover(appId)) {
-            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appId));
-        }
-
-        try {
-            QxUser qxUser = getUserByCode(appId, code);
-            log.info("/api/wx/mp/getInfo, appid=" + appId + ", code=" + code);
-            return ResultGenerator.genSuccessResult(qxUser);
-        } catch (WxErrorException e) {
-        	log.error("获取用户信息出错，/api/user/getInfo, appid=" + appId + ", code=" + code + ", " + e.getMessage());
-            throw new ServiceException("获取用户信息出错");
-        }
-    }
-	
 	public WxMpUser getWxUserByCode(String code) throws WxErrorException{
 		WxMpOAuth2AccessToken accessToken = wxMpService.oauth2getAccessToken(code);
         return wxMpService.oauth2getUserInfo(accessToken, null);
@@ -226,5 +218,30 @@ public class ApiUserController extends ApiBaseController {
 	public QxUser getUserByCode(String appId, String code) throws WxErrorException {
 		WxMpUser wxUser = getWxUserByCode(code);
         return qxUserService.getUserByUnionId(appId, wxUser.getUnionId());
+	}
+	
+	@PostMapping("/alipay/auth")
+	public Object alipayAuth(String appId, String code) {
+		AlipaySystemOauthTokenRequest request = new AlipaySystemOauthTokenRequest();//创建API对应的request类
+		request.setGrantType("authorization_code");
+		request.setCode(code);
+		AlipaySystemOauthTokenResponse response;
+		try {
+			response = alipayClient.execute(request);
+		} catch (AlipayApiException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		String alipayUserId = response.getUserId();
+		QxUser user = qxUserService.getUserByOpenId(appId, alipayUserId);
+		if (user != null) {
+			throw new ServiceException("支付宝已绑定");
+		}
+		QxUserSocial userSocial = new QxUserSocial();
+		userSocial.setUserId(getRequestUserId());
+		userSocial.setOpenId(alipayUserId);
+		userSocial.setAppId(appId);
+		userSocial.setType(SOCIAL_TYPE.ALIPAY);
+		qxUserSocialService.saveOrUpdate(userSocial);
+		return ResultGenerator.genSuccessResult();
 	}
 }

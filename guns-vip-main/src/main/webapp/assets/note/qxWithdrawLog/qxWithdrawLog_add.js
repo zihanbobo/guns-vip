@@ -9,6 +9,7 @@ var QxWithdrawLogInfoDlg = {
         updatedBy: "",
         updatedTime: "",
         deleted: "",
+        sn: "",
         userId: "",
         amount: "",
         payWay: "",

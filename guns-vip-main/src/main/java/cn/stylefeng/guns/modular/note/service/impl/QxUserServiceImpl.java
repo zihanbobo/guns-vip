@@ -170,4 +170,9 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 		queryWrapper.eq("invite_code", parentInviteCode);
 		return this.getOne(queryWrapper);
 	}
+
+	@Override
+	public QxUser getUserByOpenId(String appId, String openId) {
+		return this.baseMapper.getUserByOpenId(appId, openId);
+	}
 }

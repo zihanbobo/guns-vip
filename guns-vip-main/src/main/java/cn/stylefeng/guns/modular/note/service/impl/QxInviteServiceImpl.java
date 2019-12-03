@@ -25,12 +25,15 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.ALERT_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxInviteCommentTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteQueryTo;
 import cn.stylefeng.guns.modular.note.dto.QxInviteTo;
+import cn.stylefeng.guns.modular.note.dto.QxPayResult;
 import cn.stylefeng.guns.modular.note.entity.QxAlert;
 import cn.stylefeng.guns.modular.note.entity.QxComplaint;
 import cn.stylefeng.guns.modular.note.entity.QxInvite;
@@ -49,7 +52,7 @@ import cn.stylefeng.guns.modular.note.pojo.QxInviteUserPojo;
 import cn.stylefeng.guns.modular.note.service.QxAlertService;
 import cn.stylefeng.guns.modular.note.service.QxComplaintService;
 import cn.stylefeng.guns.modular.note.service.QxInviteCommentService;
-import  cn.stylefeng.guns.modular.note.service.QxInviteService;
+import cn.stylefeng.guns.modular.note.service.QxInviteService;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,7 +61,7 @@ import lombok.extern.slf4j.Slf4j;
  * 约单表 服务实现类
  * </p>
  *
- * @author 
+ * @author
  * @since 2019-11-18
  */
 @Slf4j
@@ -67,90 +70,97 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 
 	@Resource
 	private ConfigEntity configEntity;
-	
+
 	@Resource
 	private QxUserMapper qxUserMapper;
-	
+
 	@Resource
 	private QxInviteMapper qxInviteMapper;
-	
+
 	@Resource
 	private QxInviteApplyMapper qxInviteApplyMapper;
-	
+
 	@Resource
 	private QxInviteOperateMapper qxInviteOperateMapper;
-	
+
 	@Resource
 	private QxComplaintService qxComplaintService;
-	
+
 	@Resource
 	private QxInviteCommentService qxInviteCommentSerivce;
-	
+
 	@Resource
 	private QxAlertService qxAlertService;
-	
+
 	@Resource
 	private NoticeHelper noticeHelper;
-    
-	@Override
-    public void add(QxInviteParam param){
-        QxInvite entity = getEntity(param);
-        this.save(entity);
-    }
 
-    @Override
-    public void delete(QxInviteParam param){
-        this.removeById(getKey(param));
-    }
+	@Resource
+	private QxCoinHelper qxCoinHelper;
 
-    @Override
-    public void update(QxInviteParam param){
-        QxInvite oldEntity = getOldEntity(param);
-        QxInvite newEntity = getEntity(param);
-        ToolUtil.copyProperties(newEntity, oldEntity);
-        this.updateById(newEntity);
-    }
-
-    @Override
-    public QxInviteResult findBySpec(QxInviteParam param){
-        return null;
-    }
-
-    @Override
-    public List<QxInviteResult> findListBySpec(QxInviteParam param){
-        return null;
-    }
-
-    @Override
-    public LayuiPageInfo findPageBySpec(QxInviteParam param){
-        Page pageContext = getPageContext();
-        IPage page = this.baseMapper.customPageList(pageContext, param);
-        return LayuiPageFactory.createPageInfo(page);
-    }
-
-    private Serializable getKey(QxInviteParam param){
-        return param.getId();
-    }
-
-    private Page getPageContext() {
-        return LayuiPageFactory.defaultPage();
-    }
-
-    private QxInvite getOldEntity(QxInviteParam param) {
-        return this.getById(getKey(param));
-    }
-
-    private QxInvite getEntity(QxInviteParam param) {
-        QxInvite entity = new QxInvite();
-        ToolUtil.copyProperties(param, entity);
-        return entity;
-    }
+	@Resource
+	private QxPayLogHelper qxPayLogHelper;
 
 	@Override
-    @Transactional(rollbackFor = Exception.class)
+	public void add(QxInviteParam param) {
+		QxInvite entity = getEntity(param);
+		this.save(entity);
+	}
+
+	@Override
+	public void delete(QxInviteParam param) {
+		this.removeById(getKey(param));
+	}
+
+	@Override
+	public void update(QxInviteParam param) {
+		QxInvite oldEntity = getOldEntity(param);
+		QxInvite newEntity = getEntity(param);
+		ToolUtil.copyProperties(newEntity, oldEntity);
+		this.updateById(newEntity);
+	}
+
+	@Override
+	public QxInviteResult findBySpec(QxInviteParam param) {
+		return null;
+	}
+
+	@Override
+	public List<QxInviteResult> findListBySpec(QxInviteParam param) {
+		return null;
+	}
+
+	@Override
+	public LayuiPageInfo findPageBySpec(QxInviteParam param) {
+		Page pageContext = getPageContext();
+		IPage page = this.baseMapper.customPageList(pageContext, param);
+		return LayuiPageFactory.createPageInfo(page);
+	}
+
+	private Serializable getKey(QxInviteParam param) {
+		return param.getId();
+	}
+
+	private Page getPageContext() {
+		return LayuiPageFactory.defaultPage();
+	}
+
+	private QxInvite getOldEntity(QxInviteParam param) {
+		return this.getById(getKey(param));
+	}
+
+	private QxInvite getEntity(QxInviteParam param) {
+		QxInvite entity = new QxInvite();
+		ToolUtil.copyProperties(param, entity);
+		return entity;
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void addInvite(Long requestUserId, QxInviteTo inviteTo) {
 		QxInvite invite = new QxInvite();
 		BeanUtils.copyProperties(inviteTo, invite);
+		invite.setInviter(requestUserId);
 		invite.setSn(CommonUtils.getSerialNumber());
 		invite.setStatus(INVITE_STATUS.WAIT_MATCH);
 		this.baseMapper.insert(invite);
@@ -166,12 +176,17 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	}
 
 	@Override
+	public List<QxInviteUserPojo> applicants(Long inviteId) {
+		return this.baseMapper.getInviteUsers(inviteId);
+	}
+
+	@Override
 	public void choose(Long inviteId, Long userId) {
 		chooseApply(inviteId, userId);
 		updateInviteStatus(inviteId, userId, INVITE_STATUS.MATCHED);
 		notifyInvitee(inviteId);
 	}
-	
+
 	public void chooseApply(Long inviteId, Long userId) {
 		// 更新选中的报名状态
 		UpdateWrapper<QxInviteApply> chooseUpdateWrapper = new UpdateWrapper<>();
@@ -186,7 +201,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		rejectModel.setStatus(INVITE_APPLY_STATUS.REJECT);
 		qxInviteApplyMapper.update(rejectModel, rejectUpdateWrapper);
 	}
-	
+
 	public void updateInviteStatus(Long invitedId, Long invitee, String status) {
 		UpdateWrapper<QxInvite> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.eq("id", invitedId);
@@ -197,15 +212,15 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		model.setStatus(status);
 		this.baseMapper.update(model, updateWrapper);
 	}
-	
+
 	private void notifyInvitee(Long inviteId) {
 		List<QxInviteUserPojo> list = this.baseMapper.getInviteUsers(inviteId);
 		for (QxInviteUserPojo inviteUser : list) {
 			int tag = 0;
 			String account = inviteUser.getMobile();
 			Map<String, String> pairs = new HashMap<>();
-			
-			if (inviteUser.getChoosed()) {
+
+			if (INVITE_STATUS.MATCHED.equals(inviteUser.getStatus())) {
 				// 发送选中消息
 				tag = SMS_CODE.INVITE_SUCCESS;
 				log.info("User " + inviteUser.getMobile() + "被选中");
@@ -245,7 +260,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			changeQxInviteStatus(inviteId, INVITE_STATUS.DATING);
 		}
 	}
-	
+
 	public void createInviteOperate(Long inviteId, Long userId, String type) {
 		QxInviteOperate inviteOperate = new QxInviteOperate();
 		inviteOperate.setInviteId(inviteId);
@@ -253,14 +268,14 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		inviteOperate.setType(type);
 		qxInviteOperateMapper.insert(inviteOperate);
 	}
-	
+
 	public Boolean checkOtherSideOperate(Long inviteId, Long userId, String type) {
 		QueryWrapper<QxInviteOperate> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("invite_id", inviteId).eq("type", type).ne("user_id", userId);
 		int count = qxInviteOperateMapper.selectCount(queryWrapper);
 		return count > 0;
 	}
-	
+
 	public void changeQxInviteStatus(Long inviteId, String status) {
 		UpdateWrapper<QxInvite> updateWrapper = new UpdateWrapper<>();
 		updateWrapper.eq("id", inviteId);
@@ -272,10 +287,26 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	@Override
 	public void finish(Long inviteId, Long requestUserId) {
 		createInviteOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH);
-		if (checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH)) {
+		if (Boolean.TRUE.equals(checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH))) {
 			changeQxInviteStatus(inviteId, INVITE_STATUS.FINISH);
-			// TODO：对应金币转入到对方
+			payCoin(inviteId);
 		}
+	}
+
+	public void payCoin(Long inviteId) {
+		QxInvite invite = this.getById(inviteId);
+		Long payerId;
+		Long payeeId;
+		if (invite.getInviteType().equals(INVITE_TYPE.ACTIVE)) {
+			payerId = invite.getInviter();
+			payeeId = invite.getInvitee();
+		} else {
+			payerId = invite.getInvitee();
+			payeeId = invite.getInviter();
+		}
+		QxPayResult payResult = qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId());
+		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_OUT);
+		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_IN);
 	}
 
 	@Override
@@ -317,7 +348,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		saveAlert(userId, invite.getId());
 		sendAlert(invite, otherUser, emergencyContact);
 	}
-	
+
 	public void saveAlert(Long userId, Long inviteId) {
 		QxAlert alert = new QxAlert();
 		alert.setUserId(userId);
@@ -325,7 +356,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		alert.setStatus(ALERT_STATUS.UNHANDLE);
 		qxAlertService.save(alert);
 	}
-	
+
 	public void sendAlert(QxInvite invite, QxUser otherUser, String emergencyContact) {
 		Map<String, String> pairs = new HashMap<>();
 		pairs.put("inviteTime", invite.getInviteTime().toString());
@@ -336,6 +367,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 
 	@Override
 	public Page<List<QxInviteSearchPojo>> search(Page page, QxInviteQueryTo inviteQueryTo) {
-		return this.baseMapper.search(page, configEntity.getInviteRange(), inviteQueryTo.getLongitude(), inviteQueryTo.getLatitude(), inviteQueryTo.getContent());
+		return this.baseMapper.search(page, configEntity.getInviteRange(), inviteQueryTo.getLongitude(),
+				inviteQueryTo.getLatitude(), inviteQueryTo.getContent());
 	}
 }
