@@ -23,6 +23,16 @@ public final class ProjectConstants {
 		String WECHAT = "0";
 		String ALIPAY = "1";
 	}
+	
+	/**
+	 * 用户状态：0-正常;1-禁用
+	 * @author steven
+	 *
+	 */
+	public interface USER_STATUS {
+		String ENABLE = "0";
+		String DISABLE = "1";
+	}
 
 	/**
 	 * 通知类型：0-短信，1-邮箱，2-消息；

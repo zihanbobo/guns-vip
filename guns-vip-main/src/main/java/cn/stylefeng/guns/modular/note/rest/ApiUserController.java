@@ -43,6 +43,7 @@ import cn.stylefeng.guns.core.TokenUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.TOKEN;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxUserTo;
@@ -81,14 +82,12 @@ public class ApiUserController extends ApiBaseController {
 
 	@PostMapping("/login")
 	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
-		boolean newUser;
+		boolean newUser = false;
 		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 		QxUser user = qxUserService.getUserByAccount(mobile);
 		if (user == null) {
 			user = qxUserService.performRegister(mobile);
 			newUser = true;
-		} else {
-			newUser = false;
 		}
 		JSONObject result = generateToken(user, newUser);
 		return ResultGenerator.genSuccessResult(result);
@@ -115,14 +114,12 @@ public class ApiUserController extends ApiBaseController {
 	@PostMapping("/wx/bindUser")
 	public Object bindUser(String mobile, String code, String openCode) {
 		try {
-			boolean newUser;
+			boolean newUser = false;
 			validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 			WxMpUser wxUser = getWxUserByCode(openCode);
 			QxUser user = qxUserService.getUserByAccount(mobile);
 			if (user == null) {
 				newUser = true;
-			} else {
-				newUser = false;
 			}
 			user = qxUserService.wxBindUser(mobile, wxUser.getOpenId(), wxUser.getUnionId());
 			JSONObject result = generateToken(user, newUser);
@@ -140,6 +137,10 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	private JSONObject generateToken(QxUser user, boolean newUser) {
+		// 检查用户是否被禁用
+		if (USER_STATUS.DISABLE.equals(user.getStatus())) {
+			throw new ServiceException("用户账号被禁用");
+		}
 		String accessId = TOKEN.USER + user.getId();
 		String token = TokenUtils.createToken(accessId);
 		cacheValueSecond(accessId, 60 * 60 * 24 * 30, token);
