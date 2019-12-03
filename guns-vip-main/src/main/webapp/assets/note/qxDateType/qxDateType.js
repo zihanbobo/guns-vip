@@ -25,6 +25,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'updatedBy', sort: true, title: '更新人'},
             {field: 'updatedTime', sort: true, title: '更新时间'},
             {field: 'name', sort: true, title: '名称'},
+            {field: 'orderNo', sort: true, title: '排序'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

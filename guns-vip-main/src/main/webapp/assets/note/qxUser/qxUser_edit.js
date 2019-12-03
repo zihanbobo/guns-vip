@@ -17,7 +17,10 @@ var QxUserInfoDlg = {
         avatar: "",
         status: "",
         score: "",
-        balance: ""
+        balance: "",
+        freeze: "",
+        inviteCode: "",
+        parentId: ""
     }
 };
 

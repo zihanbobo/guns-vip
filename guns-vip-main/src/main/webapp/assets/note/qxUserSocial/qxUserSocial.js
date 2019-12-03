@@ -26,8 +26,10 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'updatedTime', sort: true, title: '更新时间'},
             {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'userId', sort: true, title: '用户ID'},
+            {field: 'appId', sort: true, title: 'APPID'},
             {field: 'openId', sort: true, title: '社交开放平台ID'},
-            {field: 'type', sort: true, title: '社交平台类型 0-微信;'},
+            {field: 'unionId', sort: true, title: 'UnionId，微信特有'},
+            {field: 'type', sort: true, title: '社交平台类型 0-微信;1-支付宝;'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

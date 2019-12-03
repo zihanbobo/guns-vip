@@ -10,7 +10,9 @@ var QxUserSocialInfoDlg = {
         updatedTime: "",
         deleted: "",
         userId: "",
+        appId: "",
         openId: "",
+        unionId: "",
         type: ""
     }
 };

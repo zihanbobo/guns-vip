@@ -27,7 +27,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'userId', sort: true, title: '用户ID'},
             {field: 'amount', sort: true, title: '金额'},
-            {field: 'type', sort: true, title: '流水类型 0-购买礼物汇入'},
+            {field: 'type', sort: true, title: '流水类型：0-充值购买金币汇入；1-金币提现支出'},
             {field: 'payWay', sort: true, title: '支付方式 0-支付宝；1-微信'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];

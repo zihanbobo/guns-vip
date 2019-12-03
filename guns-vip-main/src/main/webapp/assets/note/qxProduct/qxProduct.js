@@ -30,7 +30,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'headImages', sort: true, title: '轮播图片列表'},
             {field: 'detailImages', sort: true, title: '详情图片列表'},
             {field: 'price', sort: true, title: '兑换金币价格'},
-            {field: 'untitled', sort: true, title: '库存数量'},
+            {field: 'stock', sort: true, title: '库存数量'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

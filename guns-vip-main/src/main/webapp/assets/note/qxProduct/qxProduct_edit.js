@@ -14,7 +14,7 @@ var QxProductInfoDlg = {
         headImages: "",
         detailImages: "",
         price: "",
-        untitled: ""
+        stock: ""
     }
 };
 

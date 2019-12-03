@@ -8,7 +8,8 @@ var QxDateTypeInfoDlg = {
         createdTime: "",
         updatedBy: "",
         updatedTime: "",
-        name: ""
+        name: "",
+        orderNo: ""
     }
 };
 
