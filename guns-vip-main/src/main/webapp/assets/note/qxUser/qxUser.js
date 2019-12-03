@@ -1,5 +1,6 @@
 layui.use(['table', 'admin', 'ax', 'func'], function () {
     var $ = layui.$;
+    var form = layui.form;
     var table = layui.table;
     var $ax = layui.ax;
     var admin = layui.admin;
@@ -19,24 +20,14 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'mobile', sort: true, title: '手机号'},
-            {field: 'nickname', sort: true, title: '昵称'},
-            {field: 'age', sort: true, title: '年龄'},
-            {field: 'height', sort: true, title: '身高'},
-            {field: 'sex', sort: true, title: '性别 0-男;1-女'},
-            {field: 'avatar', sort: true, title: '头像'},
-            {field: 'status', sort: true, title: '状态 0-正常；1-禁用'},
+            {field: 'nickname', sort: false, title: '昵称'},
+            {field: 'mobile', sort: false, title: '手机'},
+            {field: 'sex', sort: true, title: '性别', templet: function(d){
+            	return d.sex == 0 ? '男' : '女';
+            }},
             {field: 'score', sort: true, title: '信用分'},
-            {field: 'balance', sort: true, title: '金币余额（可提现）'},
-            {field: 'freeze', sort: true, title: '冻结余额（不可提现）'},
-            {field: 'inviteCode', sort: true, title: '我的邀请码'},
-            {field: 'parentId', sort: true, title: '邀请人ID'},
+            {field: 'createdTime', sort: true, title: '创建时间'},
+            {field: 'status', sort: true, title: '状态', templet: '#statusTpl'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };
@@ -107,6 +98,16 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         Feng.confirm("是否删除?", operation);
     };
 
+    QxUser.changeUserStatus = function(id, checked) {
+    	var ajax = new $ax(Feng.ctxPath + "/qxUser/changeUserStatus", function(data) {
+    		Feng.success("修改状态成功!");
+    	}, function(data) {
+    		Feng.error("修改状态失败!");
+    		table.reload(QxUser.tableId);
+    	});
+    	ajax.set({'id': id, 'status': checked});
+    	ajax.start();
+    }
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + QxUser.tableId,
@@ -142,5 +143,11 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         } else if (layEvent === 'delete') {
             QxUser.onDeleteItem(data);
         }
+    });
+    
+    form.on('switch(status)', function(obj){
+    	var id = obj.elem.value;
+    	var checked = obj.elem.checked ? '0':'1';
+    	QxUser.changeUserStatus(id, checked);
     });
 });

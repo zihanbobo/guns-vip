@@ -1,15 +1,18 @@
 package cn.stylefeng.guns.modular.note.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
 import cn.stylefeng.guns.modular.note.service.QxUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
@@ -122,6 +125,15 @@ public class QxUserController extends BaseController {
     @RequestMapping("/list")
     public LayuiPageInfo list(QxUserParam qxUserParam) {
         return this.qxUserService.findPageBySpec(qxUserParam);
+    }
+    
+    @ResponseBody
+    @RequestMapping("/changeUserStatus")
+    public Object changeUserStatus(Long id, String status) {
+    	UpdateWrapper<QxUser> updateWrapper = new UpdateWrapper<>();
+    	updateWrapper.eq("id", id).set("status", status);
+    	this.qxUserService.update(updateWrapper);
+    	return ResponseData.success();
     }
 
 }
