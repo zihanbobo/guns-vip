@@ -37,7 +37,8 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      */
     QxUser.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['nickname'] = $("#nickname").val();
+        queryData['mobile'] = $("#mobile").val();
         table.reload(QxUser.tableId, {
             where: queryData, page: {curr: 1}
         });

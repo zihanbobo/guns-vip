@@ -46,19 +46,19 @@
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxUserResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxUserParam">
         select
         <include refid="Base_Column_List"/>
-        from qx_user where 1 = 1
-			<if test="paramCondition.deleted != null and paramCondition.deleted != ''">
-                and deleted like CONCAT('%',#{paramCondition.deleted},'%')
-            </if>
+        from qx_user where 1 = 1 and deleted = 0
+        <if test="paramCondition.nickname != null and paramCondition.nickname !=''">
+        	and nickname like CONCAT('%', #{paramCondition.nickname}, '%')
+        </if>
+        <if test="paramCondition.mobile != null and paramCondition.mobile != ''">
+        	and mobile like CONCAT('%', #{paramCondition.mobile}, '%')
+        </if>
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxUserParam">
         select
         <include refid="Base_Column_List"/>
         from qx_user where 1 = 1
-        <if test="paramCondition.deleted != null and paramCondition.deleted != ''">
-                and deleted = #{paramCondition.deleted}
-            </if>
     </select>
 
 	<select id="getByAccount" resultType="cn.stylefeng.guns.modular.note.entity.QxUser">
