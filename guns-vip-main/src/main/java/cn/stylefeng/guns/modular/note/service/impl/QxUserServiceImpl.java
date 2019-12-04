@@ -51,7 +51,9 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 
 	@Override
 	public void delete(QxUserParam param) {
-		this.removeById(getKey(param));
+		QxUser entity = getEntity(param);
+		entity.setDeleted(true);
+		this.updateById(entity);
 	}
 
 	@Override

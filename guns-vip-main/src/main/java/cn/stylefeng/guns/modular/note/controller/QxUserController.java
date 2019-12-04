@@ -124,6 +124,7 @@ public class QxUserController extends BaseController {
     @ResponseBody
     @RequestMapping("/list")
     public LayuiPageInfo list(QxUserParam qxUserParam) {
+    	qxUserParam.setDeleted(false);
         return this.qxUserService.findPageBySpec(qxUserParam);
     }
     
