@@ -19,14 +19,16 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'rate', sort: true, title: '比例'},
-            {field: 'type', sort: true, title: '类型 类型：0-金币兑换比例;1-提现手续费'},
+            {field: 'type', align: 'center', sort: true, title: '类型', templet: function(d){
+            	if (d.type == 0) {
+            		return '金币兑换比例';
+            	} else if (d.type == 1) {
+            		return '提现手续费比例';
+            	} else {
+            		return '';
+            	}
+            }},
+            {field: 'rate', align: 'center', sort: true, title: '比例'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };
