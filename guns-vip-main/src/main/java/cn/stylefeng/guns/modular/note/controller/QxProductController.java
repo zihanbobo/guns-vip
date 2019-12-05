@@ -121,6 +121,8 @@ public class QxProductController extends BaseController {
     @ResponseBody
     @RequestMapping("/list")
     public LayuiPageInfo list(QxProductParam qxProductParam) {
+    	LayuiPageInfo pageInfo = this.qxProductService.findPageBySpec(qxProductParam);
+    	
         return this.qxProductService.findPageBySpec(qxProductParam);
     }
 
