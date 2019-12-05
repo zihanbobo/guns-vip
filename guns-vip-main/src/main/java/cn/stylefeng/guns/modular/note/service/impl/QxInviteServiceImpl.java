@@ -109,7 +109,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 
 	@Override
 	public void delete(QxInviteParam param) {
-		this.removeById(getKey(param));
+		QxInvite entity = getEntity(param);
+		entity.setDeleted(true);
+		this.updateById(entity);
 	}
 
 	@Override

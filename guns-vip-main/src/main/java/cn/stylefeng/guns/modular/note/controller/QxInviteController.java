@@ -1,15 +1,20 @@
 package cn.stylefeng.guns.modular.note.controller;
 
-import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
-import cn.stylefeng.guns.modular.note.entity.QxInvite;
-import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
-import cn.stylefeng.guns.modular.note.service.QxInviteService;
-import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.dvo.QxInviteAdminVo;
+import cn.stylefeng.guns.modular.note.entity.QxInvite;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.model.params.QxInviteParam;
+import cn.stylefeng.guns.modular.note.service.QxInviteService;
+import cn.stylefeng.guns.modular.note.service.QxUserService;
+import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
 
 
 /**
@@ -26,6 +31,9 @@ public class QxInviteController extends BaseController {
 
     @Autowired
     private QxInviteService qxInviteService;
+    
+    @Autowired
+    private QxUserService qxUserService;
 
     /**
      * 跳转到主页面
@@ -109,7 +117,21 @@ public class QxInviteController extends BaseController {
     @ResponseBody
     public ResponseData detail(QxInviteParam qxInviteParam) {
         QxInvite detail = this.qxInviteService.getById(qxInviteParam.getId());
-        return ResponseData.success(detail);
+        QxUser inviter = qxUserService.getById(detail.getInviter());
+        QxUser invitee = null;
+        if (detail.getInvitee() != null) {
+        	invitee = qxUserService.getById(detail.getInvitee());
+        }
+        QxInviteAdminVo vo = new QxInviteAdminVo();
+        BeanUtils.copyProperties(detail, vo);
+        vo.setInviterName(inviter.getNickname());
+        vo.setInviterMobile(inviter.getMobile());
+        if (invitee != null) {
+            vo.setInviteeName(invitee.getNickname());
+            vo.setInviteeMobile(invitee.getMobile());
+        }
+
+        return ResponseData.success(vo);
     }
 
     /**

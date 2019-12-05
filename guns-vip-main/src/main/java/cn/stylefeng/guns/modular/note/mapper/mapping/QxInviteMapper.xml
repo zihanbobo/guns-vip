@@ -51,7 +51,10 @@
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxInviteResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
         select
         <include refid="Base_Column_List"/>
-        from qx_invite where 1 = 1
+        from qx_invite where 1 = 1 and deleted = 0
+        <if test="paramCondition.sn != null and paramCondition.sn != ''">
+        	and sn like CONCAT('%', #{paramCondition.sn}, '%')
+        </if>
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">

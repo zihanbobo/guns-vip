@@ -8,57 +8,21 @@
                 <div class="layui-form-item layui-row">
                     <input name="id" type="hidden"/>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">乐观锁<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="version" name="version" placeholder="请输入乐观锁" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">创建人<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="createdBy" name="createdBy" placeholder="请输入创建人" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">创建时间<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="createdTime" name="createdTime" placeholder="请输入创建时间" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">更新人<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="updatedBy" name="updatedBy" placeholder="请输入更新人" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">更新时间<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="updatedTime" name="updatedTime" placeholder="请输入更新时间" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">约单单号<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
                             <input id="sn" name="sn" placeholder="请输入约单单号" type="text" class="layui-input" lay-verify="required" required/>
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">删除标识<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="deleted" name="deleted" placeholder="请输入删除标识" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">邀请人<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="inviter" name="inviter" placeholder="请输入邀请人" type="text" class="layui-input" lay-verify="required" required/>
+                            <input id="inviterName" name="inviterName" placeholder="请输入邀请人" type="text" class="layui-input" lay-verify="required" required/>
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">被邀请人<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="invitee" name="invitee" placeholder="请输入被邀请人" type="text" class="layui-input" lay-verify="required" required/>
+                            <input id="inviteeName" name="inviteeName" placeholder="请输入被邀请人" type="text" class="layui-input" lay-verify="required" required/>
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
@@ -68,86 +32,90 @@
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">约单类型 0-主动约；1-被动约<span style="color: red;">*</span></label>
+                        <label class="layui-form-label">约单类型<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="inviteType" name="inviteType" placeholder="请输入约单类型 0-主动约；1-被动约" type="text" class="layui-input" lay-verify="required" required/>
+                        	<input type="radio" name="inviteType" value="0" title="主动约" checked />
+                        	<input type="radio" name="inviteType" value="1" title="被动约" />
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">约会类型<span style="color: red;">*</span></label>
+                        <label class="layui-form-label">状态<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="dateTypeId" name="dateTypeId" placeholder="请输入约会类型" type="text" class="layui-input" lay-verify="required" required/>
+                            <select id="status">
+                            	<option value="0">待配对</option>
+                            	<option value="1">已配对</option>
+                            	<option value="2">进行中</option>
+                            	<option value="3">已完成</option>
+                            	<option value="4">已取消</option>
+                            	<option value="5">已投诉</option>
+                            </select>
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">扣款种类 礼物ID<span style="color: red;">*</span></label>
+                        <label class="layui-form-label">约单方式<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="giftId" name="giftId" placeholder="请输入扣款种类 礼物ID" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">经度<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="longitude" name="longitude" placeholder="请输入经度" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">纬度<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="latitude" name="latitude" placeholder="请输入纬度" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">省<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="province" name="province" placeholder="请输入省" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">市<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="city" name="city" placeholder="请输入市" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">区县<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="district" name="district" placeholder="请输入区县" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">街道名称<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="street" name="street" placeholder="请输入街道名称" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">门牌号码<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="streetNumber" name="streetNumber" placeholder="请输入门牌号码" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="status" name="status" placeholder="请输入状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">约单方式：0-单独约；1-报名约<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="inviteWay" name="inviteWay" placeholder="请输入约单方式：0-单独约；1-报名约" type="text" class="layui-input" lay-verify="required" required/>
+                            <input type="radio" name="inviteWay" value="0" title="单独约" checked />
+                        	<input type="radio" name="inviteWay" value="1" title="报名约" />
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">约单描述<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="content" name="content" placeholder="请输入约单描述" type="text" class="layui-input" lay-verify="required" required/>
+                            <textarea id="content" name="content" placeholder="请输入约单描述" class="layui-textarea" lay-verify="required" required></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    	<div class="layui-card">
+    		<div class="layui-card-header">位置信息</div>
+    		<div class="layui-card-body">
+    			<div class="layui-form-item layui-row">
+    				<div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">经度</label>
+                        <div class="layui-input-block">
+                            <input id="longitude" name="longitude" placeholder="请输入经度" type="text" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">纬度</label>
+                        <div class="layui-input-block">
+                            <input id="latitude" name="latitude" placeholder="请输入纬度" type="text" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">省</label>
+                        <div class="layui-input-block">
+                            <input id="province" name="province" placeholder="请输入省" type="text" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">市</label>
+                        <div class="layui-input-block">
+                            <input id="city" name="city" placeholder="请输入市" type="text" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">区县</label>
+                        <div class="layui-input-block">
+                            <input id="district" name="district" placeholder="请输入区县" type="text" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">街道名称</label>
+                        <div class="layui-input-block">
+                            <input id="street" name="street" placeholder="请输入街道名称" type="text" class="layui-input" />
+                        </div>
+                    </div>
+                    <div class="layui-inline layui-col-md12">
+                        <label class="layui-form-label">门牌号码</label>
+                        <div class="layui-input-block">
+                            <input id="streetNumber" name="streetNumber" placeholder="请输入门牌号码" type="text" class="layui-input" />
+                        </div>
+                    </div>
+    			</div>
+    		</div>
+    	</div>
     </div>
     <div class="form-group-bottom text-center">
         <button class="layui-btn" lay-filter="btnSubmit" lay-submit>&emsp;提交&emsp;</button>

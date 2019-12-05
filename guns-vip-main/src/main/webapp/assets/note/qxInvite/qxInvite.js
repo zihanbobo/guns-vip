@@ -19,30 +19,31 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'sn', sort: true, title: '约单单号'},
-            {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'inviter', sort: true, title: '邀请人'},
-            {field: 'invitee', sort: true, title: '被邀请人'},
-            {field: 'inviteTime', sort: true, title: '邀请时间'},
-            {field: 'inviteType', sort: true, title: '约单类型 0-主动约；1-被动约'},
-            {field: 'dateTypeId', sort: true, title: '约会类型'},
-            {field: 'giftId', sort: true, title: '扣款种类 礼物ID'},
-            {field: 'longitude', sort: true, title: '经度'},
-            {field: 'latitude', sort: true, title: '纬度'},
-            {field: 'province', sort: true, title: '省'},
-            {field: 'city', sort: true, title: '市'},
-            {field: 'district', sort: true, title: '区县'},
-            {field: 'street', sort: true, title: '街道名称'},
-            {field: 'streetNumber', sort: true, title: '门牌号码'},
-            {field: 'status', sort: true, title: '状态 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉'},
-            {field: 'inviteWay', sort: true, title: '约单方式：0-单独约；1-报名约'},
+            {field: 'sn', sort: true, title: '约单单号', width: 320},
+            {field: 'inviteTime', sort: true, width: 160, title: '邀请时间'},
+            {field: 'location', sort: false, title: '地点', templet: function(d) {
+            	return d.province + d.city + d.district + d.street + d.streetNumber;
+            }},
             {field: 'content', sort: true, title: '约单描述'},
-            {align: 'center', toolbar: '#tableBar', title: '操作'}
+            {field: 'status', sort: true, title: '状态', width: 80, templet: function(d) {
+            	// 0-待配对;1-已配对;2-进行中;3-已完成;4-已取消;5-已投诉
+            	if (d.status == '0') {
+            		return '待配对';
+            	} else if (d.status == '1') {
+            		return '已配对';
+            	} else if (d.status == '2') {
+            		return '进行中';
+            	} else if (d.status == '3') {
+            		return '已完成';
+            	} else if (d.status == '4') {
+            		return '已取消';
+            	} else if (d.status == '5') {
+            		return '已投诉';
+            	} else {
+            		return '';
+            	}
+            }},
+            {align: 'center', toolbar: '#tableBar', width: 160, title: '操作'}
         ]];
     };
 
@@ -51,7 +52,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      */
     QxInvite.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['sn'] = $("#sn").val();
         table.reload(QxInvite.tableId, {
             where: queryData, page: {curr: 1}
         });
