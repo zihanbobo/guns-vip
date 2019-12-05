@@ -23,6 +23,7 @@ layui.use(['form', 'admin', 'ax'], function () {
     var $ax = layui.ax;
     var form = layui.form;
     var admin = layui.admin;
+    var formSelects = layui.formSelects;
 
     //让当前iframe弹层高度适应
     // admin.iframeAuto();
@@ -32,6 +33,23 @@ layui.use(['form', 'admin', 'ax'], function () {
     var result = ajax.start();
     form.val('qxProductForm', result.data);
 
+    var getCategories = function() {
+        // 初始化产品类别
+        $("#categoryId").html('<option value="">请选择产品分类</option>');
+        var ajax = new $ax(Feng.ctxPath + "/qxCategory/list", function(data){
+        	for (var i = 0; i < data.data.length;i++) {
+        		var categoryId = data.data[i].id;
+        		var categoryName = data.data[i].name;
+        		$("#categoryId").append('<option value="' + categoryId + '">' + categoryName + '</option>');
+        	}
+        	form.render();
+        }, function (data) {
+        	
+        });
+        ajax.start();
+    }
+    getCategories();
+    
     //表单提交事件
     form.on('submit(btnSubmit)', function (data) {
         var ajax = new $ax(Feng.ctxPath + "/qxProduct/editItem", function (data) {
@@ -51,5 +69,7 @@ layui.use(['form', 'admin', 'ax'], function () {
 
         return false;
     });
-
+    
+    $("#categoryId").val(result.data.categoryId);
+    form.render();
 });

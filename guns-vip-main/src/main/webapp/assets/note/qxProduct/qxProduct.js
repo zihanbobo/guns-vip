@@ -20,7 +20,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
             {field: 'productName', sort: true, title: '商品名称'},
-            {field: 'categoryId', sort: true, title: '品类ID'},
+            {field: 'categoryName', sort: true, title: '品类'},
             {field: 'price', sort: true, title: '兑换金币价格'},
             {field: 'stock', sort: true, title: '库存数量'},
             {field: 'createdTime', sort: true, title: '创建时间'},

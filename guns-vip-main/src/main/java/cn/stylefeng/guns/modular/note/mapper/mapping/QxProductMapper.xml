@@ -38,9 +38,8 @@
     </select>
 
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxProductResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxProductParam">
-        select
-        <include refid="Base_Column_List"/>
-        from qx_product where 1 = 1
+        select a.id AS "id", a.product_name AS "productName", b.name as "categoryName", a.price as "price", a.stock as "stock", a.created_time as "createdTime"
+        from qx_product a left join qx_category b on a.category_id = b.id where 1 = 1
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxProductParam">

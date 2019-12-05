@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 /**
  * 商品品类表控制器
  *
@@ -123,7 +122,4 @@ public class QxCategoryController extends BaseController {
     public LayuiPageInfo list(QxCategoryParam qxCategoryParam) {
         return this.qxCategoryService.findPageBySpec(qxCategoryParam);
     }
-
 }
-
-

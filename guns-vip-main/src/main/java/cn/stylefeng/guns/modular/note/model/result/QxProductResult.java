@@ -58,6 +58,11 @@ public class QxProductResult implements Serializable {
      * 品类ID
      */
     private Long categoryId;
+    
+    /**
+     * 品类名称
+     */
+    private String categoryName;
 
     /**
      * 商品名称
