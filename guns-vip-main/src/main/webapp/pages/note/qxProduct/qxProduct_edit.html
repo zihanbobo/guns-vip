@@ -21,17 +21,29 @@
                             <input id="productName" name="productName" placeholder="请输入商品名称" type="text" class="layui-input" lay-verify="required" required/>
                         </div>
                     </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">轮播图片列表<span style="color: red;">*</span></label>
+                    <input type="hidden" id="headImages" name="headImages" class="head_images_show" value="" >
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">轮播图片<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="headImages" name="headImages" placeholder="请输入轮播图片列表" type="text" class="layui-input" lay-verify="required" required/>
+                        	<div class="layui-upload">
+	                        	<button type="button" class="layui-btn" id="head_images_upload">上传轮播图</button>
+	                        	<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+	                        		<div class="layui-upload-list" id="head_images_slide_show"></div>
+	                        	</blockquote>
+                        	</div>
                         </div>
                     </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">详情图片列表<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="detailImages" name="detailImages" placeholder="请输入详情图片列表" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
+                    <input type="hidden" id="detailImages" name="detailImages" class="detail_images_show" value="">
+                    <div class="layui-form-item">
+                    	<label class="layui-form-label">详情图片<span style="color: red;">*</span></label>
+                    	<div class="layui-input-block">
+                    		<div class="layui-upload">
+                    			<button type="button" class="layui-btn" id="detail_images_upload">上传详情图</button>
+                    			<blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                    				<div class="layui-upload-list" id="detail_images_slide_show"></div>
+                    			</blockquote>
+                    		</div>
+                    	</div>
                     </div>
                     <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">兑换金币价格<span style="color: red;">*</span></label>

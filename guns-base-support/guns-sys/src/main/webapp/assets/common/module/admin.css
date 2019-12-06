@@ -1892,4 +1892,10 @@ body .layui-util-face .layui-layer-content {
     transition: none;
 }
 
+.layui-upload-img {
+	width: 92px;
+    height: 92px;
+    margin: 0 10px 10px 0;
+}
+
 /** //让layui的tree无连接线风格的展开时的箭头朝下end */
