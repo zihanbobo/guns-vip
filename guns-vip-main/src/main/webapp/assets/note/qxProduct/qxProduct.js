@@ -1,9 +1,10 @@
-layui.use(['table', 'admin', 'ax', 'func'], function () {
+layui.use(['table', 'admin', 'ax', 'func', 'form'], function () {
     var $ = layui.$;
     var table = layui.table;
     var $ax = layui.ax;
     var admin = layui.admin;
     var func = layui.func;
+    var form = layui.form;
 
     /**
      * 商品表管理
@@ -33,7 +34,8 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      */
     QxProduct.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['productName'] = $("#productName").val();
+        queryData['categoryId'] = $("#categoryId").val();
         table.reload(QxProduct.tableId, {
             where: queryData, page: {curr: 1}
         });
@@ -93,6 +95,25 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         };
         Feng.confirm("是否删除?", operation);
     };
+    
+    /**
+     * 渲染商品类别列表
+     */
+    QxProduct.getCategories = function() {
+        $("#categoryId").html('<option value="">请选择类型</option>');
+        var ajax = new $ax(Feng.ctxPath + "/qxCategory/list", function(data){
+        	for (var i = 0; i < data.data.length;i++) {
+        		var categoryId = data.data[i].id;
+        		var categoryName = data.data[i].name;
+        		$("#categoryId").append('<option value="' + categoryId + '">' + categoryName + '</option>');
+        	}
+        	form.render();
+        }, function (data) {
+        	
+        });
+        ajax.start();
+    }
+    QxProduct.getCategories();
 
     // 渲染表格
     var tableResult = table.render({
@@ -103,7 +124,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         cellMinWidth: 100,
         cols: QxProduct.initColumn()
     });
-
+    
     // 搜索按钮点击事件
     $('#btnSearch').click(function () {
         QxProduct.search();

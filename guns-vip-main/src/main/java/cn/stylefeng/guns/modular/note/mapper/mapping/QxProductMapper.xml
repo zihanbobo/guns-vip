@@ -40,6 +40,12 @@
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxProductResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxProductParam">
         select a.id AS "id", a.product_name AS "productName", b.name as "categoryName", a.price as "price", a.stock as "stock", a.created_time as "createdTime"
         from qx_product a left join qx_category b on a.category_id = b.id where 1 = 1
+        <if test="paramCondition.productName != null and paramCondition.productName !=''">
+        	and a.product_name like CONCAT('%', #{paramCondition.productName}, '%')
+        </if>
+        <if test="paramCondition.categoryId != null and paramCondition.categoryId !=''">
+       		and a.category_id = #{paramCondition.categoryId}
+        </if>
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxProductParam">
