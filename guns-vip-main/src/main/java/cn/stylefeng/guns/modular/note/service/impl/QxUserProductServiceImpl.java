@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.note.service.impl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PRODUCT_STATUS;
 import cn.stylefeng.guns.modular.note.entity.QxUserProduct;
 import cn.stylefeng.guns.modular.note.mapper.QxUserProductMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxUserProductParam;
@@ -81,4 +82,10 @@ public class QxUserProductServiceImpl extends ServiceImpl<QxUserProductMapper, Q
         return entity;
     }
 
+	@Override
+	public void deliver(Long id) {
+		QxUserProduct entity = this.baseMapper.selectById(id);
+		entity.setStatus(USER_PRODUCT_STATUS.HANDLED);
+		this.baseMapper.updateById(entity);
+	}
 }

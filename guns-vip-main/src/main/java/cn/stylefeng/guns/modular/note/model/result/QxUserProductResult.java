@@ -25,29 +25,9 @@ public class QxUserProductResult implements Serializable {
     private Long id;
 
     /**
-     * 乐观锁
-     */
-    private Integer version;
-
-    /**
-     * 创建人
-     */
-    private Long createdBy;
-
-    /**
      * 创建时间
      */
     private Date createdTime;
-
-    /**
-     * 更新人
-     */
-    private Long updatedBy;
-
-    /**
-     * 更新时间
-     */
-    private Date updatedTime;
 
     /**
      * 删除标识
@@ -58,11 +38,26 @@ public class QxUserProductResult implements Serializable {
      * 用户ID
      */
     private Long userId;
+    
+    /**
+     * 用户名称
+     */
+    private String nickname;
+    
+    /**
+     * 手机号
+     */
+    private String mobile;
 
     /**
      * 商品ID
      */
     private Long productId;
+    
+    /**
+     * 商品名称
+     */
+    private String productName;
 
     /**
      * 状态 0-未处理；1-已处理
@@ -72,6 +67,25 @@ public class QxUserProductResult implements Serializable {
     /**
      * 收货地址
      */
-    private String address;
+    private Long addressId;
+    
+    /**
+     * 收货人姓名
+     */
+    private String receiverName;
+    
+    /**
+     * 收货人联系方式
+     */
+    private String receiverContact;
+    
+    /**
+     * 区域
+     */
+    private String area;
 
+    /**
+     * 地址
+     */
+    private String address;
 }

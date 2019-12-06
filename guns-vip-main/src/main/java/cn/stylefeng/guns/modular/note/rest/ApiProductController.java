@@ -110,8 +110,8 @@ public class ApiProductController extends ApiBaseController {
 	}
 	
 	@RequestMapping("/exchange")
-	public Object exchange(Long productId) {
-		qxProductService.exchange(getRequestUserId(), productId);
+	public Object exchange(Long productId, Long addressId) {
+		qxProductService.exchange(getRequestUserId(), productId, addressId);
 		return ResultGenerator.genSuccessResult();
 	}
 }

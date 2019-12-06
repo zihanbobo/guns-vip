@@ -66,4 +66,10 @@ public interface QxUserProductService extends IService<QxUserProduct> {
      */
      LayuiPageInfo findPageBySpec(QxUserProductParam param);
 
+     /**
+      * 发货
+      * @param id
+      */
+	void deliver(Long id);
+
 }

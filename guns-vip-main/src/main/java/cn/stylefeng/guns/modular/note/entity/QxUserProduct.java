@@ -83,8 +83,8 @@ public class QxUserProduct implements Serializable {
     /**
      * 收货地址
      */
-    @TableField("address")
-    private String address;
+    @TableField("address_id")
+    private Long addressId;
 
 
     public Long getId() {
@@ -166,16 +166,16 @@ public class QxUserProduct implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public Long getAddressId() {
+		return addressId;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public void setAddressId(Long addressId) {
+		this.addressId = addressId;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @Override
+	@Override
     public String toString() {
         return "QxUserProduct{" +
         "id=" + id +
@@ -188,7 +188,7 @@ public class QxUserProduct implements Serializable {
         ", userId=" + userId +
         ", productId=" + productId +
         ", status=" + status +
-        ", address=" + address +
+        ", address=" + addressId +
         "}";
     }
 }

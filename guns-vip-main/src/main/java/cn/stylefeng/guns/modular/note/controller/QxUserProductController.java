@@ -123,6 +123,13 @@ public class QxUserProductController extends BaseController {
     public LayuiPageInfo list(QxUserProductParam qxUserProductParam) {
         return this.qxUserProductService.findPageBySpec(qxUserProductParam);
     }
+        
+    @ResponseBody
+    @RequestMapping("/deliver")
+    public ResponseData deliver(Long id) {
+    	this.qxUserProductService.deliver(id);
+    	return ResponseData.success();
+    }
 
 }
 

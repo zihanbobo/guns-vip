@@ -71,7 +71,8 @@ public interface QxProductService extends IService<QxProduct> {
 	 * 
 	 * @param requestUserId
 	 * @param productId
+	 * @param addressId 
 	 */
-	void exchange(Long userId, Long productId);
+	void exchange(Long userId, Long productId, Long addressId);
 
 }

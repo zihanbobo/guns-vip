@@ -19,16 +19,18 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
+            {field: 'nickname', sort: true, title: '用户'},
+            {field: 'mobile', sort: false, title: '账号'},
+            {field: 'productName', sort: true, title: '商品'},
+            {field: 'receiverName', sort: false, title: '收货人'},
+            {field: 'receiverContact', sort: false, title: '收货人电话'},
+            {field: 'receiverAddress', sort: false, title: '收货地址', templet: function(d) {
+            	return d.area + d.address;
+            }},
             {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'userId', sort: true, title: '用户ID'},
-            {field: 'productId', sort: true, title: '商品ID'},
-            {field: 'status', sort: true, title: '状态 0-未处理；1-已处理'},
-            {field: 'address', sort: true, title: '收货地址'},
+            {field: 'status', sort: true, title: '状态', templet: function(d){
+            	return d.status == '0' ? '未处理' : '已处理';
+            }},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };
@@ -98,6 +100,23 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         };
         Feng.confirm("是否删除?", operation);
     };
+    
+    /**
+     * 点击发货
+     */
+    QxUserProduct.onDeliverItem = function (data) {
+    	var operation = function() {
+    		var ajax = new $ax(Feng.ctxPath + "/qxUserProduct/deliver", function(data){
+    			Feng.success("发货成功!");
+    			table.reload(QxUserProduct.tableId);
+    		}, function (data) {
+    			Feng.error("发货失败!" + data.responseJSON.message + "!");
+    		});
+    		ajax.set("id", data.id);
+    		ajax.start();
+    	};
+    	Feng.confirm("是否发货?", operation);
+    }
 
     // 渲染表格
     var tableResult = table.render({
@@ -133,6 +152,8 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             QxUserProduct.openEditDlg(data);
         } else if (layEvent === 'delete') {
             QxUserProduct.onDeleteItem(data);
+        } else if (layEvent === 'deliver') {
+        	QxUserProduct.onDeliverItem(data);
         }
     });
 });

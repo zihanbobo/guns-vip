@@ -14,11 +14,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PRODUCT_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.entity.QxProduct;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.entity.QxUserProduct;
 import cn.stylefeng.guns.modular.note.mapper.QxProductMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxUserProductMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxProductParam;
 import cn.stylefeng.guns.modular.note.model.result.QxProductResult;
 import  cn.stylefeng.guns.modular.note.service.QxProductService;
@@ -40,6 +43,9 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
 	
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
+	
+	@Resource
+	private QxUserProductMapper qxUserProductMapper;
 	
     @Override
     public void add(QxProductParam param){
@@ -96,7 +102,7 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
     }
 
 	@Override
-	public void exchange(Long userId, Long productId) {
+	public void exchange(Long userId, Long productId, Long addressId) {
 		QxProduct product = this.baseMapper.selectById(productId);
 		QxUser user = qxUserMapper.selectById(userId);
 		if (product.getStock() <= 0) {
@@ -105,10 +111,24 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
 		if (user.getBalance() < product.getPrice()) {
 			throw new ServiceException("金币不足，无法兑换");
 		}
+		// 用户余额更新
 		user.setBalance(user.getBalance()-product.getPrice());
 		qxUserMapper.updateById(user);
+		// 商品库存更新
 		product.setStock(product.getStock()-1);
 		this.updateById(product);
+		// 流水
 		qxPayLogHelper.createPayLog(userId, product.getPrice(), USER_PAY_LOG_TYPE.BUY_PRODUCT_OUT);
+		// 创建用户申请单
+		saveUserProduct(userId, productId, addressId);
+	}
+	
+	public void saveUserProduct(Long userId, Long productId, Long addressId) {
+		QxUserProduct userProduct = new QxUserProduct();
+		userProduct.setProductId(productId);
+		userProduct.setUserId(userId);
+		userProduct.setAddressId(addressId);
+		userProduct.setStatus(USER_PRODUCT_STATUS.UN_HANDLE);
+		qxUserProductMapper.insert(userProduct);
 	}
 }

@@ -12,7 +12,7 @@ var QxUserProductInfoDlg = {
         userId: "",
         productId: "",
         status: "",
-        address: ""
+        addressId: ""
     }
 };
 

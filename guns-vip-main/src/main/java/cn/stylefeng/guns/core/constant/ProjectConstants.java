@@ -252,4 +252,12 @@ public final class ProjectConstants {
 		String COIN_RATE = "0";
 		String WITHDRAW_RATE = "1";
 	}
+	
+	/**
+	 * 状态 0-未处理；1-已处理
+	 */
+	public interface USER_PRODUCT_STATUS {
+		String UN_HANDLE = "0";
+		String HANDLED = "1";
+	}
 }

@@ -14,12 +14,12 @@
         <result column="user_id" property="userId" />
         <result column="product_id" property="productId" />
         <result column="status" property="status" />
-        <result column="address" property="address" />
+        <result column="address_id" property="addressId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", product_id AS "productId", status AS "status", address AS "address"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", product_id AS "productId", status AS "status", address_id AS "addressId"
     </sql>
 
 
@@ -37,8 +37,33 @@
 
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxUserProductResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxUserProductParam">
         select
-        <include refid="Base_Column_List"/>
-        from qx_user_product where 1 = 1
+        	a.id AS "id",
+        	a.created_time AS "createdTime",
+        	a.user_id AS "userId",
+        	b.nickname as "nickname", 
+        	b.mobile as "mobile", 
+        	a.product_id AS "productId", 
+        	c.product_name AS "productName", 
+        	a.status AS "status",
+        	d.name AS "receiverName",
+        	d.contact AS "receiverContact",
+        	d.area AS "area",
+        	d.address AS "address"
+        from 
+        	qx_user_product a 
+        left join 
+        	qx_user b 
+        on 
+        	a.user_id = b.id 
+        left join 
+        	qx_product c 
+        on 
+        	a.product_id = c.id 
+        left join
+        	qx_address d
+        on
+        	a.address_id = d.id
+        where 1 = 1
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxUserProductParam">
