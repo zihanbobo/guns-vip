@@ -8,5 +8,5 @@ public class QxTweetTo {
 	private String images;
 	private String title;
 	private String content;
-	private String canComment;
+	private Boolean canComment;
 }

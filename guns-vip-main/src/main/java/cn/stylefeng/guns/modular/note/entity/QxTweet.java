@@ -90,7 +90,7 @@ public class QxTweet implements Serializable {
      * 是否允许评价
      */
     @TableField("can_comment")
-    private String canComment;
+    private Boolean canComment;
 
     /**
      * 点赞数
@@ -199,15 +199,15 @@ public class QxTweet implements Serializable {
         this.content = content;
     }
 
-    public String getCanComment() {
-        return canComment;
-    }
+    public Boolean getCanComment() {
+		return canComment;
+	}
 
-    public void setCanComment(String canComment) {
-        this.canComment = canComment;
-    }
+	public void setCanComment(Boolean canComment) {
+		this.canComment = canComment;
+	}
 
-    public Integer getFavoriteCount() {
+	public Integer getFavoriteCount() {
         return favoriteCount;
     }
 

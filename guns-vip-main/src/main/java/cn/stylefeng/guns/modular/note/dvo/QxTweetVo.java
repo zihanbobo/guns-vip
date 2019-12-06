@@ -12,7 +12,7 @@ public class QxTweetVo {
 	private String images;
 	private String title;
 	private String content;
-	private String canComment;
+	private Boolean canComment;
 	private Integer favoriteCount;
 	private Integer commentCount;
 	private Integer giftCount;

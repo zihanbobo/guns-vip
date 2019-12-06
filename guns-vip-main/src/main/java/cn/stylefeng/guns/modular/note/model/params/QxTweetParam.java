@@ -78,7 +78,7 @@ public class QxTweetParam implements Serializable, BaseValidatingParam {
     /**
      * 是否允许评价
      */
-    private String canComment;
+    private Boolean canComment;
 
     /**
      * 点赞数
