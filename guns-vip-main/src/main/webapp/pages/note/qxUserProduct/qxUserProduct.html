@@ -29,7 +29,7 @@
 </div>
 
 <script type="text/html" id="tableBar">
-	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="deliver">发货</a>
+	<a class="layui-btn layui-btn-xs {{d.status==1 ? 'layui-btn-disabled' : ''}}" lay-event="{{d.status==1 ? '' : 'deliver'">{{d.status==1 ? "已发货" : "发货"}}</a>
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 </script>
