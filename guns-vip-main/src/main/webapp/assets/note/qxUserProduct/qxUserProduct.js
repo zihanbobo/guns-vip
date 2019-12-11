@@ -40,7 +40,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      */
     QxUserProduct.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['mobile'] = $("#mobile").val();
         table.reload(QxUserProduct.tableId, {
             where: queryData, page: {curr: 1}
         });

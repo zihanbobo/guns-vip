@@ -74,6 +74,11 @@ public class QxUserProductParam implements Serializable, BaseValidatingParam {
      * 收货地址
      */
     private Long addressId;
+    
+    /**
+     * 手机号
+     */
+    private String mobile;
 
     @Override
     public String checkParam() {

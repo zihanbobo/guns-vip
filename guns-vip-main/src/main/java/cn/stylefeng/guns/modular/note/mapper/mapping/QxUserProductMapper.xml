@@ -64,6 +64,9 @@
         on
         	a.address_id = d.id
         where 1 = 1
+            <if test="paramCondition.mobile != null and paramCondition.mobile !=''">
+        		and b.mobile like CONCAT('%', #{paramCondition.mobile}, '%')
+        	</if>
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxUserProductParam">
