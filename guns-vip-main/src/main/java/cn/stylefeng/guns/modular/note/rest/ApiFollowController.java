@@ -103,4 +103,14 @@ public class ApiFollowController extends ApiBaseController {
 		log.info("/api/follow/cancel, userId=" + userId);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@RequestMapping("/isFollow")
+	public Object isFollow(Long followee) {
+		QueryWrapper<QxFollow> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("follower_id", getRequestUserId()).eq("followee_id", followee);
+		int count = this.qxFollowService.count(queryWrapper);
+		boolean isFollow = count > 0;
+		log.info("/api/follow/isFollow, followee=" + followee);
+		return ResultGenerator.genSuccessResult(isFollow);
+	}
 }
