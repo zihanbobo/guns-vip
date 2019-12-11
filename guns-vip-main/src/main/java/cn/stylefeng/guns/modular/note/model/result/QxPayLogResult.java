@@ -3,6 +3,7 @@ package cn.stylefeng.guns.modular.note.model.result;
 import java.io.Serializable;
 import java.util.Date;
 
+import cn.stylefeng.guns.core.constant.ProjectConstants;
 import lombok.Data;
 
 /**
@@ -58,6 +59,16 @@ public class QxPayLogResult implements Serializable {
      * 用户ID
      */
     private Long userId;
+    
+    /**
+     * 用户名称
+     */
+    private String nickname;
+    
+    /**
+     * 用户账号
+     */
+    private String mobile;
 
     /**
      * 金额
@@ -68,5 +79,9 @@ public class QxPayLogResult implements Serializable {
      * 付费类型 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出；9-违约金汇入；
      */
     private String type;
+    
+    public String getType() {
+    	return ProjectConstants.FINANCE_LOG_MAP.get(this.type);
+    }
 
 }

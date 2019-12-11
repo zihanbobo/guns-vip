@@ -70,6 +70,11 @@ public class QxPayLogParam implements Serializable, BaseValidatingParam {
      */
     private String type;
 
+    /**
+     * 手机号
+     */
+    private String mobile;
+    
     @Override
     public String checkParam() {
         return null;

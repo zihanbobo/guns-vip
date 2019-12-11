@@ -19,15 +19,11 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'userId', sort: true, title: '用户ID'},
+            {field: 'nickname', sort: true, title: '用户昵称'},
+            {field: 'mobile', sort: false, title: '手机号'},
             {field: 'amount', sort: true, title: '金额'},
-            {field: 'type', sort: true, title: '付费类型 0-约单支出；1-约单汇入；2-打赏支出；3-打赏汇入；4-兑换商品支出；5-购买礼物支出；6-付费日记支出；7-付费日记汇入；8-违约金支出；9-违约金汇入；'},
+            {field: 'type', sort: true, title: '付费类型'},
+            {field: 'createdTime', sort: true, title: '创建时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };
@@ -37,7 +33,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      */
     QxPayLog.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['mobile'] = $("#mobile").val();
         table.reload(QxPayLog.tableId, {
             where: queryData, page: {curr: 1}
         });
