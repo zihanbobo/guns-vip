@@ -161,4 +161,18 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	Page<List<QxInviteSearchPojo>> search(Page page, QxInviteQueryTo inviteQueryTo);
 
+	/**
+	 * 我发起的约单
+	 * @param id
+	 * @return
+	 */
+	int getMyInviteCount(Long userId);
+
+	/**
+	 * 邀请我的约单
+	 * @param id
+	 * @return
+	 */
+	int getInviteMeCount(Long userId);
+
 }

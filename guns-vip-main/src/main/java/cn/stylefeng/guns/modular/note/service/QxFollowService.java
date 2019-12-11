@@ -73,4 +73,18 @@ public interface QxFollowService extends IService<QxFollow> {
       */
 	void follow(Long followerId, long followeeId);
 
+	/**
+	 * 获取我的关注数量
+	 * @param id
+	 * @return
+	 */
+	int getFollowerCount(Long userId);
+
+	/**
+	 * 获取我的粉丝数量
+	 * @param id
+	 * @return
+	 */
+	int getFolloweeCount(Long id);
+
 }

@@ -47,8 +47,11 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.USER_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
 import cn.stylefeng.guns.modular.note.dto.QxUserTo;
+import cn.stylefeng.guns.modular.note.dvo.QxUserVo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
+import cn.stylefeng.guns.modular.note.service.QxFollowService;
+import cn.stylefeng.guns.modular.note.service.QxInviteService;
 import cn.stylefeng.guns.modular.note.service.QxUserSocialService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +79,12 @@ public class ApiUserController extends ApiBaseController {
 
 	@Resource
 	private QxUserSocialService qxUserSocialService;
+	
+	@Resource
+	private QxFollowService qxFollowService;
+	
+	@Resource
+	private QxInviteService qxInviteService;
 	
 	@Resource
 	private NoticeHelper noticeHelper;
@@ -182,10 +191,24 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	@PostMapping(value = "/detail")
-	public Object detail() {
-		QxUser user = getUser();
+	public Object detail(Long userId) {
+		QxUser user;
+		if (userId != null) {
+			user = getUser(userId);
+		} else {
+			user = getUser();
+		}
+		QxUserVo userVo = createQxUserVo(user);
+		int followerCount = qxFollowService.getFollowerCount(user.getId());
+		int followeeCount = qxFollowService.getFolloweeCount(user.getId());
+		int myInviteCount = qxInviteService.getMyInviteCount(user.getId());
+		int inviteMeCount = qxInviteService.getInviteMeCount(user.getId());
+		userVo.setFollowerCount(followerCount);
+		userVo.setFolloweeCount(followeeCount);
+		userVo.setMyInviteCount(myInviteCount);
+		userVo.setInviteMeCount(inviteMeCount);
 		log.info("/api/user/detail");
-		return ResultGenerator.genSuccessResult(user);
+		return ResultGenerator.genSuccessResult(userVo);
 	}
 	
 	/**

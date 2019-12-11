@@ -372,4 +372,18 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		return this.baseMapper.search(page, configEntity.getInviteRange(), inviteQueryTo.getLongitude(),
 				inviteQueryTo.getLatitude(), inviteQueryTo.getContent());
 	}
+
+	@Override
+	public int getMyInviteCount(Long userId) {
+		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("inviter", userId);
+		return this.baseMapper.selectCount(queryWrapper);
+	}
+
+	@Override
+	public int getInviteMeCount(Long userId) {
+		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("invitee", userId);
+		return this.baseMapper.selectCount(queryWrapper);
+	}
 }
