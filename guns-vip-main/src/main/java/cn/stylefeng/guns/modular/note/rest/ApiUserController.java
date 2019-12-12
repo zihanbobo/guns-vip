@@ -46,6 +46,7 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.TOKEN;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.core.util.NoticeHelper;
+import cn.stylefeng.guns.core.util.RongCloudHelper;
 import cn.stylefeng.guns.modular.note.dto.QxUserTo;
 import cn.stylefeng.guns.modular.note.dvo.QxUserVo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
@@ -53,6 +54,7 @@ import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.service.QxFollowService;
 import cn.stylefeng.guns.modular.note.service.QxInviteService;
 import cn.stylefeng.guns.modular.note.service.QxUserSocialService;
+import io.rong.models.response.TokenResult;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -88,6 +90,9 @@ public class ApiUserController extends ApiBaseController {
 	
 	@Resource
 	private NoticeHelper noticeHelper;
+	
+	@Resource
+	private RongCloudHelper rongCloudHelper;
 
 	@PostMapping("/login")
 	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
@@ -267,5 +272,14 @@ public class ApiUserController extends ApiBaseController {
 		userSocial.setType(SOCIAL_TYPE.ALIPAY);
 		qxUserSocialService.saveOrUpdate(userSocial);
 		return ResultGenerator.genSuccessResult();
+	}
+	
+	@PostMapping("/rongCloud/token")
+	public Object rongCoudToken(HttpServletRequest request) {
+		QxUser qxUser = getUser();
+		String portrait = getImageUrl(request, Strings.isNullOrEmpty(qxUser.getAvatar()) ? configEntity.getUserDefaultAvatar() : qxUser.getAvatar());
+		TokenResult tokenResult = rongCloudHelper.generateChatToken(qxUser.getId().toString(), qxUser.getNickname(), portrait);
+		log.info("/api/rongCloud/token");
+		return ResultGenerator.genSuccessResult(tokenResult);
 	}
 }

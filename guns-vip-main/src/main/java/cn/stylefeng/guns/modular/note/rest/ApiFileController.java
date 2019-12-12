@@ -35,17 +35,12 @@ public class ApiFileController extends ApiBaseController {
 			FileUtil.createPath(absolutePath);
 			String name = UploadUtils.uploadFile(file, absolutePath);
 			String relativePath = configEntity.getImagesPath() + File.separator + name;
-			String imageUrl = getImageUrl(request.getHeader("X-Forwarded-Proto"), request.getHeader("Host"), relativePath);
+			String imageUrl = getImageUrl(request, relativePath);
 			aliyunGreen.checkImage(imageUrl);
 			return ResultGenerator.genSuccessResult(relativePath);
 		} catch (IOException e) {
 			throw new ServiceException(e.getMessage());
 		}
-	}
-	
-	public String getImageUrl(String scheme, String host, String relativePath) {
-		StringBuilder sb = new StringBuilder();
-		return sb.append(scheme).append("://").append(host).append("/resource/").append(relativePath).toString();
 	}
 	
 	@PostMapping("/checkText")

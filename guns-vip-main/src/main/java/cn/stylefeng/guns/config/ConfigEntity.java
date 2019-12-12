@@ -27,6 +27,10 @@ public class ConfigEntity {
 	// 阿里云
 	private String aliyunAccessKeyId;
 	private String aliyunSecret;
+	// 融云
+	private String rongCloudAppKey;
+	private String rongCloudAppSecret;
+	private String userDefaultAvatar;
 	// 验证码长度
 	private int codeLength;
 	// 邀请码长度

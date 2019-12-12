@@ -19,15 +19,13 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
             {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'userId', sort: true, title: '报警人ID'},
             {field: 'inviteId', sort: true, title: '约单ID'},
-            {field: 'status', sort: true, title: '状态 0-未处理；1-已处理'},
+            {field: 'status', sort: true, title: '状态', templet: function(d) {
+            	//  0-未处理；1-已处理
+            	return d.status==0 ? '未处理' : '已处理';
+            }},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

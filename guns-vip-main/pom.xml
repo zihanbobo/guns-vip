@@ -149,6 +149,11 @@
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 		</dependency>
+		<!-- 融云聊天SDK -->
+		<dependency>
+			<groupId>cn.rongcloud.im</groupId>
+			<artifactId>server-sdk-java</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -77,4 +77,12 @@ public class ApiBaseController extends BaseController {
 			throw new ServiceException(name + "错误!");
 		}
 	}
+	
+	public String getImageUrl(HttpServletRequest request, String relativePath) {
+		String scheme = request.getHeader("X-Forwarded-Proto");
+		String host = request.getHeader("Host");
+		
+		StringBuilder sb = new StringBuilder();
+		return sb.append(scheme).append("://").append(host).append("/resource/").append(relativePath).toString();
+	}
 }

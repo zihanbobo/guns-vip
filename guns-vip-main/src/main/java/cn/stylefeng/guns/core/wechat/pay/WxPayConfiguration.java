@@ -18,27 +18,40 @@ import lombok.AllArgsConstructor;
  */
 @Configuration
 @ConditionalOnClass(WxPayService.class)
-@EnableConfigurationProperties(WxPayProperties.class)
+@EnableConfigurationProperties({ WxMpPayProperties.class, WxAppPayProperties.class })
 @AllArgsConstructor
 public class WxPayConfiguration {
-  private WxPayProperties properties;
+	private WxMpPayProperties wxMpPayProperties;
 
-  @Bean
-  @ConditionalOnMissingBean
-  public WxPayService wxService() {
-    WxPayConfig payConfig = new WxPayConfig();
-    payConfig.setAppId(StringUtils.trimToNull(this.properties.getAppId()));
-    payConfig.setMchId(StringUtils.trimToNull(this.properties.getMchId()));
-    payConfig.setMchKey(StringUtils.trimToNull(this.properties.getMchKey()));
-    payConfig.setSubAppId(StringUtils.trimToNull(this.properties.getSubAppId()));
-    payConfig.setSubMchId(StringUtils.trimToNull(this.properties.getSubMchId()));
-    payConfig.setKeyPath(StringUtils.trimToNull(this.properties.getKeyPath()));
+	private WxAppPayProperties wxAppPayProperties;
 
-    // 可以指定是否使用沙箱环境
-    payConfig.setUseSandboxEnv(false);
+	@Bean(name = "wxMpPayService")
+	@ConditionalOnMissingBean
+	public WxPayService wxMpPayService() {
+		WxPayService wxPayService = new WxPayServiceImpl();
+		WxPayConfig payConfig = createPayConfig(wxMpPayProperties);
+		wxPayService.setConfig(payConfig);
+		return wxPayService;
+	}
 
-    WxPayService wxPayService = new WxPayServiceImpl();
-    wxPayService.setConfig(payConfig);
-    return wxPayService;
-  }
+	@Bean(name = "wxAppPayService")
+	@ConditionalOnMissingBean
+	public WxPayService wxAppPayService() {
+		WxPayService wxPayService = new WxPayServiceImpl();
+		WxPayConfig payConfig = createPayConfig(wxAppPayProperties);
+		wxPayService.setConfig(payConfig);
+		return wxPayService;
+	}
+
+	public WxPayConfig createPayConfig(WxPayProperties properties) {
+		WxPayConfig payConfig = new WxPayConfig();
+		payConfig.setAppId(StringUtils.trimToNull(properties.getAppId()));
+		payConfig.setMchId(StringUtils.trimToNull(properties.getMchId()));
+		payConfig.setMchKey(StringUtils.trimToNull(properties.getMchKey()));
+		payConfig.setSubAppId(StringUtils.trimToNull(properties.getSubAppId()));
+		payConfig.setSubMchId(StringUtils.trimToNull(properties.getSubMchId()));
+		payConfig.setKeyPath(StringUtils.trimToNull(properties.getKeyPath()));
+		payConfig.setUseSandboxEnv(properties.getUseSandbox());
+		return payConfig;
+	}
 }

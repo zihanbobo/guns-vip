@@ -76,7 +76,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/finance")
 public class ApiFinanceController extends ApiBaseController {
 
-	private WxPayService wxPayService;
+	@Resource(name = "wxMpPayService")
+	private WxPayService wxMpPayService;
+	
+	@Resource(name = "wxAppPayService")
+	private WxPayService wxAppPayService;
 	
 	private AlipayClient alipayClient;
 
@@ -101,22 +105,42 @@ public class ApiFinanceController extends ApiBaseController {
 	private QxPayLogHelper qxPayLogHelper;
 
 	/**
-	 * 微信购买金币
+	 * 微信公众号购买金币
 	 * 
 	 * @param packageTo
 	 * @return
 	 */
-	@PostMapping("/wx/pay")
-	public Object wxPay(QxPackageTo packageTo) {
+	@PostMapping("/wx/mp/pay")
+	public Object wxMpPay(QxPackageTo packageTo) {
 		try {
 			// 创建订单
 			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.WECHAT);
 			WxPayUnifiedOrderRequest request = createWxPayOrderRequest(packageTo.getTradeType(), coinOrder);
-			log.info("/api/finance/wx/pay");
-			return ResultGenerator.genSuccessResult(wxPayService.createOrder(request));
+			log.info("/api/finance/wx/mp/pay");
+			return ResultGenerator.genSuccessResult(wxMpPayService.createOrder(request));
 		} catch (Exception e) {
-			log.error("/api/finance/wx/pay, packageTo=" + packageTo + ", error=" + e.getMessage());
-			throw new ServiceException("微信支付失败，请联系管理员");
+			log.error("/api/finance/wx/pay, packageTo=" + packageTo + ",error=" + e.getMessage());
+			throw new ServiceException("微信公众号支付失败，请联系管理员");
+		}
+	}
+	
+	/**
+	 * APP微信购买金币
+	 * @param tradeType
+	 * @param coinOrder
+	 * @return
+	 */
+	@PostMapping("/wx/app/pay")
+	public Object wxAppPay(QxPackageTo packageTo) {
+		try {
+			// 创建订单
+			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.WECHAT);
+			WxPayUnifiedOrderRequest request = createWxPayOrderRequest(packageTo.getTradeType(), coinOrder);
+			log.info("/api/finance/wx/mp/pay");
+			return ResultGenerator.genSuccessResult(wxAppPayService.createOrder(request));
+		} catch (Exception e) {
+			log.error("/api/finance/wx/pay, packageTo=" + packageTo + ",error=" + e.getMessage());
+			throw new ServiceException("微信app支付失败，请联系管理员");
 		}
 	}
 
@@ -151,7 +175,7 @@ public class ApiFinanceController extends ApiBaseController {
 	public String wxPayNotify(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String xmlResult = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
-			WxPayOrderNotifyResult result = wxPayService.parseOrderNotifyResult(xmlResult);
+			WxPayOrderNotifyResult result = wxMpPayService.parseOrderNotifyResult(xmlResult);
 			// 判断订单信息是否正确
 			String orderNo = result.getOutTradeNo();
 			String totalFee = BaseWxPayResult.fenToYuan(result.getTotalFee());
@@ -189,7 +213,7 @@ public class ApiFinanceController extends ApiBaseController {
 		BigDecimal amount = caculateWithdrawAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
 		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
-		EntPayService entPayService = wxPayService.getEntPayService();
+		EntPayService entPayService = wxMpPayService.getEntPayService();
 		EntPayRequest request = new EntPayRequest();
 		request.setPartnerTradeNo(withdrawLog.getSn());
 		request.setOpenid(withdrawLog.getPayeeAccount());
@@ -220,7 +244,7 @@ public class ApiFinanceController extends ApiBaseController {
 	 * @return
 	 */
 	@PostMapping("/alipay/pay")
-	public Object alipay(QxPackage packageTo) {
+	public Object alipay(QxPackageTo packageTo) {
 		try {
 			// 创建订单
 			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.ALIPAY);

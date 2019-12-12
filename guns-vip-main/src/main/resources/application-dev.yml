@@ -55,22 +55,32 @@ memcached:
 wx:
   mp:
     configs:
-      - appId: 1111 （一个公众号的appid）
-        secret: 1111（公众号的appsecret）
-        token: 111 （接口配置里的Token值）
-        aesKey: 111 （接口配置里的EncodingAESKey值）
-      - appId: 2222 （一个公众号的appid）
-        secret: 2222（公众号的appsecret）
-        token: 2222 （接口配置里的Token值）
-        aesKey: 2222 （接口配置里的EncodingAESKey值）
+      - appId: wx39767aa52e58e228
+        secret: ae8ad606149afdf00eaf23d5b26e9e7b
+        token: 
+        aesKey:
+      - appId: wx73e189f481ea34f1
+        secret: 35d067acff50828a6201381b24ae2510
+        token: 
+        aesKey: 
   pay:
-    appId: #微信公众号或者小程序等的appid
-    mchId: #微信支付商户号
-    mchKey: #微信支付商户密钥
-    subAppId: #服务商模式下的子商户公众账号ID
-    subMchId: #服务商模式下的子商户号
-    keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
-    
+    mp:
+      appId: #微信公众号或者小程序等的appid
+      mchId: #微信支付商户号
+      mchKey: #微信支付商户密钥
+      subAppId: #服务商模式下的子商户公众账号ID
+      subMchId: #服务商模式下的子商户号
+      keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+      useSandbox: falsee
+    app:
+      appId: #微信公众号或者小程序等的appid
+      mchId: #微信支付商户号
+      mchKey: #微信支付商户密钥
+      subAppId: #服务商模式下的子商户公众账号ID
+      subMchId: #服务商模式下的子商户号
+      keyPath: # p12证书的位置，可以指定绝对路径，也可以指定类路径（以classpath:开头）
+      useSandbox: falsee
+
 alipay:
   gateway: https://openapi.alipaydev.com/gateway.do
   appID: 2016101700704174
