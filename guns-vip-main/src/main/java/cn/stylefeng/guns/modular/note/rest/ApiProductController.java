@@ -106,7 +106,7 @@ public class ApiProductController extends ApiBaseController {
 		List<QxProductVo> vos = createProductVos(page.getRecords());
 		page.setRecords(vos);
 		log.info("/api/product/recommend");
-		return ResultGenerator.genSuccessResult(vos);
+		return ResultGenerator.genSuccessResult(page);
 	}
 	
 	@RequestMapping("/exchange")

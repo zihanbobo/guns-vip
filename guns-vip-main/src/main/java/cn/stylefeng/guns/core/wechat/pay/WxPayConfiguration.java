@@ -26,7 +26,7 @@ public class WxPayConfiguration {
 	private WxAppPayProperties wxAppPayProperties;
 
 	@Bean(name = "wxMpPayService")
-	@ConditionalOnMissingBean
+//	@ConditionalOnMissingBean
 	public WxPayService wxMpPayService() {
 		WxPayService wxPayService = new WxPayServiceImpl();
 		WxPayConfig payConfig = createPayConfig(wxMpPayProperties);
@@ -35,7 +35,7 @@ public class WxPayConfiguration {
 	}
 
 	@Bean(name = "wxAppPayService")
-	@ConditionalOnMissingBean
+//	@ConditionalOnMissingBean
 	public WxPayService wxAppPayService() {
 		WxPayService wxPayService = new WxPayServiceImpl();
 		WxPayConfig payConfig = createPayConfig(wxAppPayProperties);
