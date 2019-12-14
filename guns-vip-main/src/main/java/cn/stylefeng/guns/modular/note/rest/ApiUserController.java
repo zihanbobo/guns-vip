@@ -1,5 +1,4 @@
 /**
- * Copyright 2018-2020 stylefeng & fengshuonan (https://gitee.com/stylefeng)
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,13 +32,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.base.Strings;
 
 import cn.stylefeng.guns.core.CacheCodeUtil;
+import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.TokenUtils;
+import cn.stylefeng.guns.core.alipay.AlipayProperties;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.TOKEN;
@@ -79,6 +82,8 @@ public class ApiUserController extends ApiBaseController {
 	
 	private final AlipayClient alipayClient;
 
+	private AlipayProperties alipayProperties;
+	
 	@Resource
 	private QxUserSocialService qxUserSocialService;
 	
@@ -225,6 +230,15 @@ public class ApiUserController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult(userVo);
 	}
 	
+	@PostMapping("/bindStatus")
+	public Object bindStatus(String appId) {
+		QueryWrapper<QxUserSocial> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", getRequestUserId()).eq("app_id", appId);
+		Boolean flag = qxUserSocialService.count(queryWrapper) > 0;
+		log.info("/api/user/bindStatus, appId=" + appId);
+		return ResultGenerator.genSuccessResult(flag);
+	}
+	
 	/**
 	 * 微信公众号授权网页
 	 *    1、引导用户进入授权页面或打开授权链接同意授权，获取code 
@@ -251,6 +265,28 @@ public class ApiUserController extends ApiBaseController {
 	public WxMpUser getWxUserByCode(String code) throws WxErrorException{
 		WxMpOAuth2AccessToken accessToken = wxMpService.oauth2getAccessToken(code);
         return wxMpService.oauth2getUserInfo(accessToken, null);
+	}
+	
+	@PostMapping("/alipay/authStr")
+	public Object alipayAuthStr() {
+		Map<String, String> params = new HashMap<>();
+		params.put("apiname", "com.alipay.account.auth");
+		params.put("method", "alipay.open.auth.sdk.code.get");
+		params.put("app_id", alipayProperties.getAppID());
+		params.put("app_name", "mc");
+		params.put("biz_type", "openservice");
+		params.put("pid", alipayProperties.getPid());
+		params.put("product_id", "APP_FAST_LOGIN");
+		params.put("scope", "kuaijie");
+		params.put("target_id", CommonUtils.getSerialNumber());
+		params.put("auth_type", "AUTHACCOUNT");
+		params.put("sign_type", "RSA2");
+		try {
+			String sign = AlipaySignature.rsaSign(params, alipayProperties.getPrivateKey(), alipayProperties.getCharset());
+			return ResultGenerator.genSuccessResult(sign);
+		} catch (AlipayApiException e) {
+			throw new ServiceException(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/alipay/auth")

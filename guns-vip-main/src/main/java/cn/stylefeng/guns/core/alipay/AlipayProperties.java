@@ -18,6 +18,11 @@ public class AlipayProperties {
 	private String appID;
 
 	/**
+	 * 签约支付宝ID
+	 */
+	private String pid;
+	
+	/**
 	 * 商户私钥，您的PKCS8格式RSA2私钥
 	 */
 	private String privateKey;
