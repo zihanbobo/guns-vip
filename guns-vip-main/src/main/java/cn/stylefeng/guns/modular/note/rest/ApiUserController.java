@@ -145,6 +145,14 @@ public class ApiUserController extends ApiBaseController {
 		log.info("/api/user/bindUser, mobile=" + mobile + ",code=" + code);
 		return ResultGenerator.genSuccessResult(result);
 	}
+	
+	@PostMapping("/wx/bindAccount")
+	public Object bindAccount(String appId, String openId, String unionId) {
+		QxUser user = getUser();
+		qxUserService.wxBindUser(user.getMobile(), appId, openId, unionId);
+		log.info("/api/user/wx/bindAccount, appId=" + appId + ",openId=" + openId + ",unionId=" + unionId);
+		return ResultGenerator.genSuccessResult();
+	}
 
 	private void validateCode(String mobile, String code,  int type, String name) {
 		String codeKey = CacheCodeUtil.createCodeKey(mobile, type);

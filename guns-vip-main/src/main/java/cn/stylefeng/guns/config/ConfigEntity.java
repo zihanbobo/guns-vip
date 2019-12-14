@@ -43,7 +43,7 @@ public class ConfigEntity {
 	private String wxSpbillCreateIp;
 	private String wxNotifyUrl;
 	private Boolean wxCanWithdraw;
-	private Boolean wxServiceContact;
+	private String wxServiceContact;
 	
 	// 支付宝支付配置
 	private Boolean alipayCanWithdraw;
