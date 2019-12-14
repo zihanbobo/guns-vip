@@ -42,6 +42,11 @@ public class ConfigEntity {
 	// 微信支付相关配置
 	private String wxSpbillCreateIp;
 	private String wxNotifyUrl;
+	private Boolean wxCanWithdraw;
+	private Boolean wxServiceContact;
+	
+	// 支付宝支付配置
+	private Boolean alipayCanWithdraw;
 	
 	// 约单搜索附近距离范围
 	private int inviteRange;

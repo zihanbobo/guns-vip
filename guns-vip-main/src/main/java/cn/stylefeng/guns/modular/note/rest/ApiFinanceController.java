@@ -207,29 +207,37 @@ public class ApiFinanceController extends ApiBaseController {
 		checkWithdrawLimit(user, coinCount);
 		BigDecimal amount = caculateWithdrawAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
+		if (userSocial == null) {
+			throw new ServiceException("请绑定微信后再提现");
+		}
 		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
-		EntPayService entPayService = wxMpPayService.getEntPayService();
-		EntPayRequest request = new EntPayRequest();
-		request.setPartnerTradeNo(withdrawLog.getSn());
-		request.setOpenid(withdrawLog.getPayeeAccount());
-		request.setCheckName(CheckNameOption.FORCE_CHECK);
-		request.setReUserName(name);
-		request.setAmount(BaseWxPayRequest.yuanToFen(amount.toString()));
-		request.setDescription("用户提现");
-		request.setSpbillCreateIp(configEntity.getWxSpbillCreateIp());
-		try {
-			EntPayResult entPayResult = entPayService.entPay(request);
-			if (ResultCode.SUCCESS.equals(entPayResult.getReturnCode()) && ResultCode.SUCCESS.equals(entPayResult.getResultCode())) {
-				updateWithdrawSuccess(withdrawLog, user, coinCount);
-				log.info("/api/finance/wx/withdraw");
-				return ResultGenerator.genSuccessResult();
-			} else {
-				log.error(entPayResult.getReturnMsg() + ", /api/finance/wx/withdraw, appId=" + appId + ", amount=" + amount);
-				throw new ServiceException(entPayResult.getReturnMsg());
+		if (Boolean.TRUE.equals(configEntity.getWxCanWithdraw())) {
+			EntPayService entPayService = wxMpPayService.getEntPayService();
+			EntPayRequest request = new EntPayRequest();
+			request.setPartnerTradeNo(withdrawLog.getSn());
+			request.setOpenid(withdrawLog.getPayeeAccount());
+			request.setCheckName(CheckNameOption.FORCE_CHECK);
+			request.setReUserName(name);
+			request.setAmount(BaseWxPayRequest.yuanToFen(amount.toString()));
+			request.setDescription("用户提现");
+			request.setSpbillCreateIp(configEntity.getWxSpbillCreateIp());
+			try {
+				EntPayResult entPayResult = entPayService.entPay(request);
+				if (ResultCode.SUCCESS.equals(entPayResult.getReturnCode()) && ResultCode.SUCCESS.equals(entPayResult.getResultCode())) {
+					updateWithdrawSuccess(withdrawLog, user, coinCount);
+					log.info("/api/finance/wx/withdraw");
+					return ResultGenerator.genSuccessResult();
+				} else {
+					log.error(entPayResult.getReturnMsg() + ", /api/finance/wx/withdraw, appId=" + appId + ", amount=" + amount);
+					throw new ServiceException(entPayResult.getReturnMsg());
+				}
+			} catch (WxPayException e) {
+				log.error("微信提现出错, error=" + e.getMessage());
+				throw new ServiceException("微信提现出错");
 			}
-		} catch (WxPayException e) {
-			log.error("微信提现出错, error=" + e.getMessage());
-			throw new ServiceException("微信提现出错");
+		} else {
+			log.info("/api/finance/wx/withdraw, appId=" + appId + ",name=" + name + ",coinCount" + coinCount);
+			return ResultGenerator.genSuccessResult(configEntity.getWxServiceContact());
 		}
 	}
 	
@@ -330,33 +338,40 @@ public class ApiFinanceController extends ApiBaseController {
 		checkWithdrawLimit(getUser(), coinCount);
 		BigDecimal amount = caculateWithdrawAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
+		if (userSocial == null) {
+			throw new ServiceException("请绑定支付宝后再提现");
+		}
 		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
-		AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
-		AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
-		Participant payeeInfo = new Participant();
-		payeeInfo.setIdentity(userSocial.getOpenId());
-		payeeInfo.setIdentityType(alipayProperties.getWithdrawIdentityType());
-		payeeInfo.setName(name);
-		model.setOutBizNo(withdrawLog.getSn());
-		model.setTransAmount(amount.toString());
-		model.setProductCode(alipayProperties.getWithdrawProductCode());
-		model.setBizScene(alipayProperties.getWithdrawBizScene());
-		model.setPayeeInfo(payeeInfo);
-		model.setOrderTitle("用户提现");
+		if (Boolean.TRUE.equals(configEntity.getAlipayCanWithdraw())) {
+			AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
+			AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
+			Participant payeeInfo = new Participant();
+			payeeInfo.setIdentity(userSocial.getOpenId());
+			payeeInfo.setIdentityType(alipayProperties.getWithdrawIdentityType());
+			payeeInfo.setName(name);
+			model.setOutBizNo(withdrawLog.getSn());
+			model.setTransAmount(amount.toString());
+			model.setProductCode(alipayProperties.getWithdrawProductCode());
+			model.setBizScene(alipayProperties.getWithdrawBizScene());
+			model.setPayeeInfo(payeeInfo);
+			model.setOrderTitle("用户提现");
 
-		try {
-			AlipayFundTransUniTransferResponse response = alipayClient.certificateExecute(request);
-			if(response.isSuccess()){
-				updateWithdrawSuccess(withdrawLog, user, coinCount);
-				log.info("/api/alipay/withdraw");
-				return ResultGenerator.genSuccessResult();
-			} else {
-				log.error("支付宝提现失败, error=" + response.getMsg());
+			try {
+				AlipayFundTransUniTransferResponse response = alipayClient.certificateExecute(request);
+				if(response.isSuccess()){
+					updateWithdrawSuccess(withdrawLog, user, coinCount);
+					log.info("/api/alipay/withdraw");
+					return ResultGenerator.genSuccessResult();
+				} else {
+					log.error("支付宝提现失败, error=" + response.getMsg());
+					throw new ServiceException("支付宝提现失败");
+				}
+			} catch (AlipayApiException e) {
+				log.error("支付宝提现失败, error=" + e.getMessage());
 				throw new ServiceException("支付宝提现失败");
 			}
-		} catch (AlipayApiException e) {
-			log.error("支付宝提现失败, error=" + e.getMessage());
-			throw new ServiceException("支付宝提现失败");
+		} else {
+			return ResultGenerator.genSuccessResult(configEntity.getWxServiceContact());
 		}
 	}
 	
