@@ -145,13 +145,14 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	}
 
 	@Override
-	public QxUser wxBindUser(String mobile, String openId, String unionId) {
+	public QxUser wxBindUser(String mobile, String appId, String openId, String unionId) {
 		QxUser user = getUserByAccount(mobile);
 		if (user == null) {
 			user = performRegister(mobile);
 		}
 		QxUserSocial qxUserSocial = new QxUserSocial();
 		qxUserSocial.setUserId(user.getId());
+		qxUserSocial.setAppId(appId);
 		qxUserSocial.setOpenId(openId);
 		qxUserSocial.setUnionId(unionId);
 		qxUserSocial.setType(SOCIAL_TYPE.WECHAT);

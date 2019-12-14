@@ -39,6 +39,10 @@ public class ConfigEntity {
 	private int codeExpirationMin;
 	// 验证码, 可重发时间
 	private int codeIntervalMin;
+	// 微信支付相关配置
+	private String wxSpbillCreateIp;
+	private String wxNotifyUrl;
+	
 	// 约单搜索附近距离范围
 	private int inviteRange;
 	// 短信

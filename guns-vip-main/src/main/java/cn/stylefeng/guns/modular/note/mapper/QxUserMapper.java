@@ -76,7 +76,7 @@ public interface QxUserMapper extends BaseMapper<QxUser> {
      * @param unionId
      * @return
      */
-    @Select("select a.* from qx_user a inner join qx_user_social b on a.id = b.user_id and b.union_id = #{unionId} and b.appId = #{appId}")
+    @Select("select a.* from qx_user a inner join qx_user_social b on a.id = b.user_id and b.union_id = #{unionId} and b.app_id = #{appId}")
     @ResultMap("BaseResultMap")
 	QxUser getUserByUnionId(@Param("appId") String appid, @Param("unionId") String unionId);
 
@@ -86,7 +86,7 @@ public interface QxUserMapper extends BaseMapper<QxUser> {
      * @param openId
      * @return
      */
-    @Select("select a.* from qx_user a inner join qx_user_social b on a.id = b.user_id and b.open_id = #{openId} and b.appId = #{appId}")
+    @Select("select a.* from qx_user a inner join qx_user_social b on a.id = b.user_id and b.open_id = #{openId} and b.app_id = #{appId}")
     @ResultMap("BaseResultMap")
 	QxUser getUserByOpenId(@Param("appId") String appId, @Param("openId") String openId);
 }

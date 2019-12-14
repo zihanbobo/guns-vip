@@ -108,7 +108,7 @@ public interface QxUserService extends IService<QxUser> {
 	 * @param unionId
 	 * @return
 	 */
-	QxUser wxBindUser(String mobile, String openId, String unionId);
+	QxUser wxBindUser(String mobile, String appId, String openId, String unionId);
 
 	/**
 	 * 根据用户ID、appID获取用户三方信息

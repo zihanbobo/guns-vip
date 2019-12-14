@@ -136,10 +136,10 @@ public class ApiFinanceController extends ApiBaseController {
 			// 创建订单
 			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.WECHAT);
 			WxPayUnifiedOrderRequest request = createWxPayOrderRequest(packageTo.getTradeType(), coinOrder);
-			log.info("/api/finance/wx/mp/pay");
+			log.info("/api/finance/wx/app/pay, packageTo=" + packageTo);
 			return ResultGenerator.genSuccessResult(wxAppPayService.createOrder(request));
 		} catch (Exception e) {
-			log.error("/api/finance/wx/pay, packageTo=" + packageTo + ",error=" + e.getMessage());
+			log.error("/api/finance/wx/app/pay, packageTo=" + packageTo + ",error=" + e.getMessage());
 			throw new ServiceException("微信app支付失败，请联系管理员");
 		}
 	}
@@ -150,6 +150,8 @@ public class ApiFinanceController extends ApiBaseController {
 		orderRequest.setOutTradeNo(coinOrder.getSn());
 		orderRequest.setTotalFee(BaseWxPayRequest.yuanToFen(coinOrder.getAmount().toString()));
 		orderRequest.setTradeType(tradeType);
+		orderRequest.setSpbillCreateIp(configEntity.getWxSpbillCreateIp());
+		orderRequest.setNotifyUrl(configEntity.getWxNotifyUrl());
 		return orderRequest;
 	}
 	
@@ -179,14 +181,18 @@ public class ApiFinanceController extends ApiBaseController {
 			// 判断订单信息是否正确
 			String orderNo = result.getOutTradeNo();
 			String totalFee = BaseWxPayResult.fenToYuan(result.getTotalFee());
-
-			QxCoinOrder coinOrder = getCoinOrder(orderNo, new BigDecimal(totalFee), COIN_ORDER_STATUS.WAIT_PAY);
-			if (coinOrder == null) {
-				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + orderNo + ",amount=" + totalFee);
-				throw new ServiceException("订单记录不存在");
-			}
-			coinOrder.setStatus(COIN_ORDER_STATUS.PAID);
-			qxCoinOrderService.updateById(coinOrder);
+			updatePaySuccess(orderNo, new BigDecimal(totalFee));
+//			QxCoinOrder coinOrder = getCoinOrder(orderNo, new BigDecimal(totalFee), COIN_ORDER_STATUS.WAIT_PAY);
+//			if (coinOrder == null) {
+//				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + orderNo + ",amount=" + totalFee);
+//				throw new ServiceException("订单记录不存在");
+//			}
+//			coinOrder.setStatus(COIN_ORDER_STATUS.PAID);
+//			qxCoinOrderService.updateById(coinOrder);
+//			// 增加用户可用金币
+//			QxUser user = getUser(coinOrder.getUserId());
+//			QxPackage qxPackage = qxPackageService.getById(coinOrder.getPackageId());
+//			user.setFreeze(user.getFreeze()+qxPackage.getCoins());
 			return WxPayNotifyResponse.success("处理成功");
 		} catch (Exception e) {
 			log.error("/api/finance/wx/payNotify, error=" + e.getMessage());
@@ -221,7 +227,7 @@ public class ApiFinanceController extends ApiBaseController {
 		request.setReUserName(name);
 		request.setAmount(BaseWxPayRequest.yuanToFen(amount.toString()));
 		request.setDescription("用户提现");
-		request.setSpbillCreateIp("192.168.0.1");
+		request.setSpbillCreateIp(configEntity.getWxSpbillCreateIp());
 		try {
 			EntPayResult entPayResult = entPayService.entPay(request);
 			if (ResultCode.SUCCESS.equals(entPayResult.getReturnCode()) && ResultCode.SUCCESS.equals(entPayResult.getResultCode())) {

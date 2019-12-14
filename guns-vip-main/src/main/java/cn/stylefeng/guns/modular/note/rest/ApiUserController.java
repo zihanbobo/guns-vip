@@ -97,7 +97,7 @@ public class ApiUserController extends ApiBaseController {
 	@PostMapping("/login")
 	public Object login(@RequestParam("mobile") String mobile, @RequestParam("code") String code) {
 		boolean newUser = false;
-		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+//		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
 		QxUser user = qxUserService.getUserByAccount(mobile);
 		if (user == null) {
 			user = qxUserService.performRegister(mobile);
@@ -113,11 +113,18 @@ public class ApiUserController extends ApiBaseController {
 	        if (!this.wxMpService.switchover(appId)) {
 	            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appId));
 	        }
-			QxUser qxUser = getUserByCode(appId, openCode);
+			WxMpUser wxUser = getWxUserByCode(openCode);
+	        JSONObject result;
+			QxUser qxUser = qxUserService.getUserByUnionId(appId, wxUser.getUnionId());
 			if (qxUser == null) {
-				throw new ServiceException("请先绑定手机号");
+				result = new JSONObject();
+				result.put("openId", wxUser.getOpenId());
+				result.put("unionId", wxUser.getUnionId());
+				result.put("validUser", false);
+			} else {
+				result = generateToken(qxUser, false);
+				result.put("validUser", true);
 			}
-			JSONObject result = generateToken(qxUser, false);
 			return ResultGenerator.genSuccessResult(result);
 		} catch (WxErrorException e) {
 			log.error("微信登录失败, /api/user/wx/login, code=" + openCode + ", error=" + e.getMessage());
@@ -126,23 +133,17 @@ public class ApiUserController extends ApiBaseController {
 	}
 	
 	@PostMapping("/wx/bindUser")
-	public Object bindUser(String mobile, String code, String openCode) {
-		try {
-			boolean newUser = false;
-			validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
-			WxMpUser wxUser = getWxUserByCode(openCode);
-			QxUser user = qxUserService.getUserByAccount(mobile);
-			if (user == null) {
-				newUser = true;
-			}
-			user = qxUserService.wxBindUser(mobile, wxUser.getOpenId(), wxUser.getUnionId());
-			JSONObject result = generateToken(user, newUser);
-			log.info("/api/user/bindUser, mobile=" + mobile + ",code=" + code);
-			return ResultGenerator.genSuccessResult(result);
-		} catch (WxErrorException e) {
-			log.error("/api/user/bindUser, mobile=" + mobile + ",code=" + code + ", error=" + e.getMessage());
-			throw new ServiceException("微信绑定失败");
+	public Object bindUser(String mobile, String code, String appId, String openId, String unionId) {
+		boolean newUser = false;
+		validateCode(mobile, code, SMS_CODE.LOGIN_OR_REGISTER, "验证码");
+		QxUser user = qxUserService.getUserByAccount(mobile);
+		if (user == null) {
+			newUser = true;
 		}
+		user = qxUserService.wxBindUser(mobile, appId, openId, unionId);
+		JSONObject result = generateToken(user, newUser);
+		log.info("/api/user/bindUser, mobile=" + mobile + ",code=" + code);
+		return ResultGenerator.genSuccessResult(result);
 	}
 
 	private void validateCode(String mobile, String code,  int type, String name) {
@@ -242,11 +243,6 @@ public class ApiUserController extends ApiBaseController {
 	public WxMpUser getWxUserByCode(String code) throws WxErrorException{
 		WxMpOAuth2AccessToken accessToken = wxMpService.oauth2getAccessToken(code);
         return wxMpService.oauth2getUserInfo(accessToken, null);
-	}
-	
-	public QxUser getUserByCode(String appId, String code) throws WxErrorException {
-		WxMpUser wxUser = getWxUserByCode(code);
-        return qxUserService.getUserByUnionId(appId, wxUser.getUnionId());
 	}
 	
 	@PostMapping("/alipay/auth")
