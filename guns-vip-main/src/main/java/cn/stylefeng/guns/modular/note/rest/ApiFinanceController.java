@@ -182,17 +182,6 @@ public class ApiFinanceController extends ApiBaseController {
 			String orderNo = result.getOutTradeNo();
 			String totalFee = BaseWxPayResult.fenToYuan(result.getTotalFee());
 			updatePaySuccess(orderNo, new BigDecimal(totalFee));
-//			QxCoinOrder coinOrder = getCoinOrder(orderNo, new BigDecimal(totalFee), COIN_ORDER_STATUS.WAIT_PAY);
-//			if (coinOrder == null) {
-//				log.error("订单记录不存在, /api/finance/wx/payNotify, orderNo=" + orderNo + ",amount=" + totalFee);
-//				throw new ServiceException("订单记录不存在");
-//			}
-//			coinOrder.setStatus(COIN_ORDER_STATUS.PAID);
-//			qxCoinOrderService.updateById(coinOrder);
-//			// 增加用户可用金币
-//			QxUser user = getUser(coinOrder.getUserId());
-//			QxPackage qxPackage = qxPackageService.getById(coinOrder.getPackageId());
-//			user.setFreeze(user.getFreeze()+qxPackage.getCoins());
 			return WxPayNotifyResponse.success("处理成功");
 		} catch (Exception e) {
 			log.error("/api/finance/wx/payNotify, error=" + e.getMessage());
