@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class QxInviteCommentTo {
 	private Long inviteId;
-	private String level;
+	private Integer score;
 	private String content;
 }

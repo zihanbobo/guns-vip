@@ -916,4 +916,15 @@ public class CommonUtils {
 	public static BigDecimal divide(BigDecimal sub, BigDecimal total) {
 		return sub.divide(total, 100, BigDecimal.ROUND_HALF_UP);
 	}
+	
+	/**
+	 * 计算信用分
+	 * @param value
+	 * @return
+	 */
+	public static Integer creditScore(Integer score, Integer initalScore) {
+		BigDecimal currentScore = new BigDecimal(score);
+		BigDecimal base = new BigDecimal(initalScore);
+		return Integer.valueOf(base.multiply(BigDecimal.ONE.add(divide(currentScore, base.add(currentScore)))).setScale(0, BigDecimal.ROUND_HALF_UP).toString());
+	}
 }

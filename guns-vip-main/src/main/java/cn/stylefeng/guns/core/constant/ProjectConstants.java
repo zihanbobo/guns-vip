@@ -10,7 +10,6 @@ import java.util.Map;
  *
  */
 public final class ProjectConstants {
-
 	/**
 	 * 用户 token
 	 */
@@ -32,6 +31,13 @@ public final class ProjectConstants {
 	public interface USER_STATUS {
 		String ENABLE = "0";
 		String DISABLE = "1";
+	}
+	
+	/**
+	 * 用户信用分
+	 */
+	public interface USER_CREDIT {
+		Integer INITIAL_SCORE = 500;
 	}
 
 	/**

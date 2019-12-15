@@ -1,20 +1,28 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.dto.QxTweetCommentTo;
+import cn.stylefeng.guns.modular.note.entity.QxTweet;
 import cn.stylefeng.guns.modular.note.entity.QxTweetComment;
 import cn.stylefeng.guns.modular.note.mapper.QxTweetCommentMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxTweetMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxTweetCommentParam;
 import cn.stylefeng.guns.modular.note.model.result.QxTweetCommentResult;
 import  cn.stylefeng.guns.modular.note.service.QxTweetCommentService;
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>
@@ -27,6 +35,9 @@ import java.util.List;
 @Service
 public class QxTweetCommentServiceImpl extends ServiceImpl<QxTweetCommentMapper, QxTweetComment> implements QxTweetCommentService {
 
+	@Resource
+	private QxTweetMapper qxTweetMapper;
+	
     @Override
     public void add(QxTweetCommentParam param){
         QxTweetComment entity = getEntity(param);
@@ -80,5 +91,17 @@ public class QxTweetCommentServiceImpl extends ServiceImpl<QxTweetCommentMapper,
         ToolUtil.copyProperties(param, entity);
         return entity;
     }
+
+	@Override
+	public void addComment(Long requestUserId, QxTweetCommentTo commentTo) {
+		QxTweetComment tweetComment = new QxTweetComment();
+		BeanUtils.copyProperties(commentTo, tweetComment);
+		tweetComment.setCreatedBy(requestUserId);
+		this.baseMapper.insert(tweetComment);
+		// 推文评论数量+1
+		QxTweet tweet = qxTweetMapper.selectById(commentTo.getTweetId());
+		tweet.setCommentCount(tweet.getCommentCount()+1);
+		qxTweetMapper.updateById(tweet);
+	}
 
 }

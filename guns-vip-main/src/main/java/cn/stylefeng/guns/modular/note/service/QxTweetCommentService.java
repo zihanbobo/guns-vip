@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.note.service;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.dto.QxTweetCommentTo;
 import cn.stylefeng.guns.modular.note.entity.QxTweetComment;
 import cn.stylefeng.guns.modular.note.model.params.QxTweetCommentParam;
 import cn.stylefeng.guns.modular.note.model.result.QxTweetCommentResult;
@@ -65,5 +66,12 @@ public interface QxTweetCommentService extends IService<QxTweetComment> {
      * @Date 2019-11-18
      */
      LayuiPageInfo findPageBySpec(QxTweetCommentParam param);
+
+     /**
+      * 添加推文评价
+      * @param requestUserId
+      * @param commentTo
+      */
+	 void addComment(Long requestUserId, QxTweetCommentTo commentTo);
 
 }

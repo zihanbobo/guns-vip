@@ -341,6 +341,15 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			inviteComment.setCommenteeId(invite.getInviter());
 		}
 		qxInviteCommentSerivce.save(inviteComment);
+		// 更新被评价用户信用分
+		QxUser commentee = qxUserMapper.selectById(inviteComment.getCommenteeId());
+		commentee.setScore(caculateScore(commentee.getScore(), commentTo.getScore()));
+		qxUserMapper.updateById(commentee);
+	}
+	
+	public Integer caculateScore(Integer currentScore, Integer commentScore) {
+		Integer resultScore = currentScore + commentScore;
+		return Math.max(0, resultScore);
 	}
 
 	@Override

@@ -58,10 +58,7 @@ public class ApiTweetCommentController extends ApiBaseController {
 	
 	@RequestMapping("/add")
 	public Object add(QxTweetCommentTo commentTo) {
-		QxTweetComment tweetComment = new QxTweetComment();
-		BeanUtils.copyProperties(commentTo, tweetComment);
-		tweetComment.setCreatedBy(getRequestUserId());
-		qxTweetCommentService.save(tweetComment);
+		qxTweetCommentService.addComment(getRequestUserId(), commentTo);
 		log.info("/api/tweet/comment/add, commentTo=" + commentTo);
 		return ResultGenerator.genSuccessResult();
 	}
