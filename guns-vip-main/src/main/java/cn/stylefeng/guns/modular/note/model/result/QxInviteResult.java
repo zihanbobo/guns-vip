@@ -135,13 +135,16 @@ public class QxInviteResult implements Serializable {
     /**
      * 约单方式
      */
-    @TableField("invite_way")
     private String inviteWay;
     
     /**
      * 约单描述
      */
-    @TableField("content")
     private String content;
+    
+    /**
+     * 商铺
+     */
+    private String shop;
 
 }

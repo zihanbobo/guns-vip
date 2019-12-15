@@ -20,4 +20,5 @@ public class QxInviteTo {
     private String street;
     private String streetNumber;
     private String content;
+    private String shop;
 }

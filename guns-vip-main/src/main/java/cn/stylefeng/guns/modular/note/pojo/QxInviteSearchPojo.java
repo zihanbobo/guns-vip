@@ -30,5 +30,6 @@ public class QxInviteSearchPojo{
     private String status;
     private String inviteWay;
     private String content;
+    private String shop;
 	private String distance; // 距离
 }

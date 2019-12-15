@@ -167,6 +167,12 @@ public class QxInvite implements Serializable {
     @TableField("content")
     private String content;
     
+    /**
+     * 商铺名称
+     */
+    @TableField("shop")
+    private String shop;
+    
     public Long getId() {
         return id;
     }
@@ -359,6 +365,14 @@ public class QxInvite implements Serializable {
 		this.content = content;
 	}
 
+	public String getShop() {
+		return shop;
+	}
+
+	public void setShop(String shop) {
+		this.shop = shop;
+	}
+
 	@Override
     public String toString() {
         return "QxInvite{" +
@@ -386,6 +400,7 @@ public class QxInvite implements Serializable {
         ", status=" + status +
         ", inviteWay=" + inviteWay +
         ", content=" + content +
+        ", shop=" + shop +
         "}";
     }
 
