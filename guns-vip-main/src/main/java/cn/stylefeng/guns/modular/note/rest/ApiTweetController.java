@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.base.Strings;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.ResultGenerator;
@@ -49,7 +50,9 @@ public class ApiTweetController extends ApiBaseController {
 		//获取分页参数
         Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxTweet> queryWrapper = new QueryWrapper<>();
-		queryWrapper.like("title", keywords);
+		if (!Strings.isNullOrEmpty(keywords)) {
+			queryWrapper.like("title", keywords);
+		}
 		queryWrapper.orderByDesc("created_time");
 		qxTweetService.page(page, queryWrapper);
 		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());

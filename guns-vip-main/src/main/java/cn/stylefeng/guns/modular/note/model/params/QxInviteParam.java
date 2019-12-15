@@ -1,13 +1,10 @@
 package cn.stylefeng.guns.modular.note.model.params;
 
-import lombok.Data;
-import cn.stylefeng.roses.kernel.model.validator.BaseValidatingParam;
+import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
+import cn.stylefeng.roses.kernel.model.validator.BaseValidatingParam;
+import lombok.Data;
 
 /**
  * <p>
@@ -136,14 +133,17 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
     /**
      * 约单方式
      */
-    @TableField("invite_way")
     private String inviteWay;
     
     /**
      * 约单描述
      */
-    @TableField("content")
     private String content;
+    
+    /**
+     * 用户性别
+     */
+    private Integer sex;
 
     @Override
     public String checkParam() {
