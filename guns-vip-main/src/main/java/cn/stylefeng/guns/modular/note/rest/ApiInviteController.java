@@ -95,6 +95,7 @@ public class ApiInviteController extends ApiBaseController {
 	
 	@PostMapping("/list")
 	public Object list(QxInviteQueryTo inviteQueryTo) {
+		inviteQueryTo.setInviteRange(configEntity.getInviteRange());
 		Page page = LayuiPageFactory.defaultPage();
 		qxInviteService.search(page, inviteQueryTo);
 		List<QxInviteVo> vos = listQxInviteVos(page.getRecords());

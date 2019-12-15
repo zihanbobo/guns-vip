@@ -10,4 +10,5 @@ public class QxInviteQueryTo {
 	private String inviteType; // 约单类型 0-主动约；1-被动约
 	private Long dateTypeId;	// 约会类型ID
 	private Integer sex; // 性别 0-男;1-女
+	private Integer inviteRange;
 }

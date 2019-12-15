@@ -378,8 +378,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 
 	@Override
 	public Page<List<QxInviteSearchPojo>> search(Page page, QxInviteQueryTo inviteQueryTo) {
-		return this.baseMapper.search(page, configEntity.getInviteRange(), inviteQueryTo.getLongitude(),
-				inviteQueryTo.getLatitude(), inviteQueryTo.getContent());
+		QxInviteParam param = new QxInviteParam();
+		BeanUtils.copyProperties(inviteQueryTo, param);
+		return this.baseMapper.search(page, param);
 	}
 
 	@Override

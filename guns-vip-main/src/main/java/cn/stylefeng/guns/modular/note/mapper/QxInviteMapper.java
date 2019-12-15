@@ -73,5 +73,5 @@ public interface QxInviteMapper extends BaseMapper<QxInvite> {
     /**
      * 根据条件搜索附近约单
      */
-	Page<List<QxInviteSearchPojo>> search(@Param("page") Page page, @Param("inviteRange") int inviteRange, @Param("longitude") String longitude, @Param("latitude") String latitude, @Param("content") String content);
+	Page<List<QxInviteSearchPojo>> search(@Param("page") Page page, @Param("paramCondition") QxInviteParam paramCondition);
 }

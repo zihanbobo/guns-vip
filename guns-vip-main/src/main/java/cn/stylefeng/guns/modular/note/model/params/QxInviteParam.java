@@ -144,6 +144,11 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
      * 用户性别
      */
     private Integer sex;
+    
+    /**
+     * 邀请距离
+     */
+    private Integer inviteRange;
 
     @Override
     public String checkParam() {
