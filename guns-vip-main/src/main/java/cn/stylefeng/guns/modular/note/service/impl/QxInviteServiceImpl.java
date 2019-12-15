@@ -291,11 +291,11 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		createInviteOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH);
 		if (Boolean.TRUE.equals(checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH))) {
 			changeQxInviteStatus(inviteId, INVITE_STATUS.FINISH);
-			payCoin(inviteId);
 		}
+		payCoin(inviteId, requestUserId);
 	}
 
-	public void payCoin(Long inviteId) {
+	public void payCoin(Long inviteId, Long requestUserId) {
 		QxInvite invite = this.getById(inviteId);
 		Long payerId;
 		Long payeeId;
@@ -306,9 +306,11 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			payerId = invite.getInvitee();
 			payeeId = invite.getInviter();
 		}
-		QxPayResult payResult = qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId());
-		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_OUT);
-		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_IN);
+		if (payerId.equals(requestUserId)) { // 当前用户是付款者，需要付款
+			QxPayResult payResult = qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId());
+			qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_OUT);
+			qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_IN);
+		}
 	}
 
 	@Override
