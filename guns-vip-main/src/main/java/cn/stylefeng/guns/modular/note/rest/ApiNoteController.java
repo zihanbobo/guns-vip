@@ -58,17 +58,22 @@ public class ApiNoteController extends ApiBaseController {
 		List<QxNoteVo> vos = new ArrayList<>();
 		List<Long> paidNotes = getPaidNotes(currentUserId);
 		for (QxNote note : list) {
-			QxNoteVo vo = new QxNoteVo();
-			BeanUtils.copyProperties(note, vo);
-			if (!note.getIsPrivate() || paidNotes.contains(currentUserId)) {
-				vo.setIsLock(false);
-			} else {
-				vo.setIsLock(true);
-			}
-			vo.setUserVo(createQxUserVo(getUser(note.getUserId())));
+			QxNoteVo vo = createNoteVo(currentUserId, note, paidNotes);
 			vos.add(vo);
 		}
 		return vos;
+	}
+	
+	public QxNoteVo createNoteVo(Long currentUserId, QxNote note, List<Long> paidNotes) {
+		QxNoteVo vo = new QxNoteVo();
+		BeanUtils.copyProperties(note, vo);
+		if (!note.getIsPrivate() || paidNotes.contains(currentUserId)) {
+			vo.setIsLock(false);
+		} else {
+			vo.setIsLock(true);
+		}
+		vo.setUserVo(createQxUserVo(getUser(note.getUserId())));
+		return vo;
 	}
 
 	private List<Long> getPaidNotes(Long userId) {
@@ -80,6 +85,16 @@ public class ApiNoteController extends ApiBaseController {
 			paidNotes.add(userNote.getNoteId());
 		}
 		return paidNotes;
+	}
+	
+	@PostMapping("/detail")
+	public Object detail(Long id) {
+		Long currentUserId = getRequestUserId();
+		List<Long> paidNotes = getPaidNotes(currentUserId);
+		QxNote note = qxNoteService.getById(id);
+		QxNoteVo vo = createNoteVo(getRequestUserId(), note, paidNotes);
+		log.info("/api/note/detail, id=" + id);
+		return ResultGenerator.genSuccessResult(vo);
 	}
 
 	@RequestMapping("/add")
