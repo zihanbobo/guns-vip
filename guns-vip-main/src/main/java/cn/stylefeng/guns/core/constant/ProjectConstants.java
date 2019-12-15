@@ -266,4 +266,12 @@ public final class ProjectConstants {
 		String UN_HANDLE = "0";
 		String HANDLED = "1";
 	}
+	
+	/**
+	 * 约单结果
+	 */
+	public interface INVITE_APPLY_RESULT {
+		String SUCCESS = "success";
+		String FAIL = "fail";
+	}
 }

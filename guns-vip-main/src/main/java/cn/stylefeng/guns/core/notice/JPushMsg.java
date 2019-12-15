@@ -1,5 +1,8 @@
 package cn.stylefeng.guns.core.notice;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
@@ -24,9 +27,13 @@ public class JPushMsg {
 	private ConfigEntity configEntity;
 	
 	public void sendPush(Long userId, String context) {
+		sendPush(userId, context, new HashMap<>());
+	}
+	
+	public void sendPush(Long userId, String context, Map<String, String> extras) {
 		ClientConfig clientConfig = ClientConfig.getInstance();
 		JPushClient jpushClient = new JPushClient(configEntity.getJpushMaster(), configEntity.getJpushAppKey(), null, clientConfig);
-		PushPayload payload = buildPushObject_all_alias_alert(userId, context);
+		PushPayload payload = buildPushObject_all_alias_alert(userId, context, extras);
 		try {
 			PushResult result = jpushClient.sendPush(payload);
 			int status = result.getResponseCode();
@@ -42,7 +49,7 @@ public class JPushMsg {
 		}
 	}
 	
-	public static PushPayload buildPushObject_all_alias_alert(Long userId, String context) {
+	public static PushPayload buildPushObject_all_alias_alert(Long userId, String context, Map<String, String> extras) {
 		return PushPayload.newBuilder()
 				.setPlatform(Platform.all())
 				.setAudience(Audience.alias(userId.toString()))
@@ -50,6 +57,7 @@ public class JPushMsg {
 				.setMessage(Message.newBuilder()
 						.setMsgContent(context)
 						.addExtra("isMessage", true)
+						.addExtras(extras)
 						.build())
 				.setOptions(Options.newBuilder().setApnsProduction(true).setTimeToLive(86000).build())
 				.build();

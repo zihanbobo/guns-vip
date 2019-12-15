@@ -21,7 +21,9 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.DateUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.ALERT_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_RESULT;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
@@ -221,14 +223,17 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			int tag = 0;
 			String account = inviteUser.getMobile();
 			Map<String, String> pairs = new HashMap<>();
+			Map<String, String> extras = new HashMap<>();
 
 			if (INVITE_STATUS.MATCHED.equals(inviteUser.getStatus())) {
 				// 发送选中消息
 				tag = SMS_CODE.INVITE_SUCCESS;
+				extras.put("result", INVITE_APPLY_RESULT.SUCCESS);
 				log.info("User " + inviteUser.getMobile() + "被选中");
 			} else {
 				// 发送落选消息
 				tag = SMS_CODE.INVITE_FAIL;
+				extras.put("result", INVITE_APPLY_RESULT.FAIL);
 				log.info("User " + inviteUser.getMobile() + "未被选中");
 			}
 			noticeHelper.push(account, tag, pairs);
@@ -357,9 +362,10 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	@Override
 	public void alert(Long userId, String emergencyContact, QxInvite invite) {
 		Long otherUserId = userId.equals(invite.getInviter()) ? invite.getInvitee() : invite.getInviter();
+		QxUser currentUser = qxUserMapper.selectById(userId);
 		QxUser otherUser = qxUserMapper.selectById(otherUserId);
 		saveAlert(userId, invite.getId());
-		sendAlert(invite, otherUser, emergencyContact);
+		sendAlert(invite, currentUser, otherUser, emergencyContact);
 	}
 
 	public void saveAlert(Long userId, Long inviteId) {
@@ -370,11 +376,12 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		qxAlertService.save(alert);
 	}
 
-	public void sendAlert(QxInvite invite, QxUser otherUser, String emergencyContact) {
+	public void sendAlert(QxInvite invite, QxUser currentUser, QxUser otherUser, String emergencyContact) {
 		Map<String, String> pairs = new HashMap<>();
-		pairs.put("inviteTime", invite.getInviteTime().toString());
-		pairs.put("location", "");
-		pairs.put("contact", otherUser.getMobile());
+		pairs.put("contact", currentUser.getMobile());
+		pairs.put("inviteTime", DateUtils.date2String(invite.getInviteTime(), DateUtils.YYYY_MM_DD_HH_MM_PATTERN));
+		pairs.put("location", "xxx");
+		pairs.put("otherContact", otherUser.getMobile());
 		noticeHelper.send(emergencyContact, SMS_CODE.EMERGENCY, pairs);
 	}
 
