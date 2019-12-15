@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 import java.util.Map;
@@ -53,4 +55,13 @@ public interface QxProductMapper extends BaseMapper<QxProduct> {
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxProductParam paramCondition);
 
+
+    /**
+     * 我的兑换
+     * @param page
+     * @param requestUserId
+     */
+    @Select("select a.* from qx_product a inner join qx_user_product b on b.user_id = ${userId} and a.id = b.product_id order by a.created_time")
+    @ResultMap("BaseResultMap")
+	Page myExchange(@Param("page") Page page, @Param("userId") Long userId);
 }

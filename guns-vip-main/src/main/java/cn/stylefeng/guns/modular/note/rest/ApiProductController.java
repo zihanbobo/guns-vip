@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,7 @@ import cn.stylefeng.guns.modular.note.dvo.QxUserVo;
 import cn.stylefeng.guns.modular.note.entity.QxCategory;
 import cn.stylefeng.guns.modular.note.entity.QxProduct;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.entity.QxUserProduct;
 import cn.stylefeng.guns.modular.note.service.QxCategoryService;
 import cn.stylefeng.guns.modular.note.service.QxProductService;
 import cn.stylefeng.guns.modular.note.service.QxUserProductService;
@@ -113,5 +115,14 @@ public class ApiProductController extends ApiBaseController {
 	public Object exchange(Long productId, Long addressId) {
 		qxProductService.exchange(getRequestUserId(), productId, addressId);
 		return ResultGenerator.genSuccessResult();
+	}
+	
+	@PostMapping("/myExchange")
+	public Object myExchange() {
+		Page page = LayuiPageFactory.defaultPage();
+		qxProductService.myExchange(page, getRequestUserId());
+		log.info("/api/product/myExchange");
+		return ResultGenerator.genSuccessResult(page);
+		
 	}
 }

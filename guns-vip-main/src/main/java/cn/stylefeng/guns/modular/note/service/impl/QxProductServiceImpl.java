@@ -140,4 +140,9 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
 		userProduct.setStatus(USER_PRODUCT_STATUS.UN_HANDLE);
 		qxUserProductMapper.insert(userProduct);
 	}
+
+	@Override
+	public Page myExchange(Page page, Long requestUserId) {
+		return this.baseMapper.myExchange(page, requestUserId);
+	}
 }

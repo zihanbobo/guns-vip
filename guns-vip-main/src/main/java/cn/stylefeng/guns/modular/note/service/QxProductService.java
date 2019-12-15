@@ -4,6 +4,8 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxProduct;
 import cn.stylefeng.guns.modular.note.model.params.QxProductParam;
 import cn.stylefeng.guns.modular.note.model.result.QxProductResult;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -74,5 +76,12 @@ public interface QxProductService extends IService<QxProduct> {
 	 * @param addressId 
 	 */
 	void exchange(Long userId, Long productId, Long addressId);
+
+	/**
+	 * 我的兑换商品
+	 * @param page
+	 * @param requestUserId
+	 */
+	Page myExchange(Page page, Long requestUserId);
 
 }
