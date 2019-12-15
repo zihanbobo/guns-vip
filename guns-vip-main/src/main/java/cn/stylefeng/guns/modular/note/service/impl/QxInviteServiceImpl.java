@@ -396,4 +396,28 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		queryWrapper.eq("invitee", userId);
 		return this.baseMapper.selectCount(queryWrapper);
 	}
+
+	@Override
+	public void cancel(Long requestUserId, Long inviteId) {
+		QxInvite invite = this.baseMapper.selectById(inviteId);
+		String inviteStatus = invite.getStatus();
+		// 检查状态
+		if (!(INVITE_STATUS.WAIT_MATCH.equals(inviteStatus) || INVITE_STATUS.MATCHED.equals(inviteStatus))) {
+			throw new ServiceException("约单已开始，不能取消");
+		}
+		// 检查是否是自己约单
+		if (!invite.getInviter().equals(requestUserId)) {
+			throw new ServiceException("只能取消自己的约单");
+		}
+		// 主动约，则直接打赏，且约单状态【已取消】
+		if (INVITE_TYPE.ACTIVE.equals(invite.getInviteType())) {
+			// 打赏
+			QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, invite.getInvitee(), invite.getGiftId());
+			qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_OUT);
+			qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_IN);
+			// 取消约单
+			invite.setStatus(INVITE_STATUS.CANCEl);
+			this.baseMapper.updateById(invite);
+		}
+	}
 }

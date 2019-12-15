@@ -175,4 +175,11 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	int getInviteMeCount(Long userId);
 
+	/**
+	 * 取消约单
+	 * @param requestUserId
+	 * @param inviteId
+	 */
+	void cancel(Long requestUserId, Long inviteId);
+
 }

@@ -310,4 +310,11 @@ public class ApiInviteController extends ApiBaseController {
 		}
 		return ResultGenerator.genSuccessResult(vos);
 	}
+	
+	@PostMapping("/cancel")
+	public Object cancel(Long inviteId) {
+		qxInviteService.cancel(getRequestUserId(), inviteId);
+		log.info("/api/invite/cancel, inviteId=" + inviteId);
+		return ResultGenerator.genSuccessResult();
+	}
 }
