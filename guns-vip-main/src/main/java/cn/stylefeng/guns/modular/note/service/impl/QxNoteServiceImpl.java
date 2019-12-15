@@ -17,7 +17,9 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.modular.note.dto.QxPayResult;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
+import cn.stylefeng.guns.modular.note.entity.QxUserNote;
 import cn.stylefeng.guns.modular.note.mapper.QxNoteMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxUserNoteMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxNoteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxNoteResult;
 import  cn.stylefeng.guns.modular.note.service.QxNoteService;
@@ -34,6 +36,9 @@ import cn.stylefeng.roses.core.util.ToolUtil;
 @Service
 public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> implements QxNoteService {
 
+	@Resource
+	private QxUserNoteMapper qxUserNoteMapper;
+	
 	@Resource
 	private QxCoinHelper qxCoinHelper;
 	
@@ -113,5 +118,10 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		QxNote note = this.getById(noteId);
 		note.setWatchCount(note.getWatchCount()+1);
 		this.updateById(note);
+		// 添加用户解锁记录
+		QxUserNote userNote = new QxUserNote();
+		userNote.setNoteId(noteId);
+		userNote.setUserId(userId);
+		qxUserNoteMapper.insert(userNote);
 	}
 }

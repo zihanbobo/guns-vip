@@ -271,6 +271,9 @@ public class ApiInviteController extends ApiBaseController {
 	public Object alert(Long inviteId) {
 		QxInvite invite = qxInviteService.getById(inviteId);
 		QxEmergency emergency = qxEmergencyService.getDefaultEmergency(getRequestUserId());
+		if (emergency == null) {
+			throw new ServiceException("请先设置紧急联系人");
+		}
 		qxInviteService.alert(getRequestUserId(), emergency.getContact(), invite);
 		log.info("/api/invite/alert, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();

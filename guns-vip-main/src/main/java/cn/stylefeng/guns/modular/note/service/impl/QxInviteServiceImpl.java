@@ -373,7 +373,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	public void sendAlert(QxInvite invite, QxUser otherUser, String emergencyContact) {
 		Map<String, String> pairs = new HashMap<>();
 		pairs.put("inviteTime", invite.getInviteTime().toString());
-		pairs.put("location", invite.getLocation());
+		pairs.put("location", "");
 		pairs.put("contact", otherUser.getMobile());
 		noticeHelper.send(emergencyContact, SMS_CODE.EMERGENCY, pairs);
 	}
