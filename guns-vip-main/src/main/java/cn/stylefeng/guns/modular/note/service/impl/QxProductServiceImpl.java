@@ -108,12 +108,7 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
 		if (product.getStock() <= 0) {
 			throw new ServiceException("商品库存不足，无法兑换");
 		}
-		if (user.getBalance() < product.getPrice()) {
-			throw new ServiceException("金币不足，无法兑换");
-		}
-		// 用户余额更新
-		user.setBalance(user.getBalance()-product.getPrice());
-		qxUserMapper.updateById(user);
+		updateChange(user, product.getPrice());
 		// 商品库存更新
 		product.setStock(product.getStock()-1);
 		this.updateById(product);
@@ -121,6 +116,20 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
 		qxPayLogHelper.createPayLog(userId, product.getPrice(), USER_PAY_LOG_TYPE.BUY_PRODUCT_OUT);
 		// 创建用户申请单
 		saveUserProduct(userId, productId, addressId);
+	}
+	
+	public void updateChange(QxUser user, Integer price) {
+		if ((user.getBalance() + user.getFreeze()) < price) {
+			throw new ServiceException("金币不足，无法兑换");
+		}
+		Integer finalFreeze = user.getFreeze() - price;
+		if (finalFreeze > 0) {
+			user.setFreeze(finalFreeze);
+		} else {
+			user.setFreeze(0);
+			user.setBalance(user.getBalance()+finalFreeze);
+		}
+		qxUserMapper.updateById(user);
 	}
 	
 	public void saveUserProduct(Long userId, Long productId, Long addressId) {
