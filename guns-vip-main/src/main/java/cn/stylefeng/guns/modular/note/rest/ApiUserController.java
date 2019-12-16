@@ -14,6 +14,7 @@
  */
 package cn.stylefeng.guns.modular.note.rest;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -282,9 +283,14 @@ public class ApiUserController extends ApiBaseController {
 		params.put("auth_type", "AUTHACCOUNT");
 		params.put("sign_type", "RSA2");
 		try {
-			String sign = AlipaySignature.rsaSign(params, alipayProperties.getPrivateKey(), alipayProperties.getCharset());
-			return ResultGenerator.genSuccessResult(sign);
+			String content = AlipaySignature.getSignContent(params);
+			String sign = AlipaySignature.rsa256Sign(content, alipayProperties.getPrivateKey(), alipayProperties.getCharset());
+			params.put("sign", URLEncoder.encode(sign, alipayProperties.getCharset()));
+			log.info("/api/user/alipay/authStr");
+			return ResultGenerator.genSuccessResult(AlipaySignature.getSignContent(params));
 		} catch (AlipayApiException e) {
+			throw new ServiceException(e.getMessage());
+		} catch (UnsupportedEncodingException e) {
 			throw new ServiceException(e.getMessage());
 		}
 	}
