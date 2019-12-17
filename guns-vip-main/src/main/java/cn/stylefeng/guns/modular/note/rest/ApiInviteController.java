@@ -132,8 +132,11 @@ public class ApiInviteController extends ApiBaseController {
 		// 检查重复报名
 		checkRepeatApply(currentUserId, inviteId);
 		QxInvite invite = qxInviteService.getById(inviteId);
+		if (invite.getInviter().equals(currentUserId)) {
+			throw new ServiceException("不能赴约自己的拼单");
+		}
 		if (!INVITE_STATUS.WAIT_MATCH.equals(invite.getStatus())) {
-			throw new ServiceException("该约单已结束，不能报名");
+			throw new ServiceException("该拼单已结束，不能报名");
 		}
 		qxInviteService.apply(currentUserId, inviteId);
 		log.info("/api/invite/apply, inviteId=" + inviteId);
