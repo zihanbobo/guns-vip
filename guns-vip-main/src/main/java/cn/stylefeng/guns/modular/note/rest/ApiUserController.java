@@ -285,9 +285,9 @@ public class ApiUserController extends ApiBaseController {
 		try {
 			String content = AlipaySignature.getSignContent(params);
 			String sign = AlipaySignature.rsa256Sign(content, alipayProperties.getPrivateKey(), alipayProperties.getCharset());
-			params.put("sign", URLEncoder.encode(sign, alipayProperties.getCharset()));
+			content = content + "&sign=" + URLEncoder.encode(sign, alipayProperties.getCharset());
 			log.info("/api/user/alipay/authStr");
-			return ResultGenerator.genSuccessResult(AlipaySignature.getSignContent(params));
+			return ResultGenerator.genSuccessResult(content);
 		} catch (AlipayApiException e) {
 			throw new ServiceException(e.getMessage());
 		} catch (UnsupportedEncodingException e) {

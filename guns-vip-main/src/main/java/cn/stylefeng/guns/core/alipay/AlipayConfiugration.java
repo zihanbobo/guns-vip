@@ -28,9 +28,9 @@ public class AlipayConfiugration {
 		certAlipayRequest.setFormat(properties.getFormat());
 		certAlipayRequest.setCharset(properties.getCharset());
 		certAlipayRequest.setSignType(properties.getSignType());
-		certAlipayRequest.setCertPath(properties.getAlipayCertPath());
-		certAlipayRequest.setAlipayPublicCertPath(properties.getAlipayCertPath());
-		certAlipayRequest.setRootCertPath(properties.getAlipayRootCertPath());
+		certAlipayRequest.setCertPath(constructAbsolutePath(properties.getAppCertPath()));
+		certAlipayRequest.setAlipayPublicCertPath(constructAbsolutePath(properties.getAlipayCertPath()));
+		certAlipayRequest.setRootCertPath(constructAbsolutePath(properties.getAlipayRootCertPath()));
 		return new DefaultAlipayClient(certAlipayRequest);
 	}
 	

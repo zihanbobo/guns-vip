@@ -254,8 +254,10 @@ public class ApiFinanceController extends ApiBaseController {
 			
 			AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 			AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+			model.setBody("金币充值");
 			model.setSubject("金币充值");
 			model.setOutTradeNo(coinOrder.getSn());
+			model.setTimeoutExpress("30m");
 			model.setTotalAmount(coinOrder.toString());
 			model.setProductCode("QUICK_MSECURITY_PAY");
 			request.setBizModel(model);
