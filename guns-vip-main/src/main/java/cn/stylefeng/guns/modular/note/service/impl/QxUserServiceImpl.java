@@ -150,13 +150,18 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 		if (user == null) {
 			user = performRegister(mobile);
 		}
-		QxUserSocial qxUserSocial = new QxUserSocial();
-		qxUserSocial.setUserId(user.getId());
-		qxUserSocial.setAppId(appId);
-		qxUserSocial.setOpenId(openId);
-		qxUserSocial.setUnionId(unionId);
-		qxUserSocial.setType(SOCIAL_TYPE.WECHAT);
-		qxUserSocialMapper.insert(qxUserSocial);
+		
+		QxUserSocial qxUserSocial = getUserSocialByAppId(user.getId(), appId);
+		if (qxUserSocial == null) {
+			qxUserSocial = new QxUserSocial();
+			qxUserSocial.setUserId(user.getId());
+			qxUserSocial.setAppId(appId);
+			qxUserSocial.setOpenId(openId);
+			qxUserSocial.setUnionId(unionId);
+			qxUserSocial.setType(SOCIAL_TYPE.WECHAT);
+			qxUserSocialMapper.insert(qxUserSocial);
+		}
+		
 		return user;
 	}
 
