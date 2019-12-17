@@ -69,6 +69,8 @@ import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
 import cn.stylefeng.guns.modular.note.service.impl.QxPayLogHelper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.bean.WxJsapiSignature;
+import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 
 @Slf4j
@@ -106,6 +108,20 @@ public class ApiFinanceController extends ApiBaseController {
 	
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
+	
+	@PostMapping("/wx/mp/config")
+	public Object wxMpConfig(String appId, String url) {
+		try {
+			if (!this.wxMpService.switchover(appId)) {
+	            throw new ServiceException(String.format("未找到对应appid=[%s]的配置，请核实！", appId));
+	        }
+			WxJsapiSignature signature = wxMpService.createJsapiSignature(url);
+			log.info("/api/finance/wx/mp/config, url=" + url);
+			return ResultGenerator.genSuccessResult(signature);
+		} catch (WxErrorException e) {
+			throw new ServiceException(e.getMessage());
+		}
+	}
 	
 	/**
 	 * 微信公众号购买金币
