@@ -74,7 +74,7 @@
 		WHERE
 			a.invite_id = #{inviteId}
     </select>
-    
+    <!-- 
     <select id="search" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
     	SELECT
     		a.id AS "id", a.created_time AS "createdTime", a.sn AS "sn", a.inviter AS "inviter", a.invitee AS "invitee", a.invite_time AS "inviteTime", a.invite_type AS "inviteType", a.date_type_id AS "dateTypeId", a.gift_id AS "giftId", a.longitude AS "longitude", a.latitude AS "latitude", a.province AS "province", a.city AS "city", a.district AS "district", a.street AS "street", a.streetNumber AS "streetNumber", a.status AS "status", a.invite_way AS "inviteWay", a.content AS "content", a.shop AS "shop",
@@ -87,6 +87,33 @@
     		a.inviter = b.id
     	WHERE
     		ST_Contains (ST_MakeEnvelope (Point ( ( ${paramCondition.longitude}+ ( ${paramCondition.inviteRange} / 111 ) ), ( ${paramCondition.latitude}+ ( ${paramCondition.inviteRange} / 111 ) ) ), Point ( ( ${paramCondition.longitude}- ( ${paramCondition.inviteRange} / 111 ) ), ( ${paramCondition.latitude}- ( ${paramCondition.inviteRange} / 111 ) ) ) ), Point ( a.longitude, a.latitude )) and a.content like '%${paramCondition.content}%'
+    		AND a.status = '0'
+    		<if test="paramCondition.inviteType != null and paramCondition.inviteType !=''">
+    		AND a.invite_type = #{paramCondition.inviteType}
+    		</if>
+    		<if test="paramCondition.dateTypeId != null and paramCondition.dateTypeId !=''">
+    		AND a.date_type_id = #{paramCondition.dateTypeId}
+    		</if>
+    		<if test="paramCondition.sex != null">
+    		AND b.sex = #{paramCondition.sex}
+    		</if>
+    	ORDER BY
+    		distance
+    </select>
+     -->
+    <!-- TODO DELETE! JUST FOR TEST -->
+    <select id="search" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
+    	SELECT
+    		a.id AS "id", a.created_time AS "createdTime", a.sn AS "sn", a.inviter AS "inviter", a.invitee AS "invitee", a.invite_time AS "inviteTime", a.invite_type AS "inviteType", a.date_type_id AS "dateTypeId", a.gift_id AS "giftId", a.longitude AS "longitude", a.latitude AS "latitude", a.province AS "province", a.city AS "city", a.district AS "district", a.street AS "street", a.streetNumber AS "streetNumber", a.status AS "status", a.invite_way AS "inviteWay", a.content AS "content", a.shop AS "shop",
+    		ceiling(rand()*500) + 500 AS distance
+    	FROM
+    		qx_invite a
+    	INNER JOIN
+    		qx_user b
+    	ON
+    		a.inviter = b.id
+    	WHERE
+    		a.content like '%${paramCondition.content}%'
     		AND a.status = '0'
     		<if test="paramCondition.inviteType != null and paramCondition.inviteType !=''">
     		AND a.invite_type = #{paramCondition.inviteType}
