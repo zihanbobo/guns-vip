@@ -32,6 +32,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -122,6 +123,15 @@ public class WebConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		List<String> securityUrls = Arrays.asList(configEntity.getSecureUrls().split(","));
 		registry.addInterceptor(new RestApiInteceptor(getCacheFactory().getCache())).addPathPatterns("/api/**").excludePathPatterns(securityUrls);
+	}
+	
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+        .allowedOrigins("*")
+        .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+        .maxAge(3600)
+        .allowCredentials(true);
 	}
 
 	/**

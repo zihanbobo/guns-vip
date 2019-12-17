@@ -16,7 +16,9 @@ package cn.stylefeng.guns.modular.note.rest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -285,14 +287,34 @@ public class ApiUserController extends ApiBaseController {
 		try {
 			String content = AlipaySignature.getSignContent(params);
 			String sign = AlipaySignature.rsa256Sign(content, alipayProperties.getPrivateKey(), alipayProperties.getCharset());
-			content = content + "&sign=" + URLEncoder.encode(sign, alipayProperties.getCharset());
+			params.put("sign", sign);
+			String resultSign = encodeSign(params, alipayProperties.getCharset());
 			log.info("/api/user/alipay/authStr");
-			return ResultGenerator.genSuccessResult(content);
+			return ResultGenerator.genSuccessResult(resultSign);
 		} catch (AlipayApiException e) {
 			throw new ServiceException(e.getMessage());
-		} catch (UnsupportedEncodingException e) {
-			throw new ServiceException(e.getMessage());
 		}
+	}
+	
+	public String encodeSign(Map<String, String> params, String charset) {
+		List<String> keys = new ArrayList<>(params.keySet());
+        StringBuilder payString = new StringBuilder();
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            String value;
+			try {
+				value = URLEncoder.encode(params.get(key), charset);
+			} catch (UnsupportedEncodingException e) {
+				throw new ServiceException(e.getMessage());
+			}
+            if (i == keys.size() - 1) {
+                //拼接时，不包括最后一个&字符
+                payString.append(key).append("=").append(value);
+            } else {
+                payString.append(key).append("=").append(value).append("&");
+            }
+        }
+        return payString.toString();
 	}
 	
 	@PostMapping("/alipay/auth")

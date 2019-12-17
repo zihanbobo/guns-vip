@@ -18,6 +18,7 @@ package cn.stylefeng.guns.core.aop;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.alibaba.fastjson.JSON;
@@ -50,6 +51,11 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
     	response.setContentType("application/json;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		response.setStatus(HttpServletResponse.SC_OK);
+		setCrossOrigin(request, response);
+		if (request.getMethod().equals("OPTIONS")) {
+			response.setStatus(HttpStatus.NO_CONTENT.value());
+			return true;
+		}
     	try {
 			String accessId = TokenUtils.validate(request.getHeader(JwtConstants.AUTH_HEADER), cache);
 			String userId = accessId.replaceAll(TOKEN.USER, "");
@@ -63,4 +69,12 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
 		response.getWriter().write(JSON.toJSONString(result));
 		return false;
     }
+    
+    private void setCrossOrigin(HttpServletRequest request, HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "*");
+		response.setHeader("Access-Control-Allow-Headers", "Content-Type, x-requested-with, X-Custom-Header, Authorization, token");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Max-Age", "3600");
+	}
 }

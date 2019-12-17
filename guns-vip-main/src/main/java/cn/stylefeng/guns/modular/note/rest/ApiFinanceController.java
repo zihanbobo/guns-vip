@@ -258,7 +258,7 @@ public class ApiFinanceController extends ApiBaseController {
 			model.setSubject("金币充值");
 			model.setOutTradeNo(coinOrder.getSn());
 			model.setTimeoutExpress("30m");
-			model.setTotalAmount(coinOrder.toString());
+			model.setTotalAmount(coinOrder.getAmount().setScale(2).toString());
 			model.setProductCode("QUICK_MSECURITY_PAY");
 			request.setBizModel(model);
 			request.setNotifyUrl(alipayProperties.getAlipayNotifyUrl());
