@@ -122,7 +122,7 @@ function delHeadImage(this_img) {
     //删除数组
     headImageArray.splice(subscript, 1);
     //重新排序
-    headImageArray.sort();
+//    headImageArray.sort();
     $('#headImages').val(headImageArray.join(","));
 }
 
@@ -135,6 +135,6 @@ function delDetailImage(this_img) {
     //删除数组
     detailImageArray.splice(subscript, 1);
     //重新排序
-    detailImageArray.sort();
+//    detailImageArray.sort();
     $('#detailImages').val(detailImageArray.join(","));
 }

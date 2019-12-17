@@ -69,6 +69,7 @@ import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
 import cn.stylefeng.guns.modular.note.service.impl.QxPayLogHelper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.mp.api.WxMpService;
 
 @Slf4j
 @RestController
@@ -81,6 +82,8 @@ public class ApiFinanceController extends ApiBaseController {
 	
 	@Resource(name = "wxAppPayService")
 	private WxPayService wxAppPayService;
+	
+	private final WxMpService wxMpService;
 	
 	private AlipayClient alipayClient;
 
@@ -103,7 +106,7 @@ public class ApiFinanceController extends ApiBaseController {
 	
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
-
+	
 	/**
 	 * 微信公众号购买金币
 	 * 
