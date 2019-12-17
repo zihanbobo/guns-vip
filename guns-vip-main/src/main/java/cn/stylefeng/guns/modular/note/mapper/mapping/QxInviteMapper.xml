@@ -94,7 +94,7 @@
     		<if test="paramCondition.dateTypeId != null and paramCondition.dateTypeId !=''">
     		AND a.date_type_id = #{paramCondition.dateTypeId}
     		</if>
-    		<if test="paramCondition.sex != null and paramCondition.sex !=''">
+    		<if test="paramCondition.sex != null">
     		AND b.sex = #{paramCondition.sex}
     		</if>
     	ORDER BY

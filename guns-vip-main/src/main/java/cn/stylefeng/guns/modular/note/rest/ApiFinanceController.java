@@ -135,6 +135,8 @@ public class ApiFinanceController extends ApiBaseController {
 			// 创建订单
 			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.WECHAT);
 			WxPayUnifiedOrderRequest request = createWxPayOrderRequest(packageTo.getTradeType(), coinOrder);
+			QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), packageTo.getAppId());
+			request.setOpenid(userSocial.getOpenId());
 			log.info("/api/finance/wx/mp/pay");
 			return ResultGenerator.genSuccessResult(wxMpPayService.createOrder(request));
 		} catch (Exception e) {
