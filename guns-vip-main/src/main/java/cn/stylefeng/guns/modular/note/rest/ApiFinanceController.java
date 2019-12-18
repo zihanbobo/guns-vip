@@ -45,6 +45,7 @@ import com.github.binarywang.wxpay.service.WxPayService;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.FileUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.alipay.AlipayProperties;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_PAY_TYPE;
@@ -301,12 +302,12 @@ public class ApiFinanceController extends ApiBaseController {
 	public void alipayNotify(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> params = getAlipayNotifyParams(request);
 		try {
-			boolean flag = AlipaySignature.rsaCheckV1(params, alipayProperties.getAlipayCertPath(),
-					alipayProperties.getCharset(), alipayProperties.getSignType());
+			boolean flag = AlipaySignature.rsaCertCheckV1(params, FileUtil.mergeDeployPath(alipayProperties.getAlipayCertPath()), alipayProperties.getCharset(), alipayProperties.getSignType());
 			if (!flag) {
 				log.error("支付宝验证签名错误, params=" + params);
 			}
 			updatePaySuccess(params.get("out_trade_no"), new BigDecimal(params.get("total_amount")));
+			log.info("/api/finance/alipay/payNotify, params=" + params);
 			response.getWriter().write("success");
 		} catch (AlipayApiException e) {
 			log.error("支付宝回调出错, /api/finance/alipay/payNotify, error=" + e.getMessage());

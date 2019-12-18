@@ -57,7 +57,7 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
     	try {
-			String accessId = TokenUtils.validate(request.getHeader(JwtConstants.AUTH_HEADER), cache);
+			String accessId = TokenUtils.getAccessId(request.getHeader(JwtConstants.AUTH_HEADER));
 			String userId = accessId.replaceAll(TOKEN.USER, "");
 			request.setAttribute("userId", userId);
 			log.info("UserID = " + userId);

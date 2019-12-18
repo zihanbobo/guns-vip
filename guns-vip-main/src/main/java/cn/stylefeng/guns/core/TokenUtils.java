@@ -70,7 +70,7 @@ public class TokenUtils {
 	 * @param token
 	 * @return
 	 */
-	private static String getAccessId(String token) {
+	public static String getAccessId(String token) {
 		if (StringUtils.isBlank(token)) {
 			throw new ServiceException("request token=" + token);
 		}

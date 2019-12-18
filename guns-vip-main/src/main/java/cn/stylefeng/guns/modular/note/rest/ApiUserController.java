@@ -176,7 +176,7 @@ public class ApiUserController extends ApiBaseController {
 		}
 		String accessId = TOKEN.USER + user.getId();
 		String token = TokenUtils.createToken(accessId);
-		cacheValueSecond(accessId, 60 * 60 * 24 * 30, token);
+//		cacheValueSecond(accessId, 60 * 60 * 24 * 30, token);
 		JSONObject result = new JSONObject();
 		result.put("id", user.getId());
 		result.put("token",token);
