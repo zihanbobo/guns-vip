@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.note.dvo;
 
 import java.util.Date;
 
+import cn.stylefeng.guns.modular.note.entity.QxGift;
 import lombok.Data;
 
 @Data
@@ -22,4 +23,6 @@ public class QxNoteVo {
 	private Boolean isLock;
 	// 用户信息
 	private QxUserVo userVo;
+	// 礼物
+	private QxGift gift;
 }

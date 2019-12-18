@@ -19,6 +19,7 @@ import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxNoteTo;
 import cn.stylefeng.guns.modular.note.dvo.QxNoteVo;
 import cn.stylefeng.guns.modular.note.dvo.QxTweetVo;
+import cn.stylefeng.guns.modular.note.entity.QxGift;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
 import cn.stylefeng.guns.modular.note.entity.QxUserNote;
 import cn.stylefeng.guns.modular.note.service.QxGiftService;
@@ -73,7 +74,16 @@ public class ApiNoteController extends ApiBaseController {
 			vo.setIsLock(true);
 		}
 		vo.setUserVo(createQxUserVo(getUser(note.getUserId())));
+		vo.setGift(getNoteGift(note.getGiftId()));
 		return vo;
+	}
+	
+	public QxGift getNoteGift(Long giftId) {
+		QxGift gift = null;
+		if (giftId != null) {
+			gift = qxGiftService.getById(giftId);
+		}
+		return gift;
 	}
 
 	private List<Long> getPaidNotes(Long userId) {
