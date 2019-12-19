@@ -19,18 +19,30 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'sn', sort: true, title: '订单号'},
-            {field: 'userId', sort: true, title: '用户ID'},
-            {field: 'amount', sort: true, title: '金额'},
-            {field: 'payWay', sort: true, title: '提现方式 0-支付宝；1-微信'},
-            {field: 'payeeAccount', sort: true, title: '收款账号 支付宝账号；微信uuid;'},
-            {field: 'status', sort: true, title: '状态 0-已申请；1-已提现;2-已取消'},
+            {field: 'nickname', sort: true, title: '用户昵称'},
+            {field: 'mobile', sort: true, title: '用户账号'},
+            {field: 'amount', sort: true, title: '提现金额'},
+            {field: 'payeeAccount', sort: true, title: '收款账号'},
+            {field: 'payWay', sort: true, title: '提现方式', templet: function(d) {
+            	//  0-支付宝；1-微信
+            	if (d.payWay == 0) {
+            		return '支付宝';
+            	} else if (d.payWay == 1) {
+            		return '微信';
+            	}
+            }},
+            {field: 'status', sort: true, title: '状态', templet: function(d) {
+            	//  0-已申请；1-已提现;2-已取消
+            	if (d.status == 0) {
+            		return '已申请';
+            	} else if (d.status == 1) {
+            		return '已提现';
+            	} else if (d.status == 2) {
+            		return '已取消';
+            	}
+            }},
+            {field: 'createdTime', sort: true, title: '创建时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };
@@ -40,7 +52,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      */
     QxWithdrawLog.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['mobile'] = $("#mobile").val();
         table.reload(QxWithdrawLog.tableId, {
             where: queryData, page: {curr: 1}
         });

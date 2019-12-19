@@ -85,6 +85,11 @@ public class QxWithdrawLogParam implements Serializable, BaseValidatingParam {
      */
     private String sn;
 
+    /**
+     * 用户账号
+     */
+    private String mobile;
+    
     @Override
     public String checkParam() {
         return null;

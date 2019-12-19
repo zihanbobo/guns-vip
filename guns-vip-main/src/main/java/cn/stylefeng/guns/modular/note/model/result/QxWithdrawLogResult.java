@@ -83,5 +83,15 @@ public class QxWithdrawLogResult implements Serializable {
      * 订单号
      */
     private String sn;
+    
+    /**
+     * 手机号
+     */
+    private String mobile;
+    
+    /**
+     * 昵称
+     */
+    private String nickname;
 
 }
