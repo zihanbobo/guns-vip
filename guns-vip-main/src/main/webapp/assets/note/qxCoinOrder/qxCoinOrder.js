@@ -19,18 +19,31 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'sn', sort: true, title: '订单号'},
-            {field: 'userId', sort: true, title: '用户ID'},
-            {field: 'packageId', sort: true, title: '金币套餐ID'},
+            {field: 'mobile', sort: true, title: '用户账号'},
+            {field: 'coins', sort: true, title: '金币'},
             {field: 'amount', sort: true, title: '金额'},
-            {field: 'type', sort: true, title: '充值类型：0-微信；1-支付宝；2-平台'},
-            {field: 'status', sort: true, title: '状态 状态：0-待支付；1-已支付;2-已取消'},
+            {field: 'type', sort: true, title: '充值类型', templet: function(d) {
+            	// 0-微信；1-支付宝；2-平台
+            	if (d.type == 0) {
+            		return '微信';
+            	} else if (d.type == 1) {
+            		return '支付宝';
+            	} else if (d.type == 2) {
+            		return '平台';
+            	}
+            }},
+            {field: 'status', sort: true, title: '状态', templet: function(d) {
+            	// 状态：0-待支付；1-已支付;2-已取消
+            	if (d.status == 0) {
+            		return '待支付';
+            	} else if (d.status == 1) {
+            		return '已支付';
+            	} else if (d.status == 2) {
+            		return '已取消';
+            	}
+            }},
+            {field: 'createdTime', sort: true, title: '创建时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

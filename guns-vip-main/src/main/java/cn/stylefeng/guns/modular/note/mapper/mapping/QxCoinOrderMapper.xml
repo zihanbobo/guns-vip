@@ -39,8 +39,16 @@
 
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxCoinOrderResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxCoinOrderParam">
         select
-        <include refid="Base_Column_List"/>
-        from qx_coin_order where 1 = 1
+        	a.id AS "id", a.created_time AS "createdTime", a.deleted AS "deleted", a.sn AS "sn", a.user_id AS "userId", a.package_id AS "packageId", a.amount AS "amount", a.type AS "type", a.status AS "status", b.mobile AS "mobile", c.coins AS "coins"
+        from
+        	qx_coin_order a
+        left join
+        	qx_user b
+        	on a.user_id = b.id
+        left join
+        	qx_package c
+        	on a.package_id = c.id
+        where 1 = 1
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxCoinOrderParam">

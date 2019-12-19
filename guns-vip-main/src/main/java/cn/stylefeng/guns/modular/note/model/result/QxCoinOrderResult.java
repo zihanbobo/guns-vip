@@ -83,4 +83,14 @@ public class QxCoinOrderResult implements Serializable {
      * 充值类型
      */
     private String type;
+    
+    /**
+     * 手机号
+     */
+    private String mobile;
+    
+    /**
+     * 金币数量
+     */
+    private String coins;
 }
