@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -89,4 +90,12 @@ public interface QxUserMapper extends BaseMapper<QxUser> {
     @Select("select a.* from qx_user a inner join qx_user_social b on a.id = b.user_id and b.open_id = #{openId} and b.app_id = #{appId}")
     @ResultMap("BaseResultMap")
 	QxUser getUserByOpenId(@Param("appId") String appId, @Param("openId") String openId);
+
+    /**
+     * 获取所有可提现金币
+     * @return
+     */
+    @Select("select sum(balance) as balance from qx_user")
+    @ResultType(Integer.class)
+	Integer getTotalBalance();
 }

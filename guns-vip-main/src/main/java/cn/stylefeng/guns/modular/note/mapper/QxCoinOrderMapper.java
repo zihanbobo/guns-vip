@@ -1,15 +1,19 @@
 package cn.stylefeng.guns.modular.note.mapper;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Select;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import cn.stylefeng.guns.modular.note.entity.QxCoinOrder;
 import cn.stylefeng.guns.modular.note.model.params.QxCoinOrderParam;
 import cn.stylefeng.guns.modular.note.model.result.QxCoinOrderResult;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -52,5 +56,9 @@ public interface QxCoinOrderMapper extends BaseMapper<QxCoinOrder> {
      * @Date 2019-11-22
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxCoinOrderParam paramCondition);
+
+    @Select("select IFNULL(sum(amount), 0) as totalAmount from qx_coin_order where status = 1")
+    @ResultType(BigDecimal.class)
+	BigDecimal getTotalCharge();
 
 }
