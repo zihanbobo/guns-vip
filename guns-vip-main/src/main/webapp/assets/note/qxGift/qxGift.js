@@ -19,15 +19,12 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
             {field: 'name', sort: true, title: '名称'},
-            {field: 'image', sort: true, title: '图片'},
-            {field: 'price', sort: true, title: '对应金币'},
+            {field: 'image', sort: true, title: '图片', templet: function(d) {
+            	return '<img src="' + Feng.ctxPath + "/resource/" + d.image  + '" class="tdImg">';
+            }},
+            {field: 'price', sort: true, title: '金币'},
+            {field: 'createdTime', sort: true, title: '创建时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

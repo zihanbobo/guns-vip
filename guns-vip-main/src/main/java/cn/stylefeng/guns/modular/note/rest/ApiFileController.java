@@ -28,13 +28,7 @@ public class ApiFileController extends ApiBaseController {
 	@PostMapping("/upload")
 	public Object uploadImage(HttpServletRequest request, @RequestParam(required = true, name = "file") MultipartFile file) {
 		try {
-			if (file.isEmpty()) {
-				throw new ServiceException("上传文件为空");
-			}
-			String absolutePath = configEntity.getAbsoluteUploadPath() + File.separator + configEntity.getImagesPath();
-			FileUtil.createPath(absolutePath);
-			String name = UploadUtils.uploadFile(file, absolutePath);
-			String relativePath = configEntity.getImagesPath() + File.separator + name;
+			String relativePath = saveImage(file, configEntity.getImagesPath());
 			String imageUrl = getImageUrl(request, relativePath);
 			aliyunGreen.checkImage(imageUrl);
 			return ResultGenerator.genSuccessResult(relativePath);
@@ -47,5 +41,26 @@ public class ApiFileController extends ApiBaseController {
 	public Object checkText(String text) {
 		aliyunGreen.checkText(text);
 		return ResultGenerator.genSuccessResult();
+	}
+	
+	@PostMapping("/uploadPackage")
+	public Object uploadPackage(HttpServletRequest request, @RequestParam(required = true, name = "file") MultipartFile file) {
+		try {
+			String relativePath = saveImage(file, configEntity.getPackageImagePath());
+			return ResultGenerator.genSuccessResult(relativePath);
+		} catch (IOException e) {
+			throw new ServiceException(e.getMessage());
+		}
+	}
+	
+	public String saveImage(MultipartFile file, String folderName) throws IllegalStateException, IOException  {
+		if (file.isEmpty()) {
+			throw new ServiceException("上传文件为空");
+		}
+		String absolutePath = configEntity.getAbsoluteUploadPath() + File.separator + folderName;
+		FileUtil.createPath(absolutePath);
+		String name = UploadUtils.uploadFile(file, absolutePath);
+		String relativePath = folderName + File.separator + name;
+		return relativePath;
 	}
 }

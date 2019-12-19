@@ -20,6 +20,7 @@ public class ConfigEntity {
 	// 上传文件
 	private String baseUploadPath;
 	private String imagesPath;
+	private String packageImagePath;
 
 	// 极光推送
 	private String jpushMaster;

@@ -15,11 +15,12 @@ var QxGiftInfoDlg = {
     }
 };
 
-layui.use(['form', 'admin', 'ax'], function () {
+layui.use(['form', 'admin', 'ax', 'upload'], function () {
     var $ = layui.jquery;
     var $ax = layui.ax;
     var form = layui.form;
     var admin = layui.admin;
+    var upload = layui.upload;
 
     //让当前iframe弹层高度适应
     // admin.iframeAuto();
@@ -28,7 +29,26 @@ layui.use(['form', 'admin', 'ax'], function () {
     var ajax = new $ax(Feng.ctxPath + "/qxGift/detail?id=" + Feng.getUrlParam("id"));
     var result = ajax.start();
     form.val('qxGiftForm', result.data);
+    $("#img1").attr('src', Feng.ctxPath + "/resource/" + result.data.avatar);
 
+    // 普通图片上传
+    upload.render({
+    	elem: '#imageBtn',
+    	url: Feng.ctxPath + "/api/file/uploadPackage",
+    	before: function(obj) {
+    		obj.preview(function(index, file, result){
+    			$('#img1').attr('src', result);
+    		});
+    	},
+    	done: function(res) {
+    		$('#image').val(res.data);
+    		Feng.success('图片上传成功');
+    	},
+    	error: function() {
+    		Feng.error('图片上传失败');
+    	}
+    });
+    
     //表单提交事件
     form.on('submit(btnSubmit)', function (data) {
         var ajax = new $ax(Feng.ctxPath + "/qxGift/editItem", function (data) {

@@ -8,42 +8,6 @@
                 <div class="layui-form-item layui-row">
                     <input name="id" type="hidden"/>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">乐观锁<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="version" name="version" placeholder="请输入乐观锁" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">创建人<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="createdBy" name="createdBy" placeholder="请输入创建人" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">创建时间<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="createdTime" name="createdTime" placeholder="请输入创建时间" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">更新人<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="updatedBy" name="updatedBy" placeholder="请输入更新人" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">更新时间<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="updatedTime" name="updatedTime" placeholder="请输入更新时间" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">删除标识<span style="color: red;">*</span></label>
-                        <div class="layui-input-block">
-                            <input id="deleted" name="deleted" placeholder="请输入删除标识" type="text" class="layui-input" lay-verify="required" required/>
-                        </div>
-                    </div>
-                    <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">名称<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
                             <input id="name" name="name" placeholder="请输入名称" type="text" class="layui-input" lay-verify="required" required/>
@@ -52,13 +16,17 @@
                     <div class="layui-inline layui-col-md12">
                         <label class="layui-form-label">图片<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="image" name="image" placeholder="请输入图片" type="text" class="layui-input" lay-verify="required" required/>
+                        	<input id="image" name="image" type="hidden" class="layui-input" />
+                        	<button type="button" class="layui-btn layui-btn-sm" id="imageBtn"><i class="layui-icon"></i>选择图片</button>
+                        	<div class="layui-upload-list">
+                    			<img class="layui-upload-img" id="img1" lay-filter="img1" width="92px" height="92px">
+                    		</div>
                         </div>
                     </div>
                     <div class="layui-inline layui-col-md12">
-                        <label class="layui-form-label">对应金币<span style="color: red;">*</span></label>
+                        <label class="layui-form-label">金币数量<span style="color: red;">*</span></label>
                         <div class="layui-input-block">
-                            <input id="price" name="price" placeholder="请输入对应金币" type="text" class="layui-input" lay-verify="required" required/>
+                            <input id="price" name="price" placeholder="请输购买所需金币数量" type="text" class="layui-input" lay-verify="required" required/>
                         </div>
                     </div>
                 </div>
