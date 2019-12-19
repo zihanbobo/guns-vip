@@ -28,6 +28,7 @@ import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_TYPE;
+import cn.stylefeng.guns.core.constant.ProjectConstants.NOTIFICATION_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SMS_CODE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.exception.ServiceException;
@@ -228,12 +229,14 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			if (INVITE_STATUS.MATCHED.equals(inviteUser.getStatus())) {
 				// 发送选中消息
 				tag = SMS_CODE.INVITE_SUCCESS;
-				extras.put("result", INVITE_APPLY_RESULT.SUCCESS);
+				extras.put("type", NOTIFICATION_TYPE.INVITE_CHOOSE_NOTIFY);
+				extras.put("data", INVITE_APPLY_RESULT.SUCCESS);
 				log.info("User " + inviteUser.getMobile() + "被选中");
 			} else {
 				// 发送落选消息
 				tag = SMS_CODE.INVITE_FAIL;
-				extras.put("result", INVITE_APPLY_RESULT.FAIL);
+				extras.put("type", NOTIFICATION_TYPE.INVITE_CHOOSE_NOTIFY);
+				extras.put("data", INVITE_APPLY_RESULT.FAIL);
 				log.info("User " + inviteUser.getMobile() + "未被选中");
 			}
 			noticeHelper.push(account, tag, pairs);

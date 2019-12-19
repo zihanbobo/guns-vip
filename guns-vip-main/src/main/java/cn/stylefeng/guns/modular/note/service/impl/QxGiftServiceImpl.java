@@ -57,7 +57,7 @@ public class QxGiftServiceImpl extends ServiceImpl<QxGiftMapper, QxGift> impleme
 
 	@Override
 	public void delete(QxGiftParam param) {
-		QxGift entity = getEntity(param);
+		QxGift entity = getOldEntity(param);
 		entity.setDeleted(true);
 		this.updateById(entity);
 	}

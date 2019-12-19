@@ -123,6 +123,13 @@ public class QxAlertController extends BaseController {
     public LayuiPageInfo list(QxAlertParam qxAlertParam) {
         return this.qxAlertService.findPageBySpec(qxAlertParam);
     }
+    
+    @ResponseBody
+    @RequestMapping("/handleAlert")
+    public ResponseData handleAlert(Long id) {
+    	this.qxAlertService.handleAlert(id);
+    	return ResponseData.success();
+    }
 
 }
 

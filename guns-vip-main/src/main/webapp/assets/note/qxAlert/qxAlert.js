@@ -19,9 +19,12 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         return [[
             {type: 'checkbox'},
             {field: 'id', hide: true, title: '标识'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'userId', sort: true, title: '报警人ID'},
-            {field: 'inviteId', sort: true, title: '约单ID'},
+            {field: 'userId', hide: true, title: '报警人ID'},
+            {field: 'nickname', sort: true, title: '报警用户'},
+            {field: 'mobile', sort: true, title: '报警用户手机'},
+            {field: 'inviteId', hide: true, title: '约单ID'},
+            {field: 'sn', sort: true, title: '约单单号'},
+            {field: 'createdTime', sort: true, title: '报警时间'},
             {field: 'status', sort: true, title: '状态', templet: function(d) {
             	//  0-未处理；1-已处理
             	return d.status==0 ? '未处理' : '已处理';
@@ -95,6 +98,36 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         };
         Feng.confirm("是否删除?", operation);
     };
+    
+    /**
+     * 点击编辑
+     *
+     * @param data 点击按钮时候的行数据
+     */
+    QxAlert.openInviteDlg = function (data) {
+         func.open({
+             title: '修改约单表',
+             content: Feng.ctxPath + '/qxInvite/edit?id=' + data.inviteId,
+             tableId: QxAlert.tableId
+         });
+     };
+     
+     /**
+      * 处理报警
+      */
+     QxAlert.handleAlert = function (data) {
+    	 var operation = function () {
+    		 var ajax = new $ax(Feng.ctxPath + "/qxAlert/handleAlert", function (data) {
+    			 Feng.success("处理成功");
+    			 table.reload(QxAlert.tableId);
+    		 }, function (data) {
+    			 Feng.error("处理失败!" + data.responseJSON.message + "!");
+    		 });
+    		 ajax.set("id", data.id);
+    		 ajax.start();
+    	 };
+    	 Feng.confirm("是否设置报警已处理?", operation);
+     }
 
     // 渲染表格
     var tableResult = table.render({
@@ -130,6 +163,10 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             QxAlert.openEditDlg(data);
         } else if (layEvent === 'delete') {
             QxAlert.onDeleteItem(data);
+        } else if (layEvent === 'invite') {
+        	QxAlert.openInviteDlg(data);
+        } else if (layEvent === 'handleAlert') {
+        	QxAlert.handleAlert(data);
         }
     });
 });

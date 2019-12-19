@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.note.service.impl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.constant.ProjectConstants.ALERT_STATUS;
 import cn.stylefeng.guns.modular.note.entity.QxAlert;
 import cn.stylefeng.guns.modular.note.mapper.QxAlertMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxAlertParam;
@@ -80,5 +81,12 @@ public class QxAlertServiceImpl extends ServiceImpl<QxAlertMapper, QxAlert> impl
         ToolUtil.copyProperties(param, entity);
         return entity;
     }
+
+	@Override
+	public void handleAlert(Long id) {
+		QxAlert entity = this.baseMapper.selectById(id);
+		entity.setStatus(ALERT_STATUS.HANDLED);
+		this.baseMapper.updateById(entity);
+	}
 
 }

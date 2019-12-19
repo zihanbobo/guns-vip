@@ -274,4 +274,12 @@ public final class ProjectConstants {
 		String SUCCESS = "success";
 		String FAIL = "fail";
 	}
+	
+	/**
+	 * 通知业务类型
+	 * 0-选择拼单用户通知
+	 */
+	public interface NOTIFICATION_TYPE {
+		String INVITE_CHOOSE_NOTIFY = "0";
+	}
 }

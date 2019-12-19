@@ -68,5 +68,20 @@ public class QxAlertResult implements Serializable {
      * 状态 0-未处理；1-已处理
      */
     private String status;
+    
+    /**
+     * 约单单号
+     */
+    private String sn;
+    
+    /**
+     * 昵称
+     */
+    private String nickname;
+    
+    /**
+     * 报警用户手机号
+     */
+    private String mobile;
 
 }

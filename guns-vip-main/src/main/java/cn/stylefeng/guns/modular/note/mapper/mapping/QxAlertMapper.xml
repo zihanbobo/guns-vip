@@ -36,8 +36,19 @@
 
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxAlertResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxAlertParam">
         select
-        <include refid="Base_Column_List"/>
-        from qx_alert where 1 = 1
+        	a.id AS "id", a.created_time AS "createdTime", a.deleted AS "deleted", a.user_id AS "userId", a.invite_id AS "inviteId", a.status AS "status", b.sn as "sn", c.nickname as "nickname", c.mobile as "mobile"
+        from
+        	qx_alert a
+        left join
+        	qx_invite b
+        on
+        	a.invite_id = b.id
+        left join
+        	qx_user c
+        on
+        	c.id = a.user_id
+        where 1 = 1
+        
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxAlertParam">

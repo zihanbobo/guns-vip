@@ -66,4 +66,10 @@ public interface QxAlertService extends IService<QxAlert> {
      */
      LayuiPageInfo findPageBySpec(QxAlertParam param);
 
+     /**
+      * 处理报警
+      * @param id
+      */
+	void handleAlert(Long id);
+
 }
