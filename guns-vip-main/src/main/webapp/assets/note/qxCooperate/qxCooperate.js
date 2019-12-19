@@ -18,19 +18,11 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
     QxCooperate.initColumn = function () {
         return [[
             {type: 'checkbox'},
-            {field: 'id', hide: true, title: '标识'},
-            {field: 'version', sort: true, title: '乐观锁'},
-            {field: 'createdBy', sort: true, title: '创建人'},
-            {field: 'createdTime', sort: true, title: '创建时间'},
-            {field: 'updatedBy', sort: true, title: '更新人'},
-            {field: 'updatedTime', sort: true, title: '更新时间'},
-            {field: 'deleted', sort: true, title: '删除标识'},
-            {field: 'userId', sort: true, title: '用户ID'},
             {field: 'company', sort: true, title: '公司名称'},
             {field: 'name', sort: true, title: '联系人'},
             {field: 'contact', sort: true, title: '联系方式'},
             {field: 'content', sort: true, title: '合作详情'},
-            {field: 'status', sort: true, title: '状态'},
+            {field: 'createdTime', sort: true, title: '创建时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };

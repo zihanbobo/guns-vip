@@ -182,4 +182,11 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	void cancel(Long requestUserId, Long inviteId);
 
+	/**
+	 * 获取约单详情
+	 * @param id
+	 * @return
+	 */
+	QxInviteSearchPojo getInviteById(Long id);
+
 }

@@ -106,14 +106,27 @@ public class ApiInviteController extends ApiBaseController {
 	private List<QxInviteVo> listQxInviteVos(List<QxInviteSearchPojo> list) {
 		List<QxInviteVo> vos = new ArrayList<>();
 		for (QxInviteSearchPojo invite : list) {
-			QxInviteVo vo = new QxInviteVo();
-			BeanUtils.copyProperties(invite, vo);
-			vo.setUserVo(createQxUserVo(getUser(invite.getInviter())));
-			vo.setGift(qxGiftService.getById(invite.getGiftId()));
-			vo.setDateType(qxDateTypeService.getById(invite.getDateTypeId()));
+			QxInviteVo vo = createInviteVo(invite);
 			vos.add(vo);
 		}
 		return vos;
+	}
+	
+	public QxInviteVo createInviteVo(QxInviteSearchPojo invite) {
+		QxInviteVo vo = new QxInviteVo();
+		BeanUtils.copyProperties(invite, vo);
+		vo.setUserVo(createQxUserVo(getUser(invite.getInviter())));
+		vo.setGift(qxGiftService.getById(invite.getGiftId()));
+		vo.setDateType(qxDateTypeService.getById(invite.getDateTypeId()));
+		return vo;
+	}
+	
+	@PostMapping("/detail")
+	public Object detail(Long id) {
+		QxInviteSearchPojo invite = qxInviteService.getInviteById(id);
+		QxInviteVo vo = createInviteVo(invite);
+		log.info("/api/invite/detail, id=" + id);
+		return ResultGenerator.genSuccessResult(vo);
 	}
 
 	@RequestMapping("/dateTypes")

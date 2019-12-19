@@ -432,4 +432,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			this.baseMapper.updateById(invite);
 		}
 	}
+
+	@Override
+	public QxInviteSearchPojo getInviteById(Long id) {
+		return this.baseMapper.getInviteById(id);
+	}
 }
