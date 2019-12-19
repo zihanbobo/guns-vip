@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.modular.note.entity.QxGift;
 import cn.stylefeng.guns.modular.note.service.QxGiftService;
@@ -22,7 +24,9 @@ public class ApiGiftConotroller extends ApiBaseController {
 	
 	@RequestMapping("/list")
 	public Object list() {
-		List<QxGift> list = qxGiftService.list();
+		QueryWrapper<QxGift> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("deleted", false);
+		List<QxGift> list = qxGiftService.list(queryWrapper);
 		log.info("/api/gift/list");
 		return ResultGenerator.genSuccessResult(list);
 	}

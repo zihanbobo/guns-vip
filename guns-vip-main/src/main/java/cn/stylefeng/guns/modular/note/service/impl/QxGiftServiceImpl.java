@@ -6,7 +6,6 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -14,12 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
-import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
-import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.entity.QxGift;
-import cn.stylefeng.guns.modular.note.entity.QxNote;
-import cn.stylefeng.guns.modular.note.entity.QxTweet;
-import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.mapper.QxGiftMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxNoteMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxTweetMapper;
@@ -63,7 +57,9 @@ public class QxGiftServiceImpl extends ServiceImpl<QxGiftMapper, QxGift> impleme
 
 	@Override
 	public void delete(QxGiftParam param) {
-		this.removeById(getKey(param));
+		QxGift entity = getEntity(param);
+		entity.setDeleted(true);
+		this.updateById(entity);
 	}
 
 	@Override

@@ -29,7 +29,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    url: jdbc:mysql://127.0.0.1:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT&allowMultiQueries=true
     username: root
     password: 123456
     filters: wall,mergeStat
@@ -48,6 +48,49 @@ spring:
 # 邮件发送（改为自己的账号）
 mail:
   from: sn93@qq.com
-  
+
 memcached:
   server: 127.0.0.1:11211
+  
+wx:
+  mp:
+    configs:
+      - appId: wx39767aa52e58e228
+        secret: ae8ad606149afdf00eaf23d5b26e9e7b
+        token: 
+        aesKey:
+      - appId: wx73e189f481ea34f1
+        secret: 35d067acff50828a6201381b24ae2510
+        token: 
+        aesKey: 
+  pay:
+    mp:
+      appId: wx39767aa52e58e228
+      mchId: 1568034641
+      mchKey: 5rukFjNAdrUbCD6EvqTzSQfAqzUOIeML
+      subAppId:
+      subMchId:
+      keyPath: cert/prod/apiclient_cert.p12
+      useSandbox: false
+    app:
+      appId: wx73e189f481ea34f1
+      mchId: 1568034641
+      mchKey: 5rukFjNAdrUbCD6EvqTzSQfAqzUOIeML
+      subAppId:
+      subMchId:
+      keyPath: cert/prod/apiclient_cert.p12
+      useSandbox: false
+
+alipay:
+  gateway: https://openapi.alipay.com/gateway.do
+  appID: 2019112569409475
+  pid: 2088631836420232
+  privateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCuzN9m6PkKj5HOxRtb31NJgMLQz8VNwBgS0u5h0FmQYftAMvvEGb3JEZa62LomFii0Fp8T+NSdwfur+ZrMLaS4PAI87RLYt1DojfQSCJBsrdg77uP6WlSRI9RRSfd6TECWKtVXrS4tthLzjdbCG7bL4e5lovG0uamgt+U3AsG6DKVC6bsB4mvMLhqt+TJ/LRwuxR6piZbJFXOfrJT0ehd0EniepQjLZADEGQCjfbFL9lVTsPZjOppL1CN0BIjtNR2MA3elE6VxGqosWwDeinwS4RgOvFjIPrpwQZjkvcgvP8y2b/fQK1hJCjlIwz7x5xPwNE3bvN2d6k7Z89FSgBjvAgMBAAECggEALgndqTAhL6vinlABxa/LMufL581hTPoUHRkbGf4TKNj1oNIMx3h0KPoN9gZQ+OkLLWtr2InIDgjibUgfgjlfUfrUKBHUzelyUN3ac8l3qHgdJKPlvbF+5n9GU2ak3LwqoqKDcEU3jWiQEz+/WX6NJaPK80/4Uz43NBJbN6LtPT/ZLuuGiAA3wEvga3tLGv1o1LZREjfIqFAn28bqYLSziOjdyfQVdENR2UGT37e2LJElFaBPWHDvD1Oci0Rh7N4b7FOmkjEEbrfDj1p6uP47w7qpLmr1RFBzVwPdZWo4ylVVi5wWV9IIqApYIqBC2QR4z3WPFl6TnH359Mnzs5YUOQKBgQDt9CqB9YGY24vmRIA4EesMdKYWopwJS6eVEPUDAvgYct//d6G5wv2vV7aM341M+KQGGORd1b6KbCruwNkNZEiZoGTAEf7/VrlXeLYL4NMK8vThwhVRtM2PZgO55v2MHdJnMcfTI9RxtxwJG3aIPWf5FxMYSUM+TMwJAwAIspchPQKBgQC8DpeDY5L4wHAfzmcRf/PUdcb3pURkCRi8djRfJwRuqL0Hsm1nju+nEId0NLiVgFgVftp2ozkP+T/gjMXuVr/r1eneLqpM6aCac/V9JgsE1BHt0Y1UebyLhj3dbgc2nefnRslszF58tFLjj1ALLdM+kAG+jbCK0bmbemC2BLhtmwKBgQCTstXbuu7JWaUZtfU8WGrkXVdmf2KJJouLrG3Yg7RJQKynHrOk4VKjzrcB9BT57O+q1TKSyASwWPnBHrTbah7iNLu0uLbl+QesMsIU12VHy4ySwOyIvchGNRUlBCrnGO+rnCujc/7+4qClSoWlhTAPXfI9ReRWPEb9ZP5VZ70FJQKBgCDP/vnK5vsGQMob7nnsNHQutK/DI2K8/5bqnQq5ORnB0XHFXTeDhidFSA0rocVcJoJhpuaqZit2VwHsLiD++++/XFYLGGXhIcexUfUrLSMDiblQJfPGZfKGUscPCq0p8iu1ezHDmvzxTcEs4U+CCGjTIarI+DPQki0htjwsKK3fAoGBAM77zyUjBWzMTeYmGJuGs4Tp/X6xn87/BLcQE3yQv/TC1OUSQNWlu8Zz6ht1hv2B8QyP5jaXu28cuaapNU52T7KyyIwp19HJtXg11SYxhy2qPk1R2VfoKcDSiZDGIsza/4N+gq1iKxCV6NZZ/eyQEYYj6dkW3cW5eqmKW0GMOwVl
+  signType: RSA2
+  appCertPath: cert/dev/appCertPublicKey_2019112569409475.crt
+  alipayCertPath: cert/dev/alipayCertPublicKey_RSA2.crt
+  alipayRootCertPath: cert/dev/alipayRootCert.crt
+  alipayNotifyUrl: https://app.qianxunnote.com/api/finance/alipay/payNotify
+  withdrawIdentityType: ALIPAY_USER_ID
+  withdrawProductCode: TRANS_ACCOUNT_NO_PWD
+  withdrawBizScene: DIRECT_TRANSFER
