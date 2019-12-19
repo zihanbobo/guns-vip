@@ -75,4 +75,11 @@ public interface QxCoinOrderService extends IService<QxCoinOrder> {
 	 */
 	QxCoinOrder createOrder(Long userId, Long packageId, String type);
 
+	/**
+	 * 为用户充值
+	 * @param userId
+	 * @param packageId
+	 */
+	void chargeUser(Long userId, Long packageId);
+
 }
