@@ -69,6 +69,9 @@ public class ConfigEntity {
 	private String eInviteFailTemplate;
 	private String eEmergencyTemplate;
 	
+	// 平台联系方式
+	private String platformContact;
+	
 	public String getAbsoluteUploadPath() {
 		return FileUtil.mergeDeployPath(baseUploadPath);
 	}

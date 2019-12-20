@@ -380,11 +380,10 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	}
 
 	public void sendAlert(QxInvite invite, QxUser currentUser, QxUser otherUser, String emergencyContact) {
+		// 用户${contact}向您发送了一键报警，请及时联系对方或平台${platformContact}进行处理
 		Map<String, String> pairs = new HashMap<>();
 		pairs.put("contact", currentUser.getMobile());
-		pairs.put("inviteTime", DateUtils.date2String(invite.getInviteTime(), DateUtils.YYYY_MM_DD_HH_MM_PATTERN));
-		pairs.put("location", "xxx");
-		pairs.put("otherContact", otherUser.getMobile());
+		pairs.put("platformContact", configEntity.getPlatformContact());
 		noticeHelper.send(emergencyContact, SMS_CODE.EMERGENCY, pairs);
 	}
 
