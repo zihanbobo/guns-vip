@@ -57,6 +57,9 @@ public class ApiFileController extends ApiBaseController {
 		if (file.isEmpty()) {
 			throw new ServiceException("上传文件为空");
 		}
+		if (!FileUtil.checkFileSize(file.getSize(), 10, "M")) {
+			throw new ServiceException("图片不能超过10M");
+		}
 		String absolutePath = configEntity.getAbsoluteUploadPath() + File.separator + folderName;
 		FileUtil.createPath(absolutePath);
 		String name = UploadUtils.uploadFile(file, absolutePath);
