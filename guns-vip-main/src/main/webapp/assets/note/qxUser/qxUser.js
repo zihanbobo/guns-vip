@@ -109,6 +109,17 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
     	ajax.set({'id': id, 'status': checked});
     	ajax.start();
     }
+    
+    /**
+     * 平台为用户充值
+     */
+    QxUser.chargeUser = function(data) {
+    	func.open({
+            title: '用户充值',
+            content: Feng.ctxPath + '/qxUser/charge?userId=' + data.id,
+            tableId: QxUser.tableId
+        });
+    }
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + QxUser.tableId,
@@ -143,6 +154,8 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             QxUser.openEditDlg(data);
         } else if (layEvent === 'delete') {
             QxUser.onDeleteItem(data);
+        } else if (layEvent === 'chargeUser') {
+        	QxUser.chargeUser(data);
         }
     });
     

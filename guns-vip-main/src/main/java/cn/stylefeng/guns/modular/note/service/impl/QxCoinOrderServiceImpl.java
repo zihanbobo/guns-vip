@@ -14,11 +14,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_PAY_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
+import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.modular.note.entity.QxCoinOrder;
 import cn.stylefeng.guns.modular.note.entity.QxPackage;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.mapper.QxCoinOrderMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxPackageMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxCoinOrderParam;
 import cn.stylefeng.guns.modular.note.model.result.QxCoinOrderResult;
 import  cn.stylefeng.guns.modular.note.service.QxCoinOrderService;
@@ -37,6 +41,12 @@ public class QxCoinOrderServiceImpl extends ServiceImpl<QxCoinOrderMapper, QxCoi
 
 	@Resource
 	private QxPackageMapper qxPackageMapper;
+	
+	@Resource
+	private QxUserMapper qxUserMapper;
+	
+	@Resource
+	private QxPayLogHelper qxPayLogHelper;
 	
     @Override
     public void add(QxCoinOrderParam param){
@@ -104,6 +114,18 @@ public class QxCoinOrderServiceImpl extends ServiceImpl<QxCoinOrderMapper, QxCoi
 		entity.setType(type);
 		this.baseMapper.insert(entity);
 		return entity;
+	}
+
+	@Override
+	public void chargeUser(Long userId, Long packageId) {
+		QxCoinOrder order = createOrder(userId, packageId, COIN_ORDER_PAY_TYPE.PLATFORM);
+		order.setStatus(COIN_ORDER_STATUS.PAID);
+		QxPackage qxPackage = qxPackageMapper.selectById(packageId);
+		QxUser qxUser = qxUserMapper.selectById(userId);
+		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+		qxUserMapper.updateById(qxUser);
+		// 用户流水
+		qxPayLogHelper.createPayLog(order.getUserId(), qxPackage.getCoins(), USER_PAY_LOG_TYPE.PLATFORM_BUY_COIN_OUT);
 	}
 
 }

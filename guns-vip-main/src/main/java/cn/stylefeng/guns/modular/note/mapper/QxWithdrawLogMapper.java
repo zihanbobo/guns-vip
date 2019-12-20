@@ -1,15 +1,19 @@
 package cn.stylefeng.guns.modular.note.mapper;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Select;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
 import cn.stylefeng.guns.modular.note.model.params.QxWithdrawLogParam;
 import cn.stylefeng.guns.modular.note.model.result.QxWithdrawLogResult;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -52,5 +56,13 @@ public interface QxWithdrawLogMapper extends BaseMapper<QxWithdrawLog> {
      * @Date 2019-11-18
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxWithdrawLogParam paramCondition);
+
+    /**
+     * 获取总提现
+     * @return
+     */
+    @Select("select IFNULL(sum(amount), 0) as amount from qx_withdraw_log where status = 1")
+    @ResultType(BigDecimal.class)
+	BigDecimal getTotalWithdraw();
 
 }

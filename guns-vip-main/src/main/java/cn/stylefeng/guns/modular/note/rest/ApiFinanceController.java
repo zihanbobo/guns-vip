@@ -47,14 +47,12 @@ import com.google.common.base.Strings;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.AppleIAPUtil;
-import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.FileUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.alipay.AlipayProperties;
 import cn.stylefeng.guns.core.constant.ProjectConstants.APPLE_IAP_ENV;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_PAY_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
-import cn.stylefeng.guns.core.constant.ProjectConstants.COST_RATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.WITHDRAW_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
@@ -71,6 +69,7 @@ import cn.stylefeng.guns.modular.note.service.QxCostRateService;
 import cn.stylefeng.guns.modular.note.service.QxPackageService;
 import cn.stylefeng.guns.modular.note.service.QxPayLogService;
 import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
+import cn.stylefeng.guns.modular.note.service.impl.QxCoinHelper;
 import cn.stylefeng.guns.modular.note.service.impl.QxPayLogHelper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -113,6 +112,9 @@ public class ApiFinanceController extends ApiBaseController {
 	
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
+	
+	@Resource
+	private QxCoinHelper qxCoinHelper;
 	
 	@PostMapping("/wx/mp/config")
 	public Object wxMpConfig(String appId, String url) {
@@ -186,12 +188,12 @@ public class ApiFinanceController extends ApiBaseController {
 	 * @param coinCount
 	 * @return
 	 */
-	public BigDecimal caculateWithdrawAmount(int coinCount) {
-		BigDecimal withdrawRate = qxCostRateService.getRateByType(COST_RATE_TYPE.WITHDRAW_RATE);
-		BigDecimal coinRate = qxCostRateService.getRateByType(COST_RATE_TYPE.COIN_RATE);
-		BigDecimal realAmount = CommonUtils.divide(new BigDecimal(coinCount), coinRate);
-		return CommonUtils.roundHalfUp(realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate)));
-	}
+//	public BigDecimal caculateWithdrawAmount(int coinCount) {
+//		BigDecimal withdrawRate = qxCostRateService.getRateByType(COST_RATE_TYPE.WITHDRAW_RATE);
+//		BigDecimal coinRate = qxCostRateService.getRateByType(COST_RATE_TYPE.COIN_RATE);
+//		BigDecimal realAmount = CommonUtils.divide(new BigDecimal(coinCount), coinRate);
+//		return CommonUtils.roundHalfUp(realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate)));
+//	}
 	
 	public void checkWithdrawLimit(QxUser user, int coinCount) {
 		if (user.getBalance() < coinCount) {
@@ -231,7 +233,7 @@ public class ApiFinanceController extends ApiBaseController {
 	public Object wxWithdraw(String appId, String name, int coinCount) {
 		QxUser user = getUser();
 		checkWithdrawLimit(user, coinCount);
-		BigDecimal amount = caculateWithdrawAmount(coinCount);
+		BigDecimal amount = qxCoinHelper.caculateWithdrawAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
 		if (userSocial == null) {
 			throw new ServiceException("请绑定微信后再提现");
@@ -422,7 +424,7 @@ public class ApiFinanceController extends ApiBaseController {
 	public Object alipayWithdraw(String appId, String name, int coinCount) {
 		QxUser user = getUser();
 		checkWithdrawLimit(getUser(), coinCount);
-		BigDecimal amount = caculateWithdrawAmount(coinCount);
+		BigDecimal amount = qxCoinHelper.caculateWithdrawAmount(coinCount);
 		QxUserSocial userSocial = qxUserService.getUserSocialByAppId(getRequestUserId(), appId);
 		if (userSocial == null) {
 			throw new ServiceException("请绑定支付宝后再提现");

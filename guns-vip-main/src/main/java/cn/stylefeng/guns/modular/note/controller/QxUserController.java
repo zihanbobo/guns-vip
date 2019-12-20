@@ -2,7 +2,9 @@ package cn.stylefeng.guns.modular.note.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -10,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
+import cn.stylefeng.guns.modular.note.service.QxCoinOrderService;
 import cn.stylefeng.guns.modular.note.service.QxUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -29,6 +32,9 @@ public class QxUserController extends BaseController {
 
     @Autowired
     private QxUserService qxUserService;
+    
+    @Autowired
+    private QxCoinOrderService qxCoinOrderService;
 
     /**
      * 跳转到主页面
@@ -61,6 +67,15 @@ public class QxUserController extends BaseController {
     @RequestMapping("/edit")
     public String edit() {
         return PREFIX + "/qxUser_edit.html";
+    }
+    
+    /**
+     * 充值页面
+     */
+    @RequestMapping("/charge")
+    public String charge(@RequestParam Long userId, Model model) {
+        model.addAttribute("userId", userId);
+    	return PREFIX + "/qxUser_charge.html";
     }
 
     /**
@@ -137,6 +152,12 @@ public class QxUserController extends BaseController {
     	return ResponseData.success();
     }
 
+    @ResponseBody
+    @RequestMapping("/chargeUser")
+    public Object chargeUser(Long userId,  Long packageId) {
+    	this.qxCoinOrderService.chargeUser(userId, packageId);
+    	return ResponseData.success();
+    }
 }
 
 

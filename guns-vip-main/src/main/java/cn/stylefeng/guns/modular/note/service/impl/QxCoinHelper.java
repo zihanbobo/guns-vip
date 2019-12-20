@@ -1,14 +1,21 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
+import java.math.BigDecimal;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Component;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.COST_RATE_TYPE;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxPayResult;
+import cn.stylefeng.guns.modular.note.entity.QxCostRate;
 import cn.stylefeng.guns.modular.note.entity.QxGift;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.mapper.QxCostRateMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxGiftMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 
@@ -20,6 +27,9 @@ public class QxCoinHelper {
 
 	@Resource
 	private QxUserMapper qxUserMapper;
+	
+	@Resource
+	private QxCostRateMapper qxCostRateMapper;
 
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
@@ -45,5 +55,24 @@ public class QxCoinHelper {
 		payResult.setPayeeId(payeeId);
 		payResult.setPrice(giftPrice);
 		return payResult;
+	}
+	
+	/**
+	 * 货币和现金转换
+	 * @param coinCount
+	 * @return
+	 */
+	public BigDecimal caculateWithdrawAmount(int coinCount) {
+		BigDecimal withdrawRate = getRateByType(COST_RATE_TYPE.WITHDRAW_RATE);
+		BigDecimal coinRate = getRateByType(COST_RATE_TYPE.COIN_RATE);
+		BigDecimal realAmount = new BigDecimal(coinCount).multiply(coinRate);
+		return CommonUtils.roundHalfUp(realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate)));
+	}
+	
+	BigDecimal getRateByType(String type) {
+		QueryWrapper<QxCostRate> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("type", type);
+		QxCostRate costRate = qxCostRateMapper.selectOne(queryWrapper);
+		return costRate.getRate();
 	}
 }
