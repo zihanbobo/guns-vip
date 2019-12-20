@@ -224,12 +224,13 @@ public final class ProjectConstants {
 	}
 
 	/**
-	 * 充值方式：0-微信；1-支付宝；2-平台
+	 * 充值方式：0-微信；1-支付宝；2-平台；3-苹果内购
 	 */
 	public interface COIN_ORDER_PAY_TYPE {
 		String WECHAT = "0";
 		String ALIPAY = "1";
 		String PLATFORM = "2";
+		String APPLE_IAP = "3";
 	}
 
 	/**
@@ -281,5 +282,25 @@ public final class ProjectConstants {
 	 */
 	public interface NOTIFICATION_TYPE {
 		String INVITE_CHOOSE_NOTIFY = "0";
+	}
+	
+	/**
+	 * 苹果内购验证服务地址
+	 * @author steven
+	 *
+	 */
+	public interface APPLE_IAP_URL {
+		String SANDBOX = "https://sandbox.itunes.apple.com/verifyReceipt";
+		String PRODUCTION = "https://buy.itunes.apple.com/verifyReceipt";
+	}
+	
+	/**
+	 * 苹果内购环境
+	 * @author steven
+	 *
+	 */
+	public interface APPLE_IAP_ENV {
+		int SANDBOX = 0;
+		int PRODUCTION = 1;
 	}
 }

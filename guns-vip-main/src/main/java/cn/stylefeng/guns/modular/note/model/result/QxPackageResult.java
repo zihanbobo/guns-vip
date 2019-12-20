@@ -68,5 +68,9 @@ public class QxPackageResult implements Serializable {
      * 排序
      */
     private Integer orderNo;
-
+    
+    /**
+     * 苹果内购商品ID
+     */
+    private String iapId;
 }

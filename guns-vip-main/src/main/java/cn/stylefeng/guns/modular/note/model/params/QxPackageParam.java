@@ -3,6 +3,9 @@ package cn.stylefeng.guns.modular.note.model.params;
 import lombok.Data;
 import cn.stylefeng.roses.kernel.model.validator.BaseValidatingParam;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -69,6 +72,11 @@ public class QxPackageParam implements Serializable, BaseValidatingParam {
      * 排序
      */
     private Integer orderNo;
+    
+    /**
+     * 苹果内购商品ID
+     */
+    private String iapId;
 
     @Override
     public String checkParam() {

@@ -1,5 +1,15 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
+import java.io.Serializable;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxPackage;
@@ -8,13 +18,6 @@ import cn.stylefeng.guns.modular.note.model.params.QxPackageParam;
 import cn.stylefeng.guns.modular.note.model.result.QxPackageResult;
 import  cn.stylefeng.guns.modular.note.service.QxPackageService;
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>
@@ -80,5 +83,12 @@ public class QxPackageServiceImpl extends ServiceImpl<QxPackageMapper, QxPackage
         ToolUtil.copyProperties(param, entity);
         return entity;
     }
+
+	@Override
+	public QxPackage getByIapId(String iapId) {
+		QueryWrapper<QxPackage> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("iap_id", iapId);
+		return this.baseMapper.selectOne(queryWrapper);
+	}
 
 }

@@ -81,7 +81,12 @@ public class QxPackage implements Serializable {
     @TableField("order_no")
     private Integer orderNo;
 
-
+    /**
+     * 苹果内购商品ID
+     */
+    @TableField("iap_id")
+    private String iapId;
+    
     public Long getId() {
         return id;
     }
@@ -161,6 +166,14 @@ public class QxPackage implements Serializable {
     public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
     }
+    
+	public String getIapId() {
+		return iapId;
+	}
+
+	public void setIapId(String iapId) {
+		this.iapId = iapId;
+	}
 
     @Override
     public String toString() {

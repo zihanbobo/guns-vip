@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.domain.AlipayFundTransUniTransferModel;
@@ -42,12 +43,15 @@ import com.github.binarywang.wxpay.constant.WxPayConstants.ResultCode;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.EntPayService;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.google.common.base.Strings;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
+import cn.stylefeng.guns.core.AppleIAPUtil;
 import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.FileUtil;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.alipay.AlipayProperties;
+import cn.stylefeng.guns.core.constant.ProjectConstants.APPLE_IAP_ENV;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_PAY_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COIN_ORDER_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.COST_RATE_TYPE;
@@ -290,6 +294,63 @@ public class ApiFinanceController extends ApiBaseController {
 		} catch (AlipayApiException e) {
 			log.error("支付宝支付出错, /api/finance/alipay/pay, packageTo=" + packageTo + ", error=" + e.getMessage());
 			throw new ServiceException("支付宝支付出错");
+		}
+	}
+	
+	/**
+	 * 苹果内购
+	 * @param packageTo
+	 * @return
+	 */
+	@PostMapping("/apple/pay")
+	public Object applePay(QxPackageTo packageTo) {
+		// 创建订单
+		QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.APPLE_IAP);
+		log.info("/api/finance/apple/pay, packageTo=" + packageTo);
+		return ResultGenerator.genSuccessResult(coinOrder);
+	}
+	
+	/**
+	 * 苹果内购支付验证
+	 * @return
+	 */
+	@PostMapping("/apple/verify")
+	public Object appleVerify(Long orderId, String payload) {
+		log.info("/api/finance/apple/verify, orderId=" + orderId + ", payload=" + payload);
+		String verifyResult = AppleIAPUtil.buyAppVerify(payload, APPLE_IAP_ENV.PRODUCTION);
+		if (Strings.isNullOrEmpty(verifyResult)) {
+			throw new ServiceException("无订单信息");
+		}
+		JSONObject obj = JSONObject.parseObject(verifyResult);
+		String status = obj.getString("status");
+		
+		if ("21007".equals(status)) {
+			verifyResult = AppleIAPUtil.buyAppVerify(payload, APPLE_IAP_ENV.SANDBOX);
+			obj = JSONObject.parseObject(verifyResult);
+			status = obj.getString("status");
+		}
+		
+		if (status.equals("0")) { // 苹果验证成功
+			String receipt = obj.getString("receipt");
+			JSONObject returnJson = JSONObject.parseObject(receipt);  	              	            
+            String inApp = returnJson.getString("in_app"); 
+            JSONObject inAppJson = JSONObject.parseObject(inApp.substring(1, inApp.length()-1));
+            String productId = inAppJson.getString("product_id");
+    		// 更新订单状态
+            QxCoinOrder order = qxCoinOrderService.getById(orderId);
+    		order.setStatus(COIN_ORDER_STATUS.PAID);
+    		qxCoinOrderService.updateById(order);
+    		// 更新用户冻结余额
+    		QxPackage qxPackage = qxPackageService.getByIapId(productId);
+    		QxUser qxUser = qxUserService.getById(order.getUserId());
+    		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+    		qxUserService.updateById(qxUser);
+    		// 用户流水
+    		qxPayLogHelper.createPayLog(order.getUserId(), qxPackage.getCoins(), USER_PAY_LOG_TYPE.BUY_COIN_OUT);
+    		return ResultGenerator.genSuccessResult();
+		} else {
+			log.info("支付验证失败, result=" + verifyResult);
+			throw new ServiceException("支付验证失败");
 		}
 	}
 
