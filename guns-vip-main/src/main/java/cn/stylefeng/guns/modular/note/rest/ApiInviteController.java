@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.ResultGenerator;
+import cn.stylefeng.guns.core.constant.ProjectConstants;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_STATUS;
 import cn.stylefeng.guns.core.exception.ServiceException;
@@ -85,6 +86,9 @@ public class ApiInviteController extends ApiBaseController {
 	 */
 	@RequestMapping("/add")
 	public Object add(QxInviteTo inviteTo) {
+		if (inviteTo.getGiftId() == null) {
+			inviteTo.setGiftId(ProjectConstants.DEFAULT_GIFT_ID);
+		}
 		if (getRequestUserId().equals(inviteTo.getInvitee())) {
 			throw new ServiceException("邀请对象不能是本人");
 		}

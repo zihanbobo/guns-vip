@@ -22,6 +22,9 @@ public class ConfigEntity {
 	private String imagesPath;
 	private String packageImagePath;
 
+	// 是否上线
+	private Boolean isOnline;
+	
 	// 极光推送
 	private String jpushMaster;
 	private String jpushAppKey;

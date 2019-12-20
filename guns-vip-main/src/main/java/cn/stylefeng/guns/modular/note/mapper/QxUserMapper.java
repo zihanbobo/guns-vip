@@ -73,11 +73,11 @@ public interface QxUserMapper extends BaseMapper<QxUser> {
 	List<QxUser> getProductUsers(@Param("page") Page page, @Param("id") Long id);
 
     /**
-     * 根据unionId获取用户
+     * 根据unionId获取用户，多个取第一个
      * @param unionId
      * @return
      */
-    @Select("select a.* from qx_user a inner join qx_user_social b on a.id = b.user_id and b.union_id = #{unionId} and b.app_id = #{appId}")
+    @Select("select a.* from qx_user a inner join qx_user_social b on a.id = b.user_id and b.union_id = #{unionId} and b.app_id = #{appId} limit 1")
     @ResultMap("BaseResultMap")
 	QxUser getUserByUnionId(@Param("appId") String appid, @Param("unionId") String unionId);
 

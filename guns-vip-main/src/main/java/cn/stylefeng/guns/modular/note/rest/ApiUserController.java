@@ -352,4 +352,10 @@ public class ApiUserController extends ApiBaseController {
 		log.info("/api/rongCloud/token");
 		return ResultGenerator.genSuccessResult(tokenResult);
 	}
+	
+	@PostMapping("/isAppOnline")
+	public Object isAppOnline() {
+		log.info("/api/user/isAppOnline");
+		return ResultGenerator.genSuccessResult(configEntity.getIsOnline());
+	}
 }

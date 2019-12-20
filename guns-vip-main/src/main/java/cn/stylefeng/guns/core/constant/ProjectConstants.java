@@ -11,6 +11,11 @@ import java.util.Map;
  */
 public final class ProjectConstants {
 	/**
+	 * 默认礼物ID
+	 */
+	public static Long DEFAULT_GIFT_ID = 1L;
+	
+	/**
 	 * 用户 token
 	 */
 	public interface TOKEN {
