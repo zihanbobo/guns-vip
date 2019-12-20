@@ -199,6 +199,16 @@ public class ApiFinanceController extends ApiBaseController {
 		if (user.getBalance() < coinCount) {
 			throw new ServiceException("提现金币不能超过金币余额");
 		}
+		checkUnhandleWithdraw(user.getId());
+	}
+	
+	public void checkUnhandleWithdraw(Long userId) {
+		QueryWrapper<QxWithdrawLog> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", userId).eq("status", 0);
+		int count = qxWithdrawLogService.count(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("您已申请过提现，不能重复申请!");
+		}
 	}
 
 	@PostMapping("/wx/payNotify")
