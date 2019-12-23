@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.note.mapper;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,8 +62,16 @@ public interface QxWithdrawLogMapper extends BaseMapper<QxWithdrawLog> {
      * 获取总提现
      * @return
      */
-    @Select("select IFNULL(sum(amount), 0) as amount from qx_withdraw_log where status = 1")
+    @Select("<script>" +
+    		"select IFNULL(sum(amount), 0) as amount from qx_withdraw_log where status = 1" +
+    		"<if test='startDate != null'>" +
+    		" and created_time &gt;= #{startDate}"+
+    		"</if>" +
+    		"<if test='endDate != null'>" +
+    		" and created_time &lt;= #{endDate}" +
+    		"</if>" +
+    		"</script>")
     @ResultType(BigDecimal.class)
-	BigDecimal getTotalWithdraw();
+	BigDecimal getTotalWithdraw(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 }

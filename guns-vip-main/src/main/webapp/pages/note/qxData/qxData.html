@@ -62,7 +62,6 @@
                 </div>
                 <div class="layui-card-body">
                     <p class="lay-big-font" id="totalAmount"></p>
-                    <p>来自：支付宝、微信、平台<span class="pull-right"></p>
                 </div>
             </div>
         </div>
@@ -73,18 +72,16 @@
                 </div>
                 <div class="layui-card-body">
                     <p class="lay-big-font" id="canWithdraw"></p>
-                    <p>总下载<span class="pull-right">5万+ <i class="layui-icon layui-icon-note"></i></span></p>
                 </div>
             </div>
         </div>
         <div class="layui-col-xs12 layui-col-sm6 layui-col-md3">
             <div class="layui-card">
                 <div class="layui-card-header">
-                    GIT PULL(来自码云)<span class="layui-badge layui-bg-black pull-right">月</span>
+                    本月充值总额<span class="layui-badge layui-bg-black pull-right">月</span>
                 </div>
                 <div class="layui-card-body">
-                    <p class="lay-big-font">1,500</p>
-                    <p>总PULL数<span class="pull-right">5万+ <i class="layui-icon layui-icon-notice"></i></span></p>
+                    <p class="lay-big-font" id="totalMonthCharge"></p>
                 </div>
             </div>
         </div>
@@ -144,6 +141,18 @@
         	ajax.start();
         };
         getTotalAmount();
+
+        // 本月充值总额
+        var getMothTotalCharge = function() {
+        	var ajax = new $ax(Feng.ctxPath + "/qxData/totalMonthCharge", function(data){
+        		$("#totalMonthCharge").text(data.data + " 元");
+        	}, function(data) {
+                Feng.error(data.responseJSON.message);
+        	});
+        	ajax.start();
+        }
+        getMothTotalCharge();
+        
         // 可提现
         var canWithdraw = function() {
         	var ajax = new $ax(Feng.ctxPath + "/qxData/canWithdraw", function(data) {

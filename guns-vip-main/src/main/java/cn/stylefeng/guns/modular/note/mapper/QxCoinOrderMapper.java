@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.note.mapper;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -57,8 +58,16 @@ public interface QxCoinOrderMapper extends BaseMapper<QxCoinOrder> {
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxCoinOrderParam paramCondition);
 
-    @Select("select IFNULL(sum(amount), 0) as totalAmount from qx_coin_order where status = 1")
+    @Select("<script>" +
+    		"select IFNULL(sum(amount), 0) as totalAmount from qx_coin_order where status = 1" +
+    		"<if test='startDate != null'>" +
+    		" and created_time &gt;= #{startDate}"+
+    		"</if>" +
+    		"<if test='endDate != null'>" +
+    		" and created_time &lt;= #{endDate}" +
+    		"</if>" +
+    		"</script>")
     @ResultType(BigDecimal.class)
-	BigDecimal getTotalCharge();
+	BigDecimal getTotalCharge(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 }
