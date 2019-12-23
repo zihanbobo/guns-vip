@@ -112,6 +112,7 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
 		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_OUT);
 		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_IN);
+		qxPayLogHelper.rewardNoteLog(userId, noteId, giftId);
 		QxNote note = this.getById(noteId);
 		note.setGiftCount(note.getGiftCount() + 1);
 		this.updateById(note);
@@ -150,5 +151,10 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		this.updateById(note);
 		
 		return note;
+	}
+
+	@Override
+	public Page rewardUsers(Page page, Long noteId) {
+		return this.baseMapper.rewardUsers(page, noteId);
 	}
 }

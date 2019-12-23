@@ -54,4 +54,23 @@
         from qx_note where 1 = 1
     </select>
 
+	<select id="rewardUsers" resultType="cn.stylefeng.guns.modular.note.pojo.QxRewardPojo">
+		SELECT
+			a.user_id AS "userId",
+			b.nickname AS "nickname",
+			b.avatar AS "avatar",
+			a.gift_name AS "giftName",
+			a.gift_image AS "giftImage",
+			a.gift_price AS "giftPrice",
+			a.created_time AS "createdTime"
+		FROM
+			qx_note_reward a
+		left join
+			qx_user b
+			on a.user_id = b.id
+		WHERE
+			a.note_id = #{noteId}
+		ORDER BY
+			a.gift_price DESC
+	</select>
 </mapper>

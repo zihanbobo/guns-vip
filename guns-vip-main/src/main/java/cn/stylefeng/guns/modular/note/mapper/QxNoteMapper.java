@@ -53,4 +53,12 @@ public interface QxNoteMapper extends BaseMapper<QxNote> {
      */
     Page<Map<String, Object>> customPageMapList(@Param("page") Page page, @Param("paramCondition") QxNoteParam paramCondition);
 
+    /**
+     * 获得打赏用户列表
+     * @param page
+     * @param noteId
+     * @return
+     */
+	Page rewardUsers(@Param("page") Page page, @Param("noteId") Long noteId);
+
 }

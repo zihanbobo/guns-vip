@@ -139,4 +139,12 @@ public class ApiTweetController extends ApiBaseController {
 		log.info("/api/tweet/reward, userId=" + userId + ",giftId=" + giftId);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@PostMapping("/rewardUsers")
+	public Object rewardUsers(Long tweetId) {
+		Page page = LayuiPageFactory.defaultPage();
+		qxTweetService.rewardUsers(page, tweetId);
+		log.info("/api/tweet/rewardUsers, tweetId=" + tweetId);
+		return ResultGenerator.genSuccessResult(page);
+	}
 }

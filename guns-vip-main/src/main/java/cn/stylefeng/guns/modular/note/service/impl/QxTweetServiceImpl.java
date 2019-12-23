@@ -112,6 +112,7 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
 		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_OUT);
 		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_IN);
+		qxPayLogHelper.rewardTweetLog(userId, tweetId, giftId);
 		QxTweet tweet = this.getById(tweetId);
 		tweet.setGiftCount(tweet.getGiftCount() + 1);
 		this.updateById(tweet);
@@ -133,5 +134,10 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 		QxTweet tweet = this.getById(id);
 		tweet.setFavoriteCount(tweet.getFavoriteCount()+1);
 		this.updateById(tweet);
+	}
+
+	@Override
+	public Page rewardUsers(Page page, Long tweetId) {
+		return this.baseMapper.rewardUsers(page, tweetId);
 	}
 }

@@ -65,4 +65,12 @@ public interface QxTweetMapper extends BaseMapper<QxTweet> {
     @ResultMap("BaseResultMap")
 	Page<List<QxTweet>> followList(@Param("page") Page page, @Param("userId") Long userId);
 
+    /**
+     * 获得打赏用户列表
+     * @param page
+     * @param tweetId
+     * @return
+     */
+	Page rewardUsers(@Param("page") Page page, @Param("tweetId") Long tweetId);
+
 }

@@ -158,6 +158,14 @@ public class ApiNoteController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult();
 	}
 	
+	@PostMapping("/rewardUsers")
+	public Object rewardUsers(Long noteId) {
+		Page page = LayuiPageFactory.defaultPage();
+		qxNoteService.rewardUsers(page, noteId);
+		log.info("/api/note/rewardUsers, noteId=" + noteId);
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
 	@RequestMapping("/unlock")
 	public Object unlock(Long noteId) {
 		QxNote note = qxNoteService.getById(noteId);

@@ -93,4 +93,11 @@ public interface QxTweetService extends IService<QxTweet> {
  	 */
 	void like(Long requestUserId, Long id);
 
+	/**
+	 * 获得打赏用户
+	 * @param page
+	 * @param tweetId
+	 */
+	Page rewardUsers(Page page, Long tweetId);
+
 }

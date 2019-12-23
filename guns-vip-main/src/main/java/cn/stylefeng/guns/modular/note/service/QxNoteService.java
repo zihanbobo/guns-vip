@@ -4,6 +4,8 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
 import cn.stylefeng.guns.modular.note.model.params.QxNoteParam;
 import cn.stylefeng.guns.modular.note.model.result.QxNoteResult;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -91,4 +93,11 @@ public interface QxNoteService extends IService<QxNote> {
  	 * @return 
  	 */
 	QxNote like(Long requestUserId, Long noteId);
+
+	/**
+	 * 获得日记打赏用户
+	 * @param page
+	 * @param noteId
+	 */
+	Page rewardUsers(Page page, Long noteId);
 }
