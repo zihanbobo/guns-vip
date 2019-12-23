@@ -83,4 +83,12 @@ public interface QxNoteService extends IService<QxNote> {
  	 * @param giftId
  	 */
  	void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId);
+
+ 	/**
+ 	 * 点赞日记
+ 	 * @param requestUserId
+ 	 * @param noteId
+ 	 * @return 
+ 	 */
+	QxNote like(Long requestUserId, Long noteId);
 }

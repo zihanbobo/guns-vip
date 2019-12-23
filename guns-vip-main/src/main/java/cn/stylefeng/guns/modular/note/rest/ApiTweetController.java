@@ -21,6 +21,7 @@ import cn.stylefeng.guns.modular.note.dto.QxTweetTo;
 import cn.stylefeng.guns.modular.note.dvo.QxTweetVo;
 import cn.stylefeng.guns.modular.note.entity.QxTweet;
 import cn.stylefeng.guns.modular.note.service.QxGiftService;
+import cn.stylefeng.guns.modular.note.service.QxTweetLikeService;
 import cn.stylefeng.guns.modular.note.service.QxTweetService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +35,9 @@ public class ApiTweetController extends ApiBaseController {
 	
 	@Resource
 	private QxGiftService qxGiftService;
+	
+	@Resource
+	private QxTweetLikeService qxTweetLikeService;
 
 	@PostMapping("/add")
 	public Object add(QxTweetTo tweetTo) {
@@ -99,9 +103,7 @@ public class ApiTweetController extends ApiBaseController {
 	
 	@PostMapping("/like")
 	public Object like(Long id) {
-		QxTweet tweet = qxTweetService.getById(id);
-		tweet.setFavoriteCount(tweet.getFavoriteCount()+1);
-		qxTweetService.updateById(tweet);
+		qxTweetService.like(getRequestUserId(), id);
 		log.info("/api/tweet/like, id=" + id);
 		return ResultGenerator.genSuccessResult();
 	}

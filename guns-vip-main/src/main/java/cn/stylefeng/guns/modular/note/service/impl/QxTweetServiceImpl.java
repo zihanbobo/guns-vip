@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,8 +16,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
+import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxPayResult;
 import cn.stylefeng.guns.modular.note.entity.QxTweet;
+import cn.stylefeng.guns.modular.note.entity.QxTweetLike;
+import cn.stylefeng.guns.modular.note.mapper.QxTweetLikeMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxTweetMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxTweetParam;
 import cn.stylefeng.guns.modular.note.model.result.QxTweetResult;
@@ -39,6 +43,9 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
+	
+	@Resource
+	private QxTweetLikeMapper qxTweetLikeMapper;
 	
 	@Override
 	public void add(QxTweetParam param) {
@@ -110,4 +117,21 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 		this.updateById(tweet);
 	}
 
+	@Override
+	public void like(Long requestUserId, Long id) {
+		QueryWrapper<QxTweetLike> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("tweet_id", id).eq("created_by", requestUserId);
+		int count = qxTweetLikeMapper.selectCount(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("不能重复点赞");
+		}
+		QxTweetLike like = new QxTweetLike();
+		like.setCreatedBy(requestUserId);
+		like.setTweetId(id);
+		qxTweetLikeMapper.insert(like);
+		
+		QxTweet tweet = this.getById(id);
+		tweet.setFavoriteCount(tweet.getFavoriteCount()+1);
+		this.updateById(tweet);
+	}
 }

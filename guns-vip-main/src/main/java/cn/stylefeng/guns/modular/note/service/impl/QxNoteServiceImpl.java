@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,9 +16,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
+import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxPayResult;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
+import cn.stylefeng.guns.modular.note.entity.QxNoteLike;
 import cn.stylefeng.guns.modular.note.entity.QxUserNote;
+import cn.stylefeng.guns.modular.note.mapper.QxNoteLikeMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxNoteMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserNoteMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxNoteParam;
@@ -44,6 +48,9 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
+	
+	@Resource
+	private QxNoteLikeMapper qxNoteLikeMapper;
 	
     @Override
     public void add(QxNoteParam param){
@@ -123,5 +130,25 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		userNote.setNoteId(noteId);
 		userNote.setUserId(userId);
 		qxUserNoteMapper.insert(userNote);
+	}
+
+	@Override
+	public QxNote like(Long requestUserId, Long noteId) {
+		QueryWrapper<QxNoteLike> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("note_id", noteId).eq("created_by", requestUserId);
+		int count = qxNoteLikeMapper.selectCount(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("不能重复点赞");
+		}
+		QxNoteLike like = new QxNoteLike();
+		like.setCreatedBy(requestUserId);
+		like.setNoteId(noteId);
+		qxNoteLikeMapper.insert(like);
+		
+		QxNote note = this.getById(noteId);
+		note.setFavoriteCount(note.getFavoriteCount() + 1);
+		this.updateById(note);
+		
+		return note;
 	}
 }

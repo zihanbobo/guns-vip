@@ -119,9 +119,7 @@ public class ApiNoteController extends ApiBaseController {
 
 	@RequestMapping("/like")
 	public Object like(Long noteId) {
-		QxNote note = qxNoteService.getById(noteId);
-		note.setFavoriteCount(note.getFavoriteCount() + 1);
-		qxNoteService.updateById(note);
+		QxNote note = qxNoteService.like(getRequestUserId(), noteId);
 		log.info("/api/note/like, noteId=" + noteId);
 		return ResultGenerator.genSuccessResult(note.getFavoriteCount());
 	}

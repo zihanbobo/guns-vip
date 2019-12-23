@@ -86,4 +86,11 @@ public interface QxTweetService extends IService<QxTweet> {
  	 */
  	void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId);
 
+ 	/**
+ 	 * 点赞
+ 	 * @param requestUserId
+ 	 * @param id
+ 	 */
+	void like(Long requestUserId, Long id);
+
 }
