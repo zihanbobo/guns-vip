@@ -61,7 +61,7 @@ public interface QxTweetMapper extends BaseMapper<QxTweet> {
      * @param page
      * @param userId
      */
-    @Select("select a.* from qx_tweet a inner join qx_follow b on a.user_id = b.followee_id and b.follower_id = #{userId}")
+    @Select("select a.* from qx_tweet a inner join qx_follow b on a.user_id = b.followee_id and b.follower_id = #{userId} order by a.created_time desc")
     @ResultMap("BaseResultMap")
 	Page<List<QxTweet>> followList(@Param("page") Page page, @Param("userId") Long userId);
 
@@ -72,5 +72,14 @@ public interface QxTweetMapper extends BaseMapper<QxTweet> {
      * @return
      */
 	Page rewardUsers(@Param("page") Page page, @Param("tweetId") Long tweetId);
+
+	/**
+	 * 获得推文列表
+	 * @param page
+	 * @param userId
+	 * @param keywords
+	 * @return
+	 */
+	Page listTweets(@Param("page") Page page, @Param("userId") Long userId, @Param("keywords") String keywords);
 
 }

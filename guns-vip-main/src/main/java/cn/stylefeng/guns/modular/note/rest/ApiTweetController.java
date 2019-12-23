@@ -53,12 +53,7 @@ public class ApiTweetController extends ApiBaseController {
 	public Object list(String keywords) {
 		//获取分页参数
         Page page = LayuiPageFactory.defaultPage();
-		QueryWrapper<QxTweet> queryWrapper = new QueryWrapper<>();
-		if (!Strings.isNullOrEmpty(keywords)) {
-			queryWrapper.like("title", keywords);
-		}
-		queryWrapper.orderByDesc("created_time");
-		qxTweetService.page(page, queryWrapper);
+        qxTweetService.listTweets(page, getRequestUserId(), keywords);
 		List<QxTweetVo> vos = createQxTweetVos(page.getRecords());
 		page.setRecords(vos);
 		log.info("/api/tweet/list, keywords=" + keywords);

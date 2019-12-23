@@ -365,4 +365,18 @@ public class ApiUserController extends ApiBaseController {
 		log.info("/api/user/report, id=" + id + ", type=" + type);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@PostMapping("/black")
+	public Object black(Long userId) {
+		qxUserService.black(getRequestUserId(), userId);
+		log.info("/api/user/black, user=" + userId);
+		return ResultGenerator.genSuccessResult();
+	}
+	
+	@PostMapping("/unblack")
+	public Object unblack(Long userId) {
+		qxUserService.unblock(getRequestUserId(), userId);
+		log.info("/api/user/unblack, userId=" + userId);
+		return ResultGenerator.genSuccessResult();
+	}
 }

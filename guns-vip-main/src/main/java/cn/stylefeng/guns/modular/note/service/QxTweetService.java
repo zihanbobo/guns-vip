@@ -15,89 +15,100 @@ import cn.stylefeng.guns.modular.note.model.result.QxTweetResult;
  * 推文表 服务类
  * </p>
  *
- * @author 
+ * @author
  * @since 2019-11-18
  */
 public interface QxTweetService extends IService<QxTweet> {
 
-    /**
-     * 新增
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    void add(QxTweetParam param);
+	/**
+	 * 新增
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	void add(QxTweetParam param);
 
-    /**
-     * 删除
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    void delete(QxTweetParam param);
+	/**
+	 * 删除
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	void delete(QxTweetParam param);
 
-    /**
-     * 更新
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    void update(QxTweetParam param);
+	/**
+	 * 更新
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	void update(QxTweetParam param);
 
-    /**
-     * 查询单条数据，Specification模式
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    QxTweetResult findBySpec(QxTweetParam param);
+	/**
+	 * 查询单条数据，Specification模式
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	QxTweetResult findBySpec(QxTweetParam param);
 
-    /**
-     * 查询列表，Specification模式
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-    List<QxTweetResult> findListBySpec(QxTweetParam param);
+	/**
+	 * 查询列表，Specification模式
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	List<QxTweetResult> findListBySpec(QxTweetParam param);
 
-    /**
-     * 查询分页数据，Specification模式
-     *
-     * @author 
-     * @Date 2019-11-18
-     */
-     LayuiPageInfo findPageBySpec(QxTweetParam param);
+	/**
+	 * 查询分页数据，Specification模式
+	 *
+	 * @author
+	 * @Date 2019-11-18
+	 */
+	LayuiPageInfo findPageBySpec(QxTweetParam param);
 
-     /**
-      * 查询我关注的人动态
-      * @param page
-      * @param requestUserId
-      */
-     Page<List<QxTweet>> followList(Page page, Long userId);
-     
+	/**
+	 * 查询我关注的人动态
+	 * 
+	 * @param page
+	 * @param requestUserId
+	 */
+	Page<List<QxTweet>> followList(Page page, Long userId);
 
- 	/**
- 	 * 打赏
- 	 * 
- 	 * @param requestUserId
- 	 * @param userId
- 	 * @param tweetId
- 	 * @param giftId
- 	 */
- 	void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId);
+	/**
+	 * 打赏
+	 * 
+	 * @param requestUserId
+	 * @param userId
+	 * @param tweetId
+	 * @param giftId
+	 */
+	void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId);
 
- 	/**
- 	 * 点赞
- 	 * @param requestUserId
- 	 * @param id
- 	 */
+	/**
+	 * 点赞
+	 * 
+	 * @param requestUserId
+	 * @param id
+	 */
 	void like(Long requestUserId, Long id);
 
 	/**
 	 * 获得打赏用户
+	 * 
 	 * @param page
 	 * @param tweetId
 	 */
 	Page rewardUsers(Page page, Long tweetId);
+
+	/**
+	 * 朋友圈列表
+	 * 
+	 * @param page
+	 * @param userId
+	 * @param keywords
+	 */
+	Page listTweets(Page page, Long userId, String keywords);
 
 }

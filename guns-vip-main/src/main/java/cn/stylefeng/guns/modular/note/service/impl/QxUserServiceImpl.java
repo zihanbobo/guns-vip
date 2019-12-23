@@ -18,9 +18,11 @@ import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
 import cn.stylefeng.guns.core.exception.ServiceException;
+import cn.stylefeng.guns.modular.note.entity.QxBlack;
 import cn.stylefeng.guns.modular.note.entity.QxReport;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
+import cn.stylefeng.guns.modular.note.mapper.QxBlackMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxReportMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserSocialMapper;
@@ -48,6 +50,9 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 
 	@Resource
 	private QxReportMapper qxReportMapper;
+	
+	@Resource
+	private QxBlackMapper qxBlackMapper;
 	
 	@Override
 	public void add(QxUserParam param) {
@@ -203,5 +208,33 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 		entity.setReportedId(id);
 		entity.setType(type);
 		qxReportMapper.insert(entity);
+	}
+
+	@Override
+	public void black(Long requestUserId, Long userId) {
+		if (requestUserId.equals(userId)) {
+			throw new ServiceException("不能屏蔽自己");
+		}
+		QueryWrapper<QxBlack> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", requestUserId).eq("black_user_id", userId);
+		int count = qxBlackMapper.selectCount(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("不能重复屏蔽");
+		}
+		QxBlack entity = new QxBlack();
+		entity.setUserId(requestUserId);
+		entity.setBlackUserId(userId);
+		qxBlackMapper.insert(entity);
+	}
+
+	@Override
+	public void unblock(Long requestUserId, Long userId) {
+		QueryWrapper<QxBlack> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", requestUserId).eq("black_user_id", userId);
+		int count = qxBlackMapper.selectCount(queryWrapper);
+		if (count == 0) {
+			throw new ServiceException("未屏蔽，无需取消");
+		}
+		qxBlackMapper.delete(queryWrapper);
 	}
 }

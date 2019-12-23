@@ -140,4 +140,9 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 	public Page rewardUsers(Page page, Long tweetId) {
 		return this.baseMapper.rewardUsers(page, tweetId);
 	}
+
+	@Override
+	public Page listTweets(Page page, Long userId, String keywords) {
+		return this.baseMapper.listTweets(page, userId, keywords);
+	}
 }

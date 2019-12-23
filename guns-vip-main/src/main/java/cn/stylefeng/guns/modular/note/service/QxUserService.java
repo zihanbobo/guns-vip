@@ -140,4 +140,18 @@ public interface QxUserService extends IService<QxUser> {
 	 * @param type
 	 */
 	void report(Long requestUserId, Long id, String type);
+
+	/**
+	 * 屏蔽某人
+	 * @param requestUserId
+	 * @param userId
+	 */
+	void black(Long requestUserId, Long userId);
+
+	/**
+	 * 取消屏蔽某人
+	 * @param requestUserId
+	 * @param userId
+	 */
+	void unblock(Long requestUserId, Long userId);
 }
