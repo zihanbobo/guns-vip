@@ -79,10 +79,23 @@ public class ApiBlackController extends ApiBaseController {
 		}
 	}
 	
+	/**
+	 * 接口废弃
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping("/delete")
 	public Object delete(Long id) {
 		qxBlacklistService.removeById(id);
 		log.info("/api/black/delete, id=" + id);
+		return ResultGenerator.genSuccessResult();
+	}
+	
+	@RequestMapping("/cancel")
+	public Object cancel(Long blackUserId) {
+		QueryWrapper<QxBlacklist> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("user_id", getRequestUserId()).eq("black_user_id", blackUserId);
+		qxBlacklistService.remove(queryWrapper);
 		return ResultGenerator.genSuccessResult();
 	}
 }
