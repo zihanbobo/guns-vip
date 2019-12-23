@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.note.service;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
 import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
 import cn.stylefeng.guns.modular.note.model.params.QxWithdrawLogParam;
@@ -74,6 +75,14 @@ public interface QxWithdrawLogService extends IService<QxWithdrawLog> {
       * @param amount
      * @return 
       */
-	 QxWithdrawLog createWithdrawLog(QxUserSocial userSocial, BigDecimal amount);
+	 QxWithdrawLog createWithdrawLog(QxUserSocial userSocial, BigDecimal amount, Integer coinCount);
+
+	 /**
+	  * 提现成功逻辑更新
+	  * @param withdrawLog
+	  * @param user
+	  * @param coinCount
+	  */
+	void updateWithdrawSuccess(QxWithdrawLog withdrawLog, QxUser user, int coinCount);
 
 }

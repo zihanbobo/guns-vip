@@ -93,5 +93,10 @@ public class QxWithdrawLogResult implements Serializable {
      * 昵称
      */
     private String nickname;
+    
+    /**
+     * 金币数量
+     */
+    private Integer coinCount;
 
 }

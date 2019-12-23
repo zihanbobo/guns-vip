@@ -90,6 +90,11 @@ public class QxWithdrawLogParam implements Serializable, BaseValidatingParam {
      */
     private String mobile;
     
+    /**
+     * 金币数量
+     */
+    private Integer coinCount;
+    
     @Override
     public String checkParam() {
         return null;

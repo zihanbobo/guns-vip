@@ -17,11 +17,12 @@
         <result column="payee_account" property="payeeAccount" />
         <result column="status" property="status" />
         <result column="sn" property="sn" />
+        <result column="coin_count" property="coinCount" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", amount AS "amount", pay_way AS "payWay", payee_account AS "payeeAccount", status AS "status", sn AS "sn"
+        id AS "id", version AS "version", created_by AS "createdBy", created_time AS "createdTime", updated_by AS "updatedBy", updated_time AS "updatedTime", deleted AS "deleted", user_id AS "userId", amount AS "amount", pay_way AS "payWay", payee_account AS "payeeAccount", status AS "status", sn AS "sn", coin_count AS "coinCount"
     </sql>
 
 
@@ -39,7 +40,7 @@
 
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxWithdrawLogResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxWithdrawLogParam">
         select
-        	a.id AS "id", a.created_time AS "createdTime",a.deleted AS "deleted", a.user_id AS "userId", a.amount AS "amount", a.pay_way AS "payWay", a.payee_account AS "payeeAccount", a.status AS "status", a.sn AS "sn", b.nickname as "nickname", b.mobile as "mobile"
+        	a.id AS "id", a.created_time AS "createdTime",a.deleted AS "deleted", a.user_id AS "userId", a.amount AS "amount", a.pay_way AS "payWay", a.payee_account AS "payeeAccount", a.status AS "status", a.sn AS "sn", b.nickname as "nickname", b.mobile as "mobile", a.coin_count AS "coinCount"
         from 
         	qx_withdraw_log a
         left join

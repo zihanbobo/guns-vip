@@ -113,6 +113,20 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
         Feng.confirm("是否删除?", operation);
     };
 
+    QxWithdrawLog.handleWithdraw = function (data) {
+    	var operation = function() {
+    		var ajax = new $ax(Feng.ctxPath + "/qxWithdrawLog/handleWithdraw", function(data) {
+        		Feng.success("提现成功");
+        		table.reload(QxWithdrawLog.tableId);
+        	}, function (data) {
+        		Feng.error("提现失败" + data.responseJSON.message + "!");
+        	});
+        	ajax.set("id", data.id);
+        	ajax.start();
+    	};
+    	Feng.confirm("是否处理提现?", operation);
+    };
+    
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + QxWithdrawLog.tableId,
@@ -147,6 +161,8 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             QxWithdrawLog.openEditDlg(data);
         } else if (layEvent === 'delete') {
             QxWithdrawLog.onDeleteItem(data);
+        } else if (layEvent === 'handleWithdraw') {
+        	QxWithdrawLog.handleWithdraw(data);
         }
     });
 });

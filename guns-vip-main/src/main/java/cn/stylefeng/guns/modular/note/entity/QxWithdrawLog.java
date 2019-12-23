@@ -94,6 +94,12 @@ public class QxWithdrawLog implements Serializable {
     private String status;
     
     /**
+     * 金币数量
+     */
+    @TableField("coin_count")
+    private Integer coinCount;
+    
+    /**
      * 订单号
      */
     @TableField("sn")
@@ -203,6 +209,14 @@ public class QxWithdrawLog implements Serializable {
 
 	public void setSn(String sn) {
 		this.sn = sn;
+	}
+
+	public Integer getCoinCount() {
+		return coinCount;
+	}
+
+	public void setCoinCount(Integer coinCount) {
+		this.coinCount = coinCount;
 	}
 
 	@Override

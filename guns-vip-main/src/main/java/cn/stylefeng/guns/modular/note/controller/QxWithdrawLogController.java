@@ -1,15 +1,20 @@
 package cn.stylefeng.guns.modular.note.controller;
 
-import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
-import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
-import cn.stylefeng.guns.modular.note.model.params.QxWithdrawLogParam;
-import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
-import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
+import cn.stylefeng.guns.core.constant.ProjectConstants.WITHDRAW_STATUS;
+import cn.stylefeng.guns.core.exception.ServiceException;
+import cn.stylefeng.guns.modular.note.entity.QxUser;
+import cn.stylefeng.guns.modular.note.entity.QxWithdrawLog;
+import cn.stylefeng.guns.modular.note.model.params.QxWithdrawLogParam;
+import cn.stylefeng.guns.modular.note.service.QxUserService;
+import cn.stylefeng.guns.modular.note.service.QxWithdrawLogService;
+import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
 
 
 /**
@@ -26,6 +31,9 @@ public class QxWithdrawLogController extends BaseController {
 
     @Autowired
     private QxWithdrawLogService qxWithdrawLogService;
+    
+    @Autowired
+    private QxUserService qxUserService;
 
     /**
      * 跳转到主页面
@@ -124,6 +132,18 @@ public class QxWithdrawLogController extends BaseController {
         return this.qxWithdrawLogService.findPageBySpec(qxWithdrawLogParam);
     }
 
+    @RequestMapping("/handleWithdraw")
+    @ResponseBody
+    public ResponseData handleWithdraw(Long id) {
+    	QxWithdrawLog withdrawLog = this.qxWithdrawLogService.getById(id);
+    	if (withdrawLog.getStatus().equals(WITHDRAW_STATUS.WAIT_OUT)) {
+    		QxUser user = qxUserService.getById(withdrawLog.getUserId());
+        	this.qxWithdrawLogService.updateWithdrawSuccess(withdrawLog, user, withdrawLog.getCoinCount());
+        	return ResponseData.success();
+    	} else {
+    		throw new ServiceException("不能操作提现");
+    	}
+    }
 }
 
 

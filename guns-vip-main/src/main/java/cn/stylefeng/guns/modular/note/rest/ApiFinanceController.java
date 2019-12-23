@@ -248,7 +248,7 @@ public class ApiFinanceController extends ApiBaseController {
 		if (userSocial == null) {
 			throw new ServiceException("请绑定微信后再提现");
 		}
-		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
+		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount, coinCount);
 		if (Boolean.TRUE.equals(configEntity.getWxCanWithdraw())) {
 			EntPayService entPayService = wxMpPayService.getEntPayService();
 			EntPayRequest request = new EntPayRequest();
@@ -262,7 +262,7 @@ public class ApiFinanceController extends ApiBaseController {
 			try {
 				EntPayResult entPayResult = entPayService.entPay(request);
 				if (ResultCode.SUCCESS.equals(entPayResult.getReturnCode()) && ResultCode.SUCCESS.equals(entPayResult.getResultCode())) {
-					updateWithdrawSuccess(withdrawLog, user, coinCount);
+					qxWithdrawLogService.updateWithdrawSuccess(withdrawLog, user, coinCount);
 					log.info("/api/finance/wx/withdraw");
 					return ResultGenerator.genSuccessResult();
 				} else {
@@ -439,7 +439,7 @@ public class ApiFinanceController extends ApiBaseController {
 		if (userSocial == null) {
 			throw new ServiceException("请绑定支付宝后再提现");
 		}
-		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount);
+		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount, coinCount);
 		if (Boolean.TRUE.equals(configEntity.getAlipayCanWithdraw())) {
 			AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
 			AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();
@@ -457,7 +457,7 @@ public class ApiFinanceController extends ApiBaseController {
 			try {
 				AlipayFundTransUniTransferResponse response = alipayClient.certificateExecute(request);
 				if(response.isSuccess()){
-					updateWithdrawSuccess(withdrawLog, user, coinCount);
+					qxWithdrawLogService.updateWithdrawSuccess(withdrawLog, user, coinCount);
 					log.info("/api/alipay/withdraw");
 					return ResultGenerator.genSuccessResult();
 				} else {
@@ -471,17 +471,6 @@ public class ApiFinanceController extends ApiBaseController {
 		} else {
 			return ResultGenerator.genSuccessResult(configEntity.getWxServiceContact());
 		}
-	}
-	
-	public void updateWithdrawSuccess(QxWithdrawLog withdrawLog, QxUser user, Integer coinCount) {
-		// 更新提现状态
-		withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
-		qxWithdrawLogService.updateById(withdrawLog);
-		// 更新用户金币余额
-		user.setBalance(user.getBalance()-coinCount);
-		qxUserService.updateById(user);
-		// 更新用户流水
-		qxPayLogHelper.createPayLog(user.getId(), coinCount, USER_PAY_LOG_TYPE.WITHDRAW_COIN_IN);
 	}
 
 	@PostMapping("/log")
