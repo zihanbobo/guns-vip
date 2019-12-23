@@ -17,8 +17,11 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
+import cn.stylefeng.guns.core.exception.ServiceException;
+import cn.stylefeng.guns.modular.note.entity.QxReport;
 import cn.stylefeng.guns.modular.note.entity.QxUser;
 import cn.stylefeng.guns.modular.note.entity.QxUserSocial;
+import cn.stylefeng.guns.modular.note.mapper.QxReportMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserSocialMapper;
 import cn.stylefeng.guns.modular.note.model.params.QxUserParam;
@@ -43,6 +46,9 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	@Resource
 	private QxUserSocialMapper qxUserSocialMapper;
 
+	@Resource
+	private QxReportMapper qxReportMapper;
+	
 	@Override
 	public void add(QxUserParam param) {
 		QxUser entity = getEntity(param);
@@ -182,5 +188,20 @@ public class QxUserServiceImpl extends ServiceImpl<QxUserMapper, QxUser> impleme
 	@Override
 	public QxUser getUserByOpenId(String appId, String openId) {
 		return this.baseMapper.getUserByOpenId(appId, openId);
+	}
+
+	@Override
+	public void report(Long requestUserId, Long id, String type) {
+		QueryWrapper<QxReport> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("reported_id", id).eq("user_id", requestUserId).eq("type", type);
+		int count = qxReportMapper.selectCount(queryWrapper);
+		if (count > 0) {
+			throw new ServiceException("您已举报该条内容");
+		}
+		QxReport entity = new QxReport();
+		entity.setUserId(requestUserId);
+		entity.setReportedId(id);
+		entity.setType(type);
+		qxReportMapper.insert(entity);
 	}
 }

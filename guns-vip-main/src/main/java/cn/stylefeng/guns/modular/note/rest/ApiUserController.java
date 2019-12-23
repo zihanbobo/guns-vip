@@ -358,4 +358,11 @@ public class ApiUserController extends ApiBaseController {
 		log.info("/api/user/isAppOnline");
 		return ResultGenerator.genSuccessResult(configEntity.getIsOnline());
 	}
+	
+	@PostMapping("/report")
+	public Object report(Long id, String type) {
+		qxUserService.report(getRequestUserId(), id, type);
+		log.info("/api/user/report, id=" + id + ", type=" + type);
+		return ResultGenerator.genSuccessResult();
+	}
 }

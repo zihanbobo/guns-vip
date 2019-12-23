@@ -132,4 +132,12 @@ public interface QxUserService extends IService<QxUser> {
 	 * @return
 	 */
 	QxUser getUserByOpenId(String appId, String openId);
+
+	/**
+	 * 举报
+	 * @param requestUserId
+	 * @param id
+	 * @param type
+	 */
+	void report(Long requestUserId, Long id, String type);
 }

@@ -310,4 +310,14 @@ public final class ProjectConstants {
 		int SANDBOX = 0;
 		int PRODUCTION = 1;
 	}
+	
+	/**
+	 * 举报类型
+	 * @author steven
+	 *
+	 */
+	public interface REPORT_TYPE {
+		String TWEET = "0";
+		String NOTE = "1";
+	}
 }
