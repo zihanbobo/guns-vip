@@ -65,8 +65,12 @@ public class QxCoinHelper {
 	public BigDecimal caculateWithdrawAmount(int coinCount) {
 		BigDecimal withdrawRate = getRateByType(COST_RATE_TYPE.WITHDRAW_RATE);
 		BigDecimal coinRate = getRateByType(COST_RATE_TYPE.COIN_RATE);
-		BigDecimal realAmount = new BigDecimal(coinCount).multiply(coinRate);
-		return CommonUtils.roundHalfUp(realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate)));
+		BigDecimal realAmount = new BigDecimal(coinCount).multiply(coinRate); // 金币兑换成现金
+		BigDecimal withdrawAmount = (realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate))).setScale(0, BigDecimal.ROUND_DOWN);
+		if (withdrawAmount.compareTo(BigDecimal.ONE) < 0) {
+			throw new ServiceException("提现金额必须大于1元");
+		}
+		return withdrawAmount;
 	}
 	
 	BigDecimal getRateByType(String type) {
