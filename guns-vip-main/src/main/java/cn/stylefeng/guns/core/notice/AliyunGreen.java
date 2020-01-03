@@ -107,7 +107,7 @@ public class AliyunGreen {
 								// 根据scene和suggetion做相关处理
 								log.info("scene = [" + scene + "]");
 								log.info("suggestion = [" + suggestion + "]");
-								if (!suggestion.equals("pass")) {
+								if (suggestion.equals("block")) {
 									log.info("图片包含敏感内容, url=" + url);
 									throw new ServiceException("图片包含敏感内容");
 								}
@@ -191,7 +191,7 @@ public class AliyunGreen {
 								// suggestion == pass 未命中垃圾 suggestion == block 命中了垃圾，可以通过label字段查看命中的垃圾分类
 								log.info("args = [" + scene + "]");
 								log.info("args = [" + suggestion + "]");
-								if (!suggestion.equals("pass")) {
+								if (suggestion.equals("block")) {
 									log.error("文本包含敏感内容");
 									throw new ServiceException("文本包含敏感内容");
 								}
