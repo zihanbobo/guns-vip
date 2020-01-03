@@ -68,7 +68,7 @@ public class QxCoinHelper {
 		BigDecimal realAmount = new BigDecimal(coinCount).multiply(coinRate); // 金币兑换成现金
 		BigDecimal withdrawAmount = (realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate))).setScale(0, BigDecimal.ROUND_DOWN);
 		if (withdrawAmount.compareTo(BigDecimal.ONE) < 0) {
-			throw new ServiceException("提现金额必须大于1元");
+			throw new ServiceException("提醒金额必须大于1元");
 		}
 		return withdrawAmount;
 	}
