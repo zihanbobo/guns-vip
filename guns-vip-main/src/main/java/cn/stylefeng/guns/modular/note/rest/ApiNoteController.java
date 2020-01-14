@@ -41,6 +41,18 @@ public class ApiNoteController extends ApiBaseController {
 	@Resource
 	private QxGiftService qxGiftService;
 	
+	
+	@PostMapping("/notes")
+	public Object list(String keywords) {
+		//获取分页参数
+        Page page = LayuiPageFactory.defaultPage();
+        qxNoteService.listNotes(page, getRequestUserId(), keywords);
+		List<QxTweetVo> vos = createQxNoteVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/tweet/list, keywords=" + keywords);
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
 	@RequestMapping("/list")
 	public Object list(Long userId) {
 		Page page = LayuiPageFactory.defaultPage();

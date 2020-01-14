@@ -61,4 +61,12 @@ public interface QxNoteMapper extends BaseMapper<QxNote> {
      */
 	Page rewardUsers(@Param("page") Page page, @Param("noteId") Long noteId);
 
+	/**
+	 * 获得推文列表
+	 * @param page
+	 * @param userId
+	 * @param keywords
+	 * @return
+	 */
+	Page listNotes(@Param("page") Page page, @Param("userId") Long userId, @Param("keywords") String keywords);
 }

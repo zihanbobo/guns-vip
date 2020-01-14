@@ -100,4 +100,12 @@ public interface QxNoteService extends IService<QxNote> {
 	 * @param noteId
 	 */
 	Page rewardUsers(Page page, Long noteId);
+
+	/**
+	 * 列出日记列表
+	 * @param page
+	 * @param requestUserId
+	 * @param keywords
+	 */
+	Page listNotes(Page page, Long requestUserId, String keywords);
 }
