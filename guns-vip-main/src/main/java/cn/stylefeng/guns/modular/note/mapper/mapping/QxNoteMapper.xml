@@ -82,7 +82,7 @@
 		WHERE
 			a.user_id NOT IN ( SELECT black_user_id FROM qx_black WHERE user_id = #{userId} ) 
 			<if test="keywords != null and keywords != ''">
-			and a.title like CONCAT('%', #{keywords}, '%')
+			and a.content like CONCAT('%', #{keywords}, '%')
 			</if>
 		ORDER BY
 			a.created_time DESC
