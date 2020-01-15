@@ -32,6 +32,8 @@ public class QxInviteVo {
 
 	// 用户信息
 	private QxUserVo userVo;
+	// 被邀请人信息
+	private QxUserVo inviteeUserVo;
 	// 礼物信息
 	private QxGift gift;
 	// 约会类型

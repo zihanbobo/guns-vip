@@ -101,7 +101,7 @@
     	ORDER BY
     		<choose>
     			<when test="paramCondition.order == 'time'.toString()">
-    				a.invite_time desc
+    				a.invite_time
     			</when>
     			<otherwise>
     				distance asc

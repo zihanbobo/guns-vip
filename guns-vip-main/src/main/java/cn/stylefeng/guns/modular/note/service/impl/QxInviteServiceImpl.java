@@ -299,11 +299,16 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	}
 
 	public void createInviteOperate(Long inviteId, Long userId, String type) {
-		QxInviteOperate inviteOperate = new QxInviteOperate();
-		inviteOperate.setInviteId(inviteId);
-		inviteOperate.setUserId(userId);
-		inviteOperate.setType(type);
-		qxInviteOperateMapper.insert(inviteOperate);
+		QueryWrapper<QxInviteOperate> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("invite_id", inviteId).eq("user_id", userId).eq("type", type);
+		int operateCount = qxInviteOperateMapper.selectCount(queryWrapper);
+		if (operateCount == 0) {
+			QxInviteOperate inviteOperate = new QxInviteOperate();
+			inviteOperate.setInviteId(inviteId);
+			inviteOperate.setUserId(userId);
+			inviteOperate.setType(type);
+			qxInviteOperateMapper.insert(inviteOperate);
+		}
 	}
 
 	public Boolean checkOtherSideOperate(Long inviteId, Long userId, String type) {
@@ -340,11 +345,9 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			payerId = invite.getInvitee();
 			payeeId = invite.getInviter();
 		}
-		if (payerId.equals(requestUserId)) { // 当前用户是付款者，需要付款
-			QxPayResult payResult = qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId(), true);
-			qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_OUT);
-			qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_IN);
-		}
+		QxPayResult payResult = qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId(), true);
+		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_OUT);
+		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_IN);
 	}
 
 	@Override
@@ -493,5 +496,10 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 				qxCoinHelper.unfreeze(invite.getInviter(), invite.getGiftId());
 			}
 		}
+	}
+
+	@Override
+	public Page myApply(Page page, Long requestUserId) {
+		return this.baseMapper.myApply(page, requestUserId);
 	}
 }

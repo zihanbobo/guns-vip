@@ -224,6 +224,9 @@ public class ApiInviteController extends ApiBaseController {
 			QxInviteVo vo = new QxInviteVo();
 			BeanUtils.copyProperties(invite, vo);
 			vo.setUserVo(createQxUserVo(getUser(invite.getInviter())));
+			if (invite.getInvitee() != null) {
+				vo.setInviteeUserVo(createQxUserVo(getUser(invite.getInvitee())));
+			}
 			vo.setGift(qxGiftService.getById(invite.getGiftId()));
 			vo.setDateType(qxDateTypeService.getById(invite.getDateTypeId()));
 			vos.add(vo);
@@ -233,7 +236,7 @@ public class ApiInviteController extends ApiBaseController {
 	
 	@RequestMapping("/start")
 	public Object start(Long inviteId) {
-		checkRepeatOperate(inviteId, getRequestUserId(), INVITE_OPERATE_TYPE.CONFIRM_START);
+//		checkRepeatOperate(inviteId, getRequestUserId(), INVITE_OPERATE_TYPE.CONFIRM_START);
 		qxInviteService.start(inviteId, getRequestUserId());
 		log.info("/api/invite/start, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
@@ -306,7 +309,7 @@ public class ApiInviteController extends ApiBaseController {
 	public Object myInvite() {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("inviter", getRequestUserId());
+		queryWrapper.eq("inviter", getRequestUserId()).orderByDesc("invite_time");
 		qxInviteService.page(page, queryWrapper);
 		List<QxInviteVo> vos = createQxInviteVos(page.getRecords());
 		page.setRecords(vos);
@@ -318,11 +321,21 @@ public class ApiInviteController extends ApiBaseController {
 	public Object inviteMe() {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("invitee", getRequestUserId());
+		queryWrapper.eq("invitee", getRequestUserId()).orderByDesc("invite_time");
 		qxInviteService.page(page, queryWrapper);
 		List<QxInviteVo> vos = createQxInviteVos(page.getRecords());
 		page.setRecords(vos);
 		log.info("/api/invite/current");
+		return ResultGenerator.genSuccessResult(page);
+	}
+	
+	@RequestMapping("/myApply")
+	public Object myApply() {
+		Page page = LayuiPageFactory.defaultPage();
+		qxInviteService.myApply(page, getRequestUserId());
+		List<QxInviteVo> vos = createQxInviteVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/invite/myApply");
 		return ResultGenerator.genSuccessResult(page);
 	}
 	

@@ -194,4 +194,11 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	void closeWaitInvite();
 
+	/**
+	 * 我报名的约单
+	 * @param page
+	 * @param requestUserId
+	 */
+	Page myApply(Page page, Long requestUserId);
+
 }

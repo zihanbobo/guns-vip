@@ -81,4 +81,14 @@ public interface QxInviteMapper extends BaseMapper<QxInvite> {
 	 * @return
 	 */
 	QxInviteSearchPojo getInviteById(@Param("inviteId") Long id);
+
+	/**
+	 * 我报名的约单
+	 * @param page
+	 * @param requestUserId
+	 * @return
+	 */
+    @Select("select a.* from qx_invite a inner join qx_invite_apply b on a.id = b.invite_id and b.user_id = #{requestUserId} order by a.invite_time")
+    @ResultMap("BaseResultMap")
+	Page myApply(@Param("page")Page page, @Param("requestUserId")Long requestUserId);
 }
