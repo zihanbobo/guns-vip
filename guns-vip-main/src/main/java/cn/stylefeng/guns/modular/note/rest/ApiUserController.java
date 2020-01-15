@@ -128,8 +128,7 @@ public class ApiUserController extends ApiBaseController {
 			QxUser qxUser = qxUserService.getUserByUnionId(appId, wxUser.getUnionId());
 			if (qxUser == null) {
 				result = new JSONObject();
-				result.put("openId", wxUser.getOpenId());
-				result.put("unionId", wxUser.getUnionId());
+				result.put("wxUser", wxUser);
 				result.put("validUser", false);
 			} else {
 				result = generateToken(qxUser, false);
