@@ -171,6 +171,10 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		invite.setSn(CommonUtils.getSerialNumber());
 		invite.setStatus(INVITE_STATUS.WAIT_MATCH);
 		this.baseMapper.insert(invite);
+		// 如果是我请客，则冻结我的礼物金币
+		if (INVITE_TYPE.ACTIVE.equals(inviteTo.getInviteType())) {
+			qxCoinHelper.freeze(requestUserId, invite.getGiftId());
+		}
 	}
 
 	@Override
@@ -180,6 +184,11 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		inviteApply.setInviteId(inviteId);
 		inviteApply.setStatus(INVITE_APPLY_STATUS.UN_SURE);
 		qxInviteApplyMapper.insert(inviteApply);
+		// 如果是TA请客，则需冻结报名人的金币
+		QxInvite invite = this.baseMapper.selectById(inviteId);
+		if (INVITE_TYPE.PASSIVE.equals(invite.getInviteType())) {
+			qxCoinHelper.freeze(currentUserId, invite.getGiftId());
+		}
 	}
 
 	@Override
@@ -207,6 +216,18 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		QxInviteApply rejectModel = new QxInviteApply();
 		rejectModel.setStatus(INVITE_APPLY_STATUS.REJECT);
 		qxInviteApplyMapper.update(rejectModel, rejectUpdateWrapper);
+		
+		// 如果是TA请客，则在报名时，需将金币退还至原账户
+		QxInvite invite = this.baseMapper.selectById(inviteId);
+		if (INVITE_TYPE.PASSIVE.equals(invite.getInviteType())) {
+			List<QxInviteUserPojo> list = this.baseMapper.getInviteUsers(inviteId);
+			for (QxInviteUserPojo inviteUser : list) {
+				if (INVITE_APPLY_STATUS.REJECT.equals(inviteUser.getStatus())) {
+					// 解冻对应金币
+					qxCoinHelper.unfreeze(inviteUser.getUserId(), invite.getGiftId());
+				}
+			}
+		}
 	}
 
 	public void updateInviteStatus(Long invitedId, Long invitee, String status) {
@@ -228,7 +249,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			Map<String, String> pairs = new HashMap<>();
 			Map<String, String> extras = new HashMap<>();
 
-			if (INVITE_STATUS.MATCHED.equals(inviteUser.getStatus())) {
+			if (INVITE_APPLY_STATUS.AGREE.equals(inviteUser.getStatus())) {
 				// 发送选中消息
 				tag = SMS_CODE.INVITE_SUCCESS;
 				extras.put("type", NOTIFICATION_TYPE.INVITE_CHOOSE_NOTIFY);
@@ -265,11 +286,15 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		return this.baseMapper.getCurrentInvites(page, userId);
 	}
 
+	/**
+	 * 确认见面，即约单结束，将金币转给对方
+	 */
 	@Override
 	public void start(Long inviteId, Long requestUserId) {
 		createInviteOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_START);
 		if (checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_START)) {
-			changeQxInviteStatus(inviteId, INVITE_STATUS.DATING);
+			changeQxInviteStatus(inviteId, INVITE_STATUS.FINISH);
+			payCoin(inviteId, requestUserId);
 		}
 	}
 
@@ -302,7 +327,6 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		if (Boolean.TRUE.equals(checkOtherSideOperate(inviteId, requestUserId, INVITE_OPERATE_TYPE.CONFIRM_FINISH))) {
 			changeQxInviteStatus(inviteId, INVITE_STATUS.FINISH);
 		}
-		payCoin(inviteId, requestUserId);
 	}
 
 	public void payCoin(Long inviteId, Long requestUserId) {
@@ -317,7 +341,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 			payeeId = invite.getInviter();
 		}
 		if (payerId.equals(requestUserId)) { // 当前用户是付款者，需要付款
-			QxPayResult payResult = qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId());
+			QxPayResult payResult = qxCoinHelper.payCoin(payerId, payeeId, invite.getGiftId(), true);
 			qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_OUT);
 			qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.INVITE_IN);
 		}
@@ -411,6 +435,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void cancel(Long requestUserId, Long inviteId) {
 		QxInvite invite = this.baseMapper.selectById(inviteId);
 		String inviteStatus = invite.getStatus();
@@ -424,14 +449,27 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		}
 		// 主动约，则直接打赏，且约单状态【已取消】
 		if (INVITE_TYPE.ACTIVE.equals(invite.getInviteType())) {
-			// 打赏
-			QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, invite.getInvitee(), invite.getGiftId());
-			qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_OUT);
-			qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_IN);
-			// 取消约单
-			invite.setStatus(INVITE_STATUS.CANCEl);
-			this.baseMapper.updateById(invite);
+			// 我请客，我爽约
+			if (invite.getInviter().equals(requestUserId)) {
+				QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, invite.getInvitee(), invite.getGiftId(), true);
+				qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_OUT);
+				qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_IN);
+			} else {
+				// 我请客，TA爽约,暂无措施
+			}
+		} else {
+			// TA请客，TA爽约
+			if (invite.getInvitee().equals(requestUserId)) {
+				QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, invite.getInvitee(), invite.getGiftId(), true);
+				qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_OUT);
+				qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.COMPENSATION_IN);
+			} else {
+				// TA请客，TA爽约，暂无措施
+			}
 		}
+		// 取消约单
+		invite.setStatus(INVITE_STATUS.CANCEl);
+		this.baseMapper.updateById(invite);
 	}
 
 	@Override
@@ -439,14 +477,21 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		return this.baseMapper.getInviteById(id);
 	}
 
+	/**
+	 * 超过24小时没有配对的单，就取消
+	 */
 	@Override
 	public void closeWaitInvite() {
 		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("status", ProjectConstants.INVITE_STATUS.WAIT_MATCH).lt("invite_time", new Date());
+		queryWrapper.eq("status", ProjectConstants.INVITE_STATUS.WAIT_MATCH).lt("invite_time", DateUtils.addDay(new Date(), 1));
 		List<QxInvite> unmatchedInvites = this.baseMapper.selectList(queryWrapper);
 		for (QxInvite invite : unmatchedInvites) {
 			invite.setStatus(ProjectConstants.INVITE_STATUS.CANCEl);
 			this.baseMapper.updateById(invite);
+			// 未配对的单，只有主动约才有金额冻结
+			if (INVITE_TYPE.PASSIVE.equals(invite.getInviteType())) {
+				qxCoinHelper.unfreeze(invite.getInviter(), invite.getGiftId());
+			}
 		}
 	}
 }

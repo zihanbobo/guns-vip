@@ -108,4 +108,12 @@ public interface QxNoteService extends IService<QxNote> {
 	 * @param keywords
 	 */
 	Page listNotes(Page page, Long requestUserId, String keywords);
+
+	/**
+	 * 我的关注的人日记
+	 * @param page
+	 * @param requestUserId
+	 * @return
+	 */
+	Page followList(Page page, Long requestUserId);
 }

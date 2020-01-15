@@ -109,7 +109,7 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void rewardNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
-		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId, false);
 		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_OUT);
 		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_IN);
 		qxPayLogHelper.rewardNoteLog(requestUserId, noteId, giftId);
@@ -119,8 +119,9 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	}
 
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void unlockNote(Long requestUserId, Long userId, Long noteId, Long giftId) {
-		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId, false);
 		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.NOTE_OUT);
 		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.NOTE_IN);
 		QxNote note = this.getById(noteId);
@@ -161,5 +162,10 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	@Override
 	public Page listNotes(Page page, Long requestUserId, String keywords) {
 		return this.baseMapper.listNotes(page, requestUserId, keywords);
+	}
+
+	@Override
+	public Page followList(Page page, Long requestUserId) {
+		return this.baseMapper.followList(page, requestUserId);
 	}
 }

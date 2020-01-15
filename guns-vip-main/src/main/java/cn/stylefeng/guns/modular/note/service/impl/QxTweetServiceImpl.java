@@ -109,7 +109,7 @@ public class QxTweetServiceImpl extends ServiceImpl<QxTweetMapper, QxTweet> impl
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void rewardTweet(Long requestUserId, Long userId, Long tweetId, Long giftId) {
-		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId);
+		QxPayResult payResult = qxCoinHelper.payCoin(requestUserId, userId, giftId, false);
 		qxPayLogHelper.createPayLog(payResult.getPayerId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_OUT);
 		qxPayLogHelper.createPayLog(payResult.getPayeeId(), payResult.getPrice(), USER_PAY_LOG_TYPE.REWARD_IN);
 		qxPayLogHelper.rewardTweetLog(requestUserId, tweetId, giftId);

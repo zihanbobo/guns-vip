@@ -199,4 +199,14 @@ public class ApiNoteController extends ApiBaseController {
 		qxNoteService.updateById(note);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@PostMapping("/followList")
+	public Object followList() {
+		Page page = LayuiPageFactory.defaultPage();
+		qxNoteService.followList(page, getRequestUserId());
+		List<QxNoteVo> vos = createQxNoteVos(page.getRecords());
+		page.setRecords(vos);
+		log.info("/api/note/followList");
+		return ResultGenerator.genSuccessResult(page);
+	}
 }
