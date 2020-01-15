@@ -88,6 +88,7 @@
     	WHERE
     		ST_Contains (ST_MakeEnvelope (Point ( ( ${paramCondition.longitude}+ ( ${paramCondition.inviteRange} / 111 ) ), ( ${paramCondition.latitude}+ ( ${paramCondition.inviteRange} / 111 ) ) ), Point ( ( ${paramCondition.longitude}- ( ${paramCondition.inviteRange} / 111 ) ), ( ${paramCondition.latitude}- ( ${paramCondition.inviteRange} / 111 ) ) ) ), Point ( a.longitude, a.latitude )) and a.content like '%${paramCondition.content}%'
     		AND a.status = '0'
+    		AND a.invite_way = '1'
     		<if test="paramCondition.inviteType != null and paramCondition.inviteType !=''">
     		AND a.invite_type = #{paramCondition.inviteType}
     		</if>

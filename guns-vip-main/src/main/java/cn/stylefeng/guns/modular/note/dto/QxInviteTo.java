@@ -2,10 +2,13 @@ package cn.stylefeng.guns.modular.note.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
 public class QxInviteTo {
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date inviteTime;
 	private String inviteType;
 	private String inviteWay;
