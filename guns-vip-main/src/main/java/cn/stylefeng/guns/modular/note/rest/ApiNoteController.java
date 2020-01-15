@@ -207,9 +207,9 @@ public class ApiNoteController extends ApiBaseController {
 	}
 	
 	@PostMapping("/followList")
-	public Object followList() {
+	public Object followList(String keywords) {
 		Page page = LayuiPageFactory.defaultPage();
-		qxNoteService.followList(page, getRequestUserId());
+		qxNoteService.followList(page, getRequestUserId(), keywords);
 		List<QxNoteVo> vos = createQxNoteVos(page.getRecords());
 		page.setRecords(vos);
 		log.info("/api/note/followList");
