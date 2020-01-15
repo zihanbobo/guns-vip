@@ -69,12 +69,12 @@ public class NoticeHelper {
 		}
 	}
 	
-	public void push(String account, Integer tag, Map<String, String> pairs) {
+	public void push(String account, Integer tag, Map<String, String> pairs, Map<String, String>extras) {
 		Date date = new Date();
 		QxUser user = userMapper.getByAccount(account);
 		NoticeEmailDto eDto = new NoticeEmailDto(account, tag, pairs);
 		QxNotice notice = saveNotice(account, eDto.getTextBody(configEntity.getTemplate(eDto.getTag(), false)), tag, NOTICE_TYPE.PUSH, date);
-		sendPush(user.getId(), notice.getId(), eDto);
+		sendPush(user.getId(), notice.getId(), eDto, extras);
 	}
 	
 	private boolean needCheckInterval(Integer tag) {
@@ -126,12 +126,12 @@ public class NoticeHelper {
 		});
 	}
 	
-	private void sendPush(Long userId, Long noticeId, NoticeEmailDto noticeEmailDto) {
+	private void sendPush(Long userId, Long noticeId, NoticeEmailDto noticeEmailDto, Map<String, String>extras) {
 		threadsContexts.submit("push", new Runnable() {
 			public void run() {
 				String template = configEntity.getTemplate(noticeEmailDto.getTag(), false);
 				String textBody = noticeEmailDto.getTextBody(template);
-				jpushMsg.sendPush(userId, textBody);
+				jpushMsg.sendPush(userId, textBody, extras);
 				updateSuccess(noticeId);
 			}
 		});

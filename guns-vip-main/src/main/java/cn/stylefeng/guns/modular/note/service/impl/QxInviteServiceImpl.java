@@ -262,7 +262,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 				extras.put("data", INVITE_APPLY_RESULT.FAIL);
 				log.info("User " + inviteUser.getMobile() + "未被选中");
 			}
-			noticeHelper.push(account, tag, pairs);
+			noticeHelper.push(account, tag, pairs, extras);
 		}
 	}
 
