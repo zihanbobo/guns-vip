@@ -119,16 +119,17 @@ public class QxProductServiceImpl extends ServiceImpl<QxProductMapper, QxProduct
 	}
 	
 	public void updateChange(QxUser user, Integer price) {
-		if ((user.getBalance() + user.getFreeze()) < price) {
+		if (user.getBalance() < price) {
 			throw new ServiceException("金币不足，无法兑换");
 		}
-		Integer finalFreeze = user.getFreeze() - price;
-		if (finalFreeze > 0) {
-			user.setFreeze(finalFreeze);
-		} else {
-			user.setFreeze(0);
-			user.setBalance(user.getBalance()+finalFreeze);
-		}
+//		Integer finalFreeze = user.getFreeze() - price;
+//		if (finalFreeze > 0) {
+//			user.setFreeze(finalFreeze);
+//		} else {
+//			user.setFreeze(0);
+//			user.setBalance(user.getBalance()+finalFreeze);
+//		}
+		user.setBalance(user.getBalance() - price);
 		qxUserMapper.updateById(user);
 	}
 	

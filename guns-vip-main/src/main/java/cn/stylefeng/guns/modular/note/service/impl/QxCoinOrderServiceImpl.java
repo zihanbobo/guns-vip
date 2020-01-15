@@ -122,7 +122,8 @@ public class QxCoinOrderServiceImpl extends ServiceImpl<QxCoinOrderMapper, QxCoi
 		order.setStatus(COIN_ORDER_STATUS.PAID);
 		QxPackage qxPackage = qxPackageMapper.selectById(packageId);
 		QxUser qxUser = qxUserMapper.selectById(userId);
-		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+//		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+		qxUser.setBalance(qxUser.getBalance()+qxPackage.getCoins());
 		qxUserMapper.updateById(qxUser);
 		// 用户流水
 		qxPayLogHelper.createPayLog(order.getUserId(), qxPackage.getCoins(), USER_PAY_LOG_TYPE.PLATFORM_BUY_COIN_OUT);

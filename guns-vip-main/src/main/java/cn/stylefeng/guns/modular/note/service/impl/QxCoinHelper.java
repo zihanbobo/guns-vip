@@ -38,13 +38,15 @@ public class QxCoinHelper {
 		// 检查用户金币是否足够打赏
 		QxGift gift = qxGiftMapper.selectById(giftId);
 		QxUser payUser = qxUserMapper.selectById(payerId);
-		if (payUser.getFreeze() < gift.getPrice()) {
+//		if (payUser.getFreeze() < gift.getPrice()) {
+		if (payUser.getBalance() < gift.getPrice()) {
 			throw new ServiceException("金币余额不足，请先充值");
 		}
 		// 金币转账到对方账户
 		Integer giftPrice = gift.getPrice();
 		QxUser payeeUser = qxUserMapper.selectById(payeeId);
-		payUser.setFreeze(payUser.getFreeze() - giftPrice);
+//		payUser.setFreeze(payUser.getFreeze() - giftPrice);
+		payUser.setBalance(payUser.getBalance( )- giftPrice);
 		payeeUser.setBalance(payeeUser.getBalance() + giftPrice);
 		qxUserMapper.updateById(payUser);
 		qxUserMapper.updateById(payeeUser);

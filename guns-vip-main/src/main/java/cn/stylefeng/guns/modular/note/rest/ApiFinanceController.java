@@ -355,7 +355,8 @@ public class ApiFinanceController extends ApiBaseController {
     		// 更新用户冻结余额
     		QxPackage qxPackage = qxPackageService.getByIapId(productId);
     		QxUser qxUser = qxUserService.getById(order.getUserId());
-    		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+//    		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+    		qxUser.setBalance(qxUser.getBalance() + qxPackage.getCoins());
     		qxUserService.updateById(qxUser);
     		// 用户流水
     		qxPayLogHelper.createPayLog(order.getUserId(), qxPackage.getCoins(), USER_PAY_LOG_TYPE.BUY_COIN_OUT);
@@ -404,7 +405,8 @@ public class ApiFinanceController extends ApiBaseController {
 		// 更新用户冻结余额
 		QxPackage qxPackage = qxPackageService.getById(order.getPackageId());
 		QxUser qxUser = qxUserService.getById(order.getUserId());
-		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+//		qxUser.setFreeze(qxUser.getFreeze()+qxPackage.getCoins());
+		qxUser.setBalance(qxUser.getBalance() + qxPackage.getCoins());
 		qxUserService.updateById(qxUser);
 		// 用户流水
 		qxPayLogHelper.createPayLog(order.getUserId(), qxPackage.getCoins(), USER_PAY_LOG_TYPE.BUY_COIN_OUT);
