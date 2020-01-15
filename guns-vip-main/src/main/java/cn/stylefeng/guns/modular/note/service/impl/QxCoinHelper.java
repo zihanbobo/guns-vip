@@ -47,7 +47,7 @@ public class QxCoinHelper {
 			}
 			// 金币转账到对方账户
 			payUser.setFreeze(payUser.getFreeze() - giftPrice);
-			payeeUser.setFreeze(payeeUser.getFreeze() + giftPrice);
+			payeeUser.setBalance(payeeUser.getBalance() + giftPrice);
 		} else { // 否则打赏，送礼物从余额中扣除
 			if (payUser.getBalance() < gift.getPrice()) {
 				throw new ServiceException("金币余额不足，请先充值");

@@ -236,7 +236,7 @@ public class ApiInviteController extends ApiBaseController {
 	
 	@RequestMapping("/start")
 	public Object start(Long inviteId) {
-//		checkRepeatOperate(inviteId, getRequestUserId(), INVITE_OPERATE_TYPE.CONFIRM_START);
+		checkRepeatOperate(inviteId, getRequestUserId(), INVITE_OPERATE_TYPE.CONFIRM_START);
 		qxInviteService.start(inviteId, getRequestUserId());
 		log.info("/api/invite/start, inviteId=" + inviteId);
 		return ResultGenerator.genSuccessResult();
@@ -247,7 +247,7 @@ public class ApiInviteController extends ApiBaseController {
 		queryWrapper.eq("user_id", userId).eq("invite_id", inviteId).eq("type", operateType);
 		int count = qxInviteOperateService.count(queryWrapper);
 		if (count > 0) {
-			throw new ServiceException("不能重复操作");
+			throw new ServiceException("已确认，请等待对方确认");
 		}
 	}
 	
