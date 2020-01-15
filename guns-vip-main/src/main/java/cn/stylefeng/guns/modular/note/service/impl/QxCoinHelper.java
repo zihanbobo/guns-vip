@@ -104,7 +104,7 @@ public class QxCoinHelper {
 		QxGift gift = qxGiftMapper.selectById(giftId);
 		Integer amount = gift.getPrice();
 		if (user.getBalance() < amount) {
-			throw new ServiceException("金币不足，无法冻结");
+			throw new ServiceException("金币不足，请充值");
 		}
 		user.setBalance(user.getBalance() - amount);
 		user.setFreeze(user.getFreeze() + amount);

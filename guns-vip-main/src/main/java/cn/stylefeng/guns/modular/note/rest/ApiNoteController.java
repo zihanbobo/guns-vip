@@ -53,6 +53,12 @@ public class ApiNoteController extends ApiBaseController {
 		return ResultGenerator.genSuccessResult(page);
 	}
 	
+	/**
+	 * 作废
+	 * @param userId
+	 * @param isPrivate
+	 * @return
+	 */
 	@RequestMapping("/list")
 	public Object list(Long userId, boolean isPrivate) {
 		Page page = LayuiPageFactory.defaultPage();
@@ -140,7 +146,7 @@ public class ApiNoteController extends ApiBaseController {
 	public Object myNote(boolean isPrivate) {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxNote> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("user_id", getRequestUserId()).eq("is_private", isPrivate).orderByDesc("created_time");
+		queryWrapper.eq("user_id", getRequestUserId()).eq("is_private", isPrivate).eq("deleted", false).orderByDesc("created_time");
 		qxNoteService.page(page, queryWrapper);
 		List<QxTweetVo> vos = createQxNoteVos(page.getRecords());
 		page.setRecords(vos);
@@ -152,7 +158,7 @@ public class ApiNoteController extends ApiBaseController {
 	public Object userNotes(Long userId, boolean isPrivate) {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxNote> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("user_id", userId).eq("is_private", isPrivate).orderByDesc("created_time");
+		queryWrapper.eq("user_id", userId).eq("is_private", isPrivate).eq("deleted", false).orderByDesc("created_time");
 		qxNoteService.page(page, queryWrapper);
 		List<QxTweetVo> vos = createQxNoteVos(page.getRecords());
 		page.setRecords(vos);
