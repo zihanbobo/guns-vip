@@ -188,4 +188,15 @@ public class ApiNoteController extends ApiBaseController {
 		log.info("/api/note/unlock, noteId=" + noteId);
 		return ResultGenerator.genSuccessResult();
 	}
+	
+	@RequestMapping("/delete")
+	public Object delete(Long noteId) {
+		QxNote note = qxNoteService.getById(noteId);
+		if (!note.getUserId().equals(getRequestUserId())) {
+			throw new ServiceException("只能删除自己的日记");
+		}
+		note.setDeleted(true);
+		qxNoteService.updateById(note);
+		return ResultGenerator.genSuccessResult();
+	}
 }

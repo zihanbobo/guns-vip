@@ -81,6 +81,7 @@
 			qx_note a 
 		WHERE
 			a.user_id NOT IN ( SELECT black_user_id FROM qx_black WHERE user_id = #{userId} ) 
+			and a.deleted != 1
 			<if test="keywords != null and keywords != ''">
 			and a.content like CONCAT('%', #{keywords}, '%')
 			</if>
