@@ -80,7 +80,7 @@ public class ApiNoteController extends ApiBaseController {
 	public QxNoteVo createNoteVo(Long currentUserId, QxNote note, List<Long> paidNotes) {
 		QxNoteVo vo = new QxNoteVo();
 		BeanUtils.copyProperties(note, vo);
-		if (!note.getIsPrivate() || paidNotes.contains(currentUserId)) {
+		if (!note.getIsPrivate() || paidNotes.contains(note.getId())) {
 			vo.setIsLock(false);
 		} else {
 			vo.setIsLock(true);

@@ -130,7 +130,7 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		// 添加用户解锁记录
 		QxUserNote userNote = new QxUserNote();
 		userNote.setNoteId(noteId);
-		userNote.setUserId(userId);
+		userNote.setUserId(requestUserId);
 		qxUserNoteMapper.insert(userNote);
 	}
 
