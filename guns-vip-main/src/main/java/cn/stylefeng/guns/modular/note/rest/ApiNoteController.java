@@ -54,10 +54,10 @@ public class ApiNoteController extends ApiBaseController {
 	}
 	
 	@RequestMapping("/list")
-	public Object list(Long userId) {
+	public Object list(Long userId, boolean isPrivate) {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxNote> queryWrapper = new QueryWrapper();
-		queryWrapper.eq("user_id", userId);
+		queryWrapper.eq("user_id", userId).eq("is_private", isPrivate);
 		queryWrapper.orderByDesc("created_time");
 		qxNoteService.page(page, queryWrapper);
 		List<QxNoteVo> vos = createQxNoteVos(page.getRecords());
@@ -137,10 +137,10 @@ public class ApiNoteController extends ApiBaseController {
 	}
 	
 	@RequestMapping("/myNote")
-	public Object myNote() {
+	public Object myNote(boolean isPrivate) {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxNote> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("user_id", getRequestUserId()).orderByDesc("created_time");
+		queryWrapper.eq("user_id", getRequestUserId()).eq("is_private", isPrivate).orderByDesc("created_time");
 		qxNoteService.page(page, queryWrapper);
 		List<QxTweetVo> vos = createQxNoteVos(page.getRecords());
 		page.setRecords(vos);
@@ -149,10 +149,10 @@ public class ApiNoteController extends ApiBaseController {
 	}
 	
 	@RequestMapping("/userNotes")
-	public Object userNotes(Long userId) {
+	public Object userNotes(Long userId, boolean isPrivate) {
 		Page page = LayuiPageFactory.defaultPage();
 		QueryWrapper<QxNote> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("user_id", userId).orderByDesc("created_time");
+		queryWrapper.eq("user_id", userId).eq("is_private", isPrivate).orderByDesc("created_time");
 		qxNoteService.page(page, queryWrapper);
 		List<QxTweetVo> vos = createQxNoteVos(page.getRecords());
 		page.setRecords(vos);

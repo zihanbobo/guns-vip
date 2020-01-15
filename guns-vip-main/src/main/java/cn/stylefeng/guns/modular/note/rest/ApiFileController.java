@@ -29,8 +29,8 @@ public class ApiFileController extends ApiBaseController {
 	public Object uploadImage(HttpServletRequest request, @RequestParam(required = true, name = "file") MultipartFile file) {
 		try {
 			String relativePath = saveImage(file, configEntity.getImagesPath());
-			String imageUrl = getImageUrl(request, relativePath);
-			aliyunGreen.checkImage(imageUrl);
+//			String imageUrl = getImageUrl(request, relativePath);
+//			aliyunGreen.checkImage(imageUrl);
 			return ResultGenerator.genSuccessResult(relativePath);
 		} catch (IOException e) {
 			throw new ServiceException(e.getMessage());
