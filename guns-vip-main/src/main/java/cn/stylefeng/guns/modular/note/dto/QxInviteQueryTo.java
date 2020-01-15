@@ -11,4 +11,5 @@ public class QxInviteQueryTo {
 	private Long dateTypeId;	// 约会类型ID
 	private Integer sex; // 性别 0-男;1-女
 	private Integer inviteRange;
+	private String order; // 排序：时间/距离
 }

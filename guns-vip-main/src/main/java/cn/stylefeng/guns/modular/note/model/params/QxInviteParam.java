@@ -151,6 +151,11 @@ public class QxInviteParam implements Serializable, BaseValidatingParam {
     private Integer inviteRange;
     
     /**
+     * 排序
+     */
+    private String order;
+    
+    /**
      * 商铺
      */
     private String shop;

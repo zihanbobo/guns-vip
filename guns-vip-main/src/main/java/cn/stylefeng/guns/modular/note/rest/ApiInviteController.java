@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.note.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -14,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
+import cn.stylefeng.guns.core.DateUtils;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.core.constant.ProjectConstants;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_OPERATE_TYPE;
@@ -122,6 +124,7 @@ public class ApiInviteController extends ApiBaseController {
 		vo.setUserVo(createQxUserVo(getUser(invite.getInviter())));
 		vo.setGift(qxGiftService.getById(invite.getGiftId()));
 		vo.setDateType(qxDateTypeService.getById(invite.getDateTypeId()));
+		vo.setRemainDays(DateUtils.getIntervalDays(invite.getInviteTime(), new Date()));
 		return vo;
 	}
 	

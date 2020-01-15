@@ -28,6 +28,7 @@ public class QxInviteVo {
 	private String inviteWay;
 	private String content;
 	private String distance; // 距离
+	private Integer remainDays; // 距离今天还剩几天
 
 	// 用户信息
 	private QxUserVo userVo;

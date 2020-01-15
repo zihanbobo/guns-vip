@@ -74,7 +74,7 @@
 		WHERE
 			a.invite_id = #{inviteId}
     </select>
-    <!-- 
+    
     <select id="search" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
     	SELECT
     		a.id AS "id", a.created_time AS "createdTime", a.sn AS "sn", a.inviter AS "inviter", a.invitee AS "invitee", a.invite_time AS "inviteTime", a.invite_type AS "inviteType", a.date_type_id AS "dateTypeId", a.gift_id AS "giftId", a.longitude AS "longitude", a.latitude AS "latitude", a.province AS "province", a.city AS "city", a.district AS "district", a.street AS "street", a.streetNumber AS "streetNumber", a.status AS "status", a.invite_way AS "inviteWay", a.content AS "content", a.shop AS "shop",
@@ -98,10 +98,17 @@
     		AND b.sex = #{paramCondition.sex}
     		</if>
     	ORDER BY
-    		distance
+    		<choose>
+    			<when test="paramCondition.order == 'time'.toString()">
+    				a.invite_time desc
+    			</when>
+    			<otherwise>
+    				distance asc
+    			</otherwise>
+    		</choose>
     </select>
-     -->
-    <!-- TODO DELETE! JUST FOR TEST -->
+    
+    <!-- TODO DELETE! JUST FOR TEST
     <select id="search" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo" parameterType="cn.stylefeng.guns.modular.note.model.params.QxInviteParam">
     	SELECT
     		a.id AS "id", a.created_time AS "createdTime", a.sn AS "sn", a.inviter AS "inviter", a.invitee AS "invitee", a.invite_time AS "inviteTime", a.invite_type AS "inviteType", a.date_type_id AS "dateTypeId", a.gift_id AS "giftId", a.longitude AS "longitude", a.latitude AS "latitude", a.province AS "province", a.city AS "city", a.district AS "district", a.street AS "street", a.streetNumber AS "streetNumber", a.status AS "status", a.invite_way AS "inviteWay", a.content AS "content", a.shop AS "shop",
@@ -127,7 +134,8 @@
     	ORDER BY
     		distance
     </select>
-    
+     -->
+     
     <select id="getInviteById" resultType="cn.stylefeng.guns.modular.note.pojo.QxInviteSearchPojo" >
     	SELECT
     		a.id AS "id", a.created_time AS "createdTime", a.sn AS "sn", a.inviter AS "inviter", a.invitee AS "invitee", a.invite_time AS "inviteTime", a.invite_type AS "inviteType", a.date_type_id AS "dateTypeId", a.gift_id AS "giftId", a.longitude AS "longitude", a.latitude AS "latitude", a.province AS "province", a.city AS "city", a.district AS "district", a.street AS "street", a.streetNumber AS "streetNumber", a.status AS "status", a.invite_way AS "inviteWay", a.content AS "content", a.shop AS "shop"
