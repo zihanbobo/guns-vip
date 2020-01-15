@@ -189,4 +189,9 @@ public interface QxInviteService extends IService<QxInvite> {
 	 */
 	QxInviteSearchPojo getInviteById(Long id);
 
+	/**
+	 * 关闭未配对约单
+	 */
+	void closeWaitInvite();
+
 }

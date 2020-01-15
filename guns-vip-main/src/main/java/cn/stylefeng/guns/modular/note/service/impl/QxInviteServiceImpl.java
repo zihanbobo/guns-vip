@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.note.service.impl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.config.ConfigEntity;
 import cn.stylefeng.guns.core.CommonUtils;
 import cn.stylefeng.guns.core.DateUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants;
 import cn.stylefeng.guns.core.constant.ProjectConstants.ALERT_STATUS;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_RESULT;
 import cn.stylefeng.guns.core.constant.ProjectConstants.INVITE_APPLY_STATUS;
@@ -435,5 +437,16 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	@Override
 	public QxInviteSearchPojo getInviteById(Long id) {
 		return this.baseMapper.getInviteById(id);
+	}
+
+	@Override
+	public void closeWaitInvite() {
+		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
+		queryWrapper.eq("status", ProjectConstants.INVITE_STATUS.WAIT_MATCH).lt("invite_time", new Date());
+		List<QxInvite> unmatchedInvites = this.baseMapper.selectList(queryWrapper);
+		for (QxInvite invite : unmatchedInvites) {
+			invite.setStatus(ProjectConstants.INVITE_STATUS.CANCEl);
+			this.baseMapper.updateById(invite);
+		}
 	}
 }
