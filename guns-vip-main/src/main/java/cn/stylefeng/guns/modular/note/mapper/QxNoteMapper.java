@@ -77,8 +77,9 @@ public interface QxNoteMapper extends BaseMapper<QxNote> {
      * 获取关注人的动态
      * @param page
      * @param userId
+     * @param keywords 
      */
-    @Select("select a.* from qx_note a inner join qx_follow b on a.user_id = b.followee_id and b.follower_id = #{userId} order by a.created_time desc")
-    @ResultMap("BaseResultMap")
-	Page<List<QxTweet>> followList(@Param("page") Page page, @Param("userId") Long userId);
+//    @Select("select a.* from qx_note a inner join qx_follow b on a.user_id = b.followee_id and b.follower_id = #{userId} order by a.created_time desc")
+//    @ResultMap("BaseResultMap")
+	Page<List<QxTweet>> followList(@Param("page") Page page, @Param("userId") Long userId, @Param("keywords")String keywords);
 }

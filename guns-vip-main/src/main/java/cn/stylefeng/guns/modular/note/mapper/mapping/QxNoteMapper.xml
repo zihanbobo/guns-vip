@@ -88,4 +88,18 @@
 		ORDER BY
 			a.created_time DESC
 	</select>
+	
+	<select id="followList" resultType="cn.stylefeng.guns.modular.note.entity.QxNote">
+		select
+			a.*
+		from
+			qx_note a 
+		inner join 
+			qx_follow b on a.user_id = b.followee_id
+		and b.follower_id = #{userId}
+		<if test="keywords != null and keywords != ''">
+		and a.content like CONCAT('%', #{keywords}, '%')
+		</if>
+		order by a.created_time desc
+	</select>
 </mapper>

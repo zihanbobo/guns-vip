@@ -163,9 +163,9 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	public Page listNotes(Page page, Long requestUserId, String keywords) {
 		return this.baseMapper.listNotes(page, requestUserId, keywords);
 	}
-
 	@Override
-	public Page followList(Page page, Long requestUserId) {
-		return this.baseMapper.followList(page, requestUserId);
+	public Page followList(Page page, Long requestUserId, String keywords) {
+		return this.baseMapper.followList(page, requestUserId, keywords);
+
 	}
 }
