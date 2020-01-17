@@ -13,7 +13,7 @@ layui.define(['layer'], function (exports) {
 
     var admin = {
         version: '314',  // 版本号
-        defaultTheme: 'theme-admin',  // 默认主题
+        defaultTheme: 'theme-white',  // 默认主题
         tableName: 'easyweb',  // 存储表名
         /* 设置侧栏折叠 */
         flexible: function (expand) {
