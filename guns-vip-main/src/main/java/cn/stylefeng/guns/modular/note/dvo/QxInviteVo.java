@@ -29,6 +29,7 @@ public class QxInviteVo {
 	private String content;
 	private String distance; // 距离
 	private Integer remainDays; // 距离今天还剩几天
+	private String shop;
 
 	// 用户信息
 	private QxUserVo userVo;
@@ -40,7 +41,7 @@ public class QxInviteVo {
 	private QxDateType dateType;
 
 	public String getLocation() {
-		return Stream.of(province, city, district, street, streetNumber).filter(s -> s != null)
+		return Stream.of(province, city, district, street, streetNumber, shop).filter(s -> s != null)
 				.collect(Collectors.joining());
 	}
 }
