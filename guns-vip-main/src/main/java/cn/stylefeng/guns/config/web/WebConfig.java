@@ -209,7 +209,7 @@ public class WebConfig implements WebMvcConfigurer {
 	/**
 	 * xssFilter注册
 	 */
-	@Bean
+//	@Bean
 	public FilterRegistrationBean xssFilterRegistration() {
 		XssFilter xssFilter = new XssFilter();
 		xssFilter.setUrlExclusion(Arrays.asList("/notice/add", "/notice/update"));
