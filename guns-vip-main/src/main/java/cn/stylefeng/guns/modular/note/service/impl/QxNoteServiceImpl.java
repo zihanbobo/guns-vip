@@ -127,7 +127,7 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		note.setGiftCount(note.getGiftCount() + 1);
 		this.updateById(note);
 		// 自动添加打赏评论
-		addOfficalComment(requestUserId, noteId, giftId);
+		addOfficalComment(requestUserId, noteId, giftId, false);
 	}
 	
 	/**
@@ -136,13 +136,20 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	 * @param noteId
 	 * @param content
 	 */
-	private void addOfficalComment(Long userId, Long noteId, Long giftId) {
+	private void addOfficalComment(Long userId, Long noteId, Long giftId, Boolean unlock) {
 		// 获取礼物
 		QxGift gift = qxGiftMapper.selectById(giftId);
+		String action = "";
+		if (unlock) {
+			action = "解锁了";
+		} else {
+			action = "打赏了";
+		}
 		QxNoteComment comment = new QxNoteComment();
 		comment.setCreatedBy(userId);
 		comment.setNoteId(noteId);
-		comment.setContent("打赏了" + gift.getName() + "(" + gift.getPrice() +"金币)");
+		
+		comment.setContent(action + gift.getName() + "(" + gift.getPrice() +"金币)");
 		comment.setOfficial(true);
 		qxNoteCommentMapper.insert(comment);
 	}
@@ -162,7 +169,7 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		userNote.setUserId(requestUserId);
 		qxUserNoteMapper.insert(userNote);
 		// 添加解锁记录
-		addOfficalComment(requestUserId, noteId, giftId);
+		addOfficalComment(requestUserId, noteId, giftId, true);
 	}
 
 	@Override
