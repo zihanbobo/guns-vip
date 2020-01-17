@@ -75,14 +75,23 @@ public class QxCoinHelper {
 	 * @return
 	 */
 	public BigDecimal caculateWithdrawAmount(int coinCount) {
-		BigDecimal withdrawRate = getRateByType(COST_RATE_TYPE.WITHDRAW_RATE);
 		BigDecimal coinRate = getRateByType(COST_RATE_TYPE.COIN_RATE);
 		BigDecimal realAmount = new BigDecimal(coinCount).multiply(coinRate); // 金币兑换成现金
-		BigDecimal withdrawAmount = (realAmount.multiply(BigDecimal.ONE.subtract(withdrawRate))).setScale(0,
-				BigDecimal.ROUND_DOWN);
-		if (withdrawAmount.compareTo(BigDecimal.ONE) < 0) {
-			throw new ServiceException("提醒金额必须大于1元");
+		if (realAmount.compareTo(BigDecimal.ONE) < 0) {
+			throw new ServiceException("提现金额必须大于1元");
 		}
+		// 只能提取整数
+		return realAmount.setScale(0, BigDecimal.ROUND_DOWN);
+	}
+	
+	/**
+	 * 获取最终提现金额
+	 * @param amount
+	 * @return
+	 */
+	public BigDecimal getWithdrawAmount(BigDecimal amount) {
+		BigDecimal withdrawRate = getRateByType(COST_RATE_TYPE.WITHDRAW_RATE);
+		BigDecimal withdrawAmount = amount.multiply(BigDecimal.ONE.subtract(withdrawRate));
 		return withdrawAmount;
 	}
 
@@ -94,35 +103,49 @@ public class QxCoinHelper {
 	}
 
 	/**
-	 * 冻结金币
+	 * 冻结礼物对应金币
 	 * 
 	 * @param user
 	 * @param amount
 	 */
 	public void freeze(Long userId, Long giftId) {
-		QxUser user = qxUserMapper.selectById(userId);
 		QxGift gift = qxGiftMapper.selectById(giftId);
-		Integer amount = gift.getPrice();
-		if (user.getBalance() < amount) {
-			throw new ServiceException("金币不足，请充值");
-		}
-		user.setBalance(user.getBalance() - amount);
-		user.setFreeze(user.getFreeze() + amount);
-		qxUserMapper.updateById(user);
+		freezeCoin(userId, gift.getPrice());
 	}
 
 	/**
-	 * 解冻金币
+	 * 解冻礼物金币
 	 */
 	public void unfreeze(Long userId, Long giftId) {
-		QxUser user = qxUserMapper.selectById(userId);
 		QxGift gift = qxGiftMapper.selectById(giftId);
-		Integer amount = gift.getPrice();
-		if (user.getFreeze() < amount) {
+		unfreezeCoin(userId, gift.getPrice());
+	}
+	
+	/**
+	 * 冻结金币
+	 * @param userId
+	 * @param coinCount
+	 */
+	public void freezeCoin(Long userId, Integer coinCount) {
+		QxUser user = qxUserMapper.selectById(userId);
+		if (user.getBalance() < coinCount) {
+			throw new ServiceException("金币不足，请充值");
+		}
+		user.setBalance(user.getBalance() - coinCount);
+		user.setFreeze(user.getFreeze() + coinCount);
+		qxUserMapper.updateById(user);
+	}
+	
+	/**
+	 * 解冻金币
+	 */
+	public void unfreezeCoin(Long userId, Integer coinCount) {
+		QxUser user = qxUserMapper.selectById(userId);
+		if (user.getFreeze() < coinCount) {
 			throw new ServiceException("冻结金币不足，无法解冻");
 		}
-		user.setBalance(user.getBalance() + amount);
-		user.setFreeze(user.getFreeze() - amount);
+		user.setBalance(user.getBalance() + coinCount);
+		user.setFreeze(user.getFreeze() - coinCount);
 		qxUserMapper.updateById(user);
 	}
 }

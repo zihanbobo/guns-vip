@@ -249,7 +249,7 @@ public class ApiFinanceController extends ApiBaseController {
 		if (userSocial == null) {
 			throw new ServiceException("请绑定微信后再提现");
 		}
-		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount, coinCount);
+		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(user, userSocial, amount);
 		if (Boolean.TRUE.equals(configEntity.getWxCanWithdraw())) {
 			EntPayService entPayService = wxMpPayService.getEntPayService();
 			EntPayRequest request = new EntPayRequest();
@@ -449,7 +449,7 @@ public class ApiFinanceController extends ApiBaseController {
 		if (userSocial == null) {
 			throw new ServiceException("请绑定支付宝后再提现");
 		}
-		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(userSocial, amount, coinCount);
+		QxWithdrawLog withdrawLog = qxWithdrawLogService.createWithdrawLog(user, userSocial, amount);
 		if (Boolean.TRUE.equals(configEntity.getAlipayCanWithdraw())) {
 			AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
 			AlipayFundTransUniTransferModel model = new AlipayFundTransUniTransferModel();

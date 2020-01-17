@@ -75,7 +75,7 @@ public interface QxWithdrawLogService extends IService<QxWithdrawLog> {
       * @param amount
      * @return 
       */
-	 QxWithdrawLog createWithdrawLog(QxUserSocial userSocial, BigDecimal amount, Integer coinCount);
+	 QxWithdrawLog createWithdrawLog(QxUser user, QxUserSocial userSocial, BigDecimal amount);
 
 	 /**
 	  * 提现成功逻辑更新

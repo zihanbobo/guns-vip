@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,6 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.CommonUtils;
+import cn.stylefeng.guns.core.constant.ProjectConstants.COST_RATE_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.SOCIAL_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.constant.ProjectConstants.WITHDRAW_PAY_WAY;
@@ -49,6 +51,9 @@ public class QxWithdrawLogServiceImpl extends ServiceImpl<QxWithdrawLogMapper, Q
 	
 	@Resource
 	private QxPayLogHelper qxPayLogHelper;
+	
+	@Resource
+	private QxCoinHelper qxCoinHelper;
 	
 	@Override
 	public void add(QxWithdrawLogParam param) {
@@ -105,16 +110,22 @@ public class QxWithdrawLogServiceImpl extends ServiceImpl<QxWithdrawLogMapper, Q
 	}
 
 	@Override
-	public QxWithdrawLog createWithdrawLog(QxUserSocial userSocial, BigDecimal amount, Integer coinCount) {
+	@Transactional(rollbackFor = Exception.class)
+	public QxWithdrawLog createWithdrawLog(QxUser user, QxUserSocial userSocial, BigDecimal amount) {
+		BigDecimal coinRate = qxCoinHelper.getRateByType(COST_RATE_TYPE.COIN_RATE); // 汇率
+		BigDecimal withdrawAmount = qxCoinHelper.getWithdrawAmount(amount); // 获取可提现金额，整数
+		Integer withdrawCoinCount = CommonUtils.divide(amount, coinRate).setScale(0, BigDecimal.ROUND_DOWN).intValue();
 		QxWithdrawLog entity = new QxWithdrawLog();
 		entity.setSn(CommonUtils.getSerialNumber());
 		entity.setUserId(userSocial.getUserId());
-		entity.setAmount(amount);
-		entity.setCoinCount(coinCount);
+		entity.setAmount(withdrawAmount);
+		entity.setCoinCount(withdrawCoinCount);
 		entity.setPayWay(getWithdrawPayWay(userSocial.getType()));
 		entity.setPayeeAccount(userSocial.getOpenId());
 		entity.setStatus(WITHDRAW_STATUS.WAIT_OUT);
 		this.baseMapper.insert(entity);
+		// 冻结用户金额
+		qxCoinHelper.freezeCoin(user.getId(), withdrawCoinCount);
 		return entity;
 	}
 
@@ -135,7 +146,7 @@ public class QxWithdrawLogServiceImpl extends ServiceImpl<QxWithdrawLogMapper, Q
 		withdrawLog.setStatus(WITHDRAW_STATUS.OUT);
 		this.updateById(withdrawLog);
 		// 更新用户金币余额
-		user.setBalance(user.getBalance() - coinCount);
+		user.setFreeze(user.getFreeze() - coinCount);
 		qxUserMapper.updateById(user);
 		// 更新用户流水
 		qxPayLogHelper.createPayLog(user.getId(), coinCount, USER_PAY_LOG_TYPE.WITHDRAW_COIN_IN);
