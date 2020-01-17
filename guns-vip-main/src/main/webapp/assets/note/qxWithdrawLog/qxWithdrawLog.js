@@ -22,8 +22,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             {field: 'sn', sort: true, title: '订单号'},
             {field: 'nickname', sort: true, title: '用户昵称'},
             {field: 'mobile', sort: true, title: '用户账号'},
-            {field: 'amount', sort: true, title: '提现金额'},
-            {field: 'payeeAccount', sort: true, title: '收款账号'},
+            {field: 'amount', sort: true, title: '提现金额/元'},
             {field: 'payWay', sort: true, title: '提现方式', templet: function(d) {
             	//  0-支付宝；1-微信
             	if (d.payWay == 0) {
@@ -42,7 +41,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
             		return '已取消';
             	}
             }},
-            {field: 'createdTime', sort: true, title: '创建时间'},
+            {field: 'createdTime', sort: true, title: '申请时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作'}
         ]];
     };
