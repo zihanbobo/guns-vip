@@ -85,6 +85,11 @@ public class QxCoinOrderParam implements Serializable, BaseValidatingParam {
      */
     private String type;
 
+    /**
+     * 用户账号
+     */
+    private String mobile;
+    
     @Override
     public String checkParam() {
         return null;

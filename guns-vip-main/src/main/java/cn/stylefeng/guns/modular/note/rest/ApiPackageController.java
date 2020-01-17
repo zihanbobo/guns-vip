@@ -26,7 +26,7 @@ public class ApiPackageController extends ApiBaseController {
 	@PostMapping("/list")
 	public Object list() {
 		QueryWrapper<QxPackage> queryWrapper = new QueryWrapper<>();
-		queryWrapper.orderByAsc("order_no");
+		queryWrapper.eq("deleted", false).orderByAsc("order_no");
 		List<QxPackage> list = qxPackageService.list(queryWrapper);
 		log.info("/api/package/list");
 		return ResultGenerator.genSuccessResult(list);

@@ -38,7 +38,9 @@ public class QxPackageServiceImpl extends ServiceImpl<QxPackageMapper, QxPackage
 
     @Override
     public void delete(QxPackageParam param){
-        this.removeById(getKey(param));
+        QxPackage oldEntity = getOldEntity(param);
+        oldEntity.setDeleted(true);
+        this.updateById(oldEntity);
     }
 
     @Override

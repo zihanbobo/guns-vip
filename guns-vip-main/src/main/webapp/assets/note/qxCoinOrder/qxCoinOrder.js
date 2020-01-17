@@ -53,7 +53,7 @@ layui.use(['table', 'admin', 'ax', 'func'], function () {
      */
     QxCoinOrder.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['mobile'] = $("#mobile").val();
         table.reload(QxCoinOrder.tableId, {
             where: queryData, page: {curr: 1}
         });

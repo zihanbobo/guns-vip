@@ -38,7 +38,7 @@
     <select id="customPageList" resultType="cn.stylefeng.guns.modular.note.model.result.QxPackageResult" parameterType="cn.stylefeng.guns.modular.note.model.params.QxPackageParam">
         select
         <include refid="Base_Column_List"/>
-        from qx_package where 1 = 1
+        from qx_package where 1 = 1 and deleted = 0
     </select>
 
     <select id="customPageMapList" resultType="map" parameterType="cn.stylefeng.guns.modular.note.model.params.QxPackageParam">
