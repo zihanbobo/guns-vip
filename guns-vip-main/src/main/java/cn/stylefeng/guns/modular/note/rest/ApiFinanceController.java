@@ -160,6 +160,7 @@ public class ApiFinanceController extends ApiBaseController {
 	 */
 	@PostMapping("/wx/app/pay")
 	public Object wxAppPay(QxPackageTo packageTo) {
+		notifyIosPay(packageTo.getIsAndroid());
 		try {
 			// 创建订单
 			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.WECHAT);
@@ -286,6 +287,7 @@ public class ApiFinanceController extends ApiBaseController {
 	 */
 	@PostMapping("/alipay/pay")
 	public Object alipay(QxPackageTo packageTo) {
+		notifyIosPay(packageTo.getIsAndroid());
 		try {
 			// 创建订单
 			QxCoinOrder coinOrder = qxCoinOrderService.createOrder(getRequestUserId(), packageTo.getId(), COIN_ORDER_PAY_TYPE.ALIPAY);
@@ -306,6 +308,12 @@ public class ApiFinanceController extends ApiBaseController {
 		} catch (AlipayApiException e) {
 			log.error("支付宝支付出错, /api/finance/alipay/pay, packageTo=" + packageTo + ", error=" + e.getMessage());
 			throw new ServiceException("支付宝支付出错");
+		}
+	}
+	
+	private void notifyIosPay(Boolean isAndroid) {
+		if (isAndroid == null) {
+			throw new ServiceException("iOS请下拉页面，保存二维码到公众号充值");
 		}
 	}
 	

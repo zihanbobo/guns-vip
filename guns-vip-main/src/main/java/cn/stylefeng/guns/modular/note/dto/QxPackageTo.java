@@ -8,4 +8,5 @@ public class QxPackageTo {
 	private Long id;
 	private String tradeType;
 	private String appId;
+	private Boolean isAndroid;
 }
