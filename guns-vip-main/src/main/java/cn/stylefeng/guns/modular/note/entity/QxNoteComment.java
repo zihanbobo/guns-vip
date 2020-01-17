@@ -73,6 +73,13 @@ public class QxNoteComment implements Serializable {
      */
     @TableField("content")
     private String content;
+    
+    /**
+     * 是否是官方
+     * @return
+     */
+    @TableField("official")
+    private Boolean official;
 
 
     public Long getId() {
@@ -147,7 +154,15 @@ public class QxNoteComment implements Serializable {
         this.content = content;
     }
 
-    @Override
+    public Boolean getOfficial() {
+		return official;
+	}
+
+	public void setOfficial(Boolean official) {
+		this.official = official;
+	}
+
+	@Override
     public String toString() {
         return "QxNoteComment{" +
         "id=" + id +

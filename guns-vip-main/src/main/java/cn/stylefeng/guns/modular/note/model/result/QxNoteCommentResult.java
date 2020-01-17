@@ -63,5 +63,10 @@ public class QxNoteCommentResult implements Serializable {
      * 评论内容
      */
     private String content;
+    
+    /**
+     * 是否是官方
+     */
+    private Boolean official;
 
 }

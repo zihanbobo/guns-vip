@@ -18,9 +18,13 @@ import cn.stylefeng.guns.base.pojo.page.LayuiPageInfo;
 import cn.stylefeng.guns.core.constant.ProjectConstants.USER_PAY_LOG_TYPE;
 import cn.stylefeng.guns.core.exception.ServiceException;
 import cn.stylefeng.guns.modular.note.dto.QxPayResult;
+import cn.stylefeng.guns.modular.note.entity.QxGift;
 import cn.stylefeng.guns.modular.note.entity.QxNote;
+import cn.stylefeng.guns.modular.note.entity.QxNoteComment;
 import cn.stylefeng.guns.modular.note.entity.QxNoteLike;
 import cn.stylefeng.guns.modular.note.entity.QxUserNote;
+import cn.stylefeng.guns.modular.note.mapper.QxGiftMapper;
+import cn.stylefeng.guns.modular.note.mapper.QxNoteCommentMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxNoteLikeMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxNoteMapper;
 import cn.stylefeng.guns.modular.note.mapper.QxUserNoteMapper;
@@ -51,6 +55,12 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 	
 	@Resource
 	private QxNoteLikeMapper qxNoteLikeMapper;
+	
+	@Resource
+	private QxNoteCommentMapper qxNoteCommentMapper;
+	
+	@Resource
+	private QxGiftMapper qxGiftMapper;
 	
     @Override
     public void add(QxNoteParam param){
@@ -116,6 +126,25 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		QxNote note = this.getById(noteId);
 		note.setGiftCount(note.getGiftCount() + 1);
 		this.updateById(note);
+		// 自动添加打赏评论
+		addOfficalComment(requestUserId, noteId, giftId);
+	}
+	
+	/**
+	 * 添加官方评论
+	 * @param userId
+	 * @param noteId
+	 * @param content
+	 */
+	private void addOfficalComment(Long userId, Long noteId, Long giftId) {
+		// 获取礼物
+		QxGift gift = qxGiftMapper.selectById(giftId);
+		QxNoteComment comment = new QxNoteComment();
+		comment.setCreatedBy(userId);
+		comment.setNoteId(noteId);
+		comment.setContent("打赏了" + gift.getName() + "(" + gift.getPrice() +"金币)");
+		comment.setOfficial(true);
+		qxNoteCommentMapper.insert(comment);
 	}
 
 	@Override
@@ -132,6 +161,8 @@ public class QxNoteServiceImpl extends ServiceImpl<QxNoteMapper, QxNote> impleme
 		userNote.setNoteId(noteId);
 		userNote.setUserId(requestUserId);
 		qxUserNoteMapper.insert(userNote);
+		// 添加解锁记录
+		addOfficalComment(requestUserId, noteId, giftId);
 	}
 
 	@Override

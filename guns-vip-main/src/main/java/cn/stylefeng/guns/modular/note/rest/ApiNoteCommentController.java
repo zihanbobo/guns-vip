@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.stylefeng.guns.base.pojo.page.LayuiPageFactory;
 import cn.stylefeng.guns.config.ConfigEntity;
+import cn.stylefeng.guns.core.DateUtils;
 import cn.stylefeng.guns.core.ResultGenerator;
 import cn.stylefeng.guns.modular.note.dto.QxNoteCommentTo;
 import cn.stylefeng.guns.modular.note.dvo.QxNoteCommentVo;
@@ -52,6 +53,12 @@ public class ApiNoteCommentController extends ApiBaseController {
 			QxNoteCommentVo vo = new QxNoteCommentVo();
 			BeanUtils.copyProperties(comment, vo);
 			vo.setUserVo(createQxUserVo(getUser(comment.getCreatedBy())));
+			// 设置官方评论
+			if (comment.getOfficial()) {
+				vo.setCreatedTime("官方");
+			} else {
+				vo.setCreatedTime(DateUtils.time2String(comment.getCreatedTime()));
+			}
 			vos.add(vo);
 		}
 		return vos;

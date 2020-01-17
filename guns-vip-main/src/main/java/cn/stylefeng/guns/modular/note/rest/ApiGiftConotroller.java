@@ -25,7 +25,7 @@ public class ApiGiftConotroller extends ApiBaseController {
 	@RequestMapping("/list")
 	public Object list() {
 		QueryWrapper<QxGift> queryWrapper = new QueryWrapper<>();
-		queryWrapper.eq("deleted", false);
+		queryWrapper.eq("deleted", false).orderByAsc("price");
 		List<QxGift> list = qxGiftService.list(queryWrapper);
 		log.info("/api/gift/list");
 		return ResultGenerator.genSuccessResult(list);

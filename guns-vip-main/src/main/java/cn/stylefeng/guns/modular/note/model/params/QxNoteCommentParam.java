@@ -65,6 +65,11 @@ public class QxNoteCommentParam implements Serializable, BaseValidatingParam {
      */
     private String content;
 
+    /**
+     * 是否是正式
+     */
+    private Boolean official;
+    
     @Override
     public String checkParam() {
         return null;
