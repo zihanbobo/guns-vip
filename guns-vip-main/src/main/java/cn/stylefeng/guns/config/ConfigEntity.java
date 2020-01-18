@@ -54,6 +54,8 @@ public class ConfigEntity {
 	
 	// 约单搜索附近距离范围
 	private int inviteRange;
+	// 每天最多发送5单
+	private int maxInvite;
 	// 短信
 	private String smsDomain;
 	private String smsSignName;

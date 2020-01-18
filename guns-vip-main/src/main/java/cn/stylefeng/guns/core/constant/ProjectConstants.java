@@ -138,7 +138,7 @@ public final class ProjectConstants {
 	}
 
 	/**
-	 * 操作类型：0-确认开始；1-确认结束；2-确认取消；
+	 * 操作类型：0-确认开始；1-确认结束；2-确认取消；3-选择报名人；4-同意报名人
 	 * 
 	 * @author steven
 	 */
@@ -146,6 +146,8 @@ public final class ProjectConstants {
 		String CONFIRM_START = "0";
 		String CONFIRM_FINISH = "1";
 		String CONFIRM_CANCEL = "2";
+		String CHOOSE_APPLY = "3";
+		String AGREE_INVITE = "4";
 	}
 
 	/**

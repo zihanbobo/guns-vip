@@ -200,8 +200,27 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	@Override
 	public void choose(Long inviteId, Long userId) {
 		chooseApply(inviteId, userId);
+		saveChooseOperate(inviteId);
 		updateInviteStatus(inviteId, userId, INVITE_STATUS.MATCHED);
 		notifyInvitee(inviteId);
+	}
+	
+	/**
+	 * 保存选择动作记录
+	 * @param inviteId
+	 */
+	private void saveChooseOperate(Long inviteId) {
+		QxInvite invite = this.getById(inviteId);
+		createInviteOperate(invite.getId(), invite.getInviter(), INVITE_OPERATE_TYPE.CHOOSE_APPLY);
+	}
+	
+	/**
+	 * 保存同意动作记录
+	 * @param inviteId
+	 */
+	private void saveAgreeOperate(Long inviteId) {
+		QxInvite invite = this.getById(inviteId);
+		createInviteOperate(invite.getId(), invite.getInvitee(), INVITE_OPERATE_TYPE.AGREE_INVITE);
 	}
 
 	public void chooseApply(Long inviteId, Long userId) {
@@ -274,6 +293,8 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 		if (INVITE_TYPE.PASSIVE.equals(invite.getInviteType())) { // 如果是TA请客，则我点击同意时，扣除我的费用到freeze
 			qxCoinHelper.freeze(invitee, invite.getGiftId());
 		}
+		// 保存同意记录
+		saveAgreeOperate(inviteId);
 		chooseApply(inviteId, invitee);
 		updateInviteStatus(inviteId, null, INVITE_STATUS.MATCHED);
 		notifyInvitee(inviteId);
