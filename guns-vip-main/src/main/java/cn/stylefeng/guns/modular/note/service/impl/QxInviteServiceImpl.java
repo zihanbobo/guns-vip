@@ -493,7 +493,7 @@ public class QxInviteServiceImpl extends ServiceImpl<QxInviteMapper, QxInvite> i
 	public void closeWaitInvite() {
 		QueryWrapper<QxInvite> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("status", ProjectConstants.INVITE_STATUS.WAIT_MATCH).lt("invite_time",
-				DateUtils.addDay(new Date(), 1));
+				DateUtils.addDay(new Date(), -1));
 		List<QxInvite> unmatchedInvites = this.baseMapper.selectList(queryWrapper);
 		for (QxInvite invite : unmatchedInvites) {
 			invite.setStatus(ProjectConstants.INVITE_STATUS.CANCEl);
