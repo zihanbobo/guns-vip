@@ -142,11 +142,17 @@ public class ApiInviteController extends ApiBaseController {
 		Date today = new Date();
 		Timestamp startTimestamp = DateUtils.createStartTime(today);
 		Timestamp endTimestamp = DateUtils.createEndTime(today);
+		String message = "";
+		if (INVITE_OPERATE_TYPE.AGREE_INVITE.equals(type)) {
+			message = "超过每日同意最大限制";
+		} else {
+			message = "超过每日选择报名人最大限制";
+		}
 		QueryWrapper<QxInviteOperate> queryWrapper = new QueryWrapper<>();
 		queryWrapper.eq("user_id", userId).eq("type", type).ge("created_time"	, startTimestamp).le("created_time", endTimestamp);
 		int count = qxInviteOperateService.count(queryWrapper);
 		if (count >= configEntity.getMaxInvite()) {
-			throw new ServiceException("超过每日选择报名人最大限制");
+			throw new ServiceException(message);
 		}
 	}
 	
